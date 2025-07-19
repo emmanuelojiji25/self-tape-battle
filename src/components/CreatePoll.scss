@@ -1,0 +1,42 @@
+.CreatePoll {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+
+  input {
+    border: 0;
+    font-size: 20px;
+    outline: none;
+  }
+}
+
+.poll-type-container {
+  margin-top: 30px;
+}
+
+.placeholder-container {
+  display: flex;
+  gap: 20px;
+}
+
+.placeholder {
+  width: 50%;
+  height: 150px;
+  background: grey;
+}
+
+.bar-input {
+  width: 100%;
+  height: 50px;
+  background: grey;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  border-radius: 10px;
+
+  &::placeholder {
+    color: white;
+  }
+}

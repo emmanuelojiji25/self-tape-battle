@@ -65,7 +65,7 @@ const PollCard = ({
 
   useEffect(() => {
     setHeight(PollCardRef.current.offsetHeight);
-  },[]);
+  }, []);
 
   return (
     <div

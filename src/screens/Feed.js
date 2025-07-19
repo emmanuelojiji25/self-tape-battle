@@ -1,10 +1,12 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import CreatePoll from "../components/CreatePoll";
 import PollCard from "../components/PollCard";
 import { db } from "../firebaseConfig";
 import "./Feed.scss";
 
 const Feed = () => {
+  const [isCreatePollVisible, setIsCreatePollVisible] = useState(false);
   const [questions, setQuestions] = useState([]);
 
   const handleGetPolls = async () => {
@@ -44,6 +46,15 @@ const Feed = () => {
           id={question.id}
         />
       ))}
+
+      <button
+        className="create-poll"
+        onClick={() => setIsCreatePollVisible(true)}
+      >
+        Create Poll
+      </button>
+
+      {isCreatePollVisible && <CreatePoll />}
     </div>
   );
 };
