@@ -5,7 +5,7 @@ import Feed from "./screens/Feed";
 import { auth } from "./firebaseConfig";
 
 function App() {
-  const [signedIn, setSignedIn] = useState(false);
+  const [signedIn, setSignedIn] = useState(true);
 
   return (
     <div className="App">

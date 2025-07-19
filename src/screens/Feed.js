@@ -1,17 +1,43 @@
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import PollCard from "../components/PollCard";
+import { db } from "../firebaseConfig";
+import "./Feed.scss";
 
 const Feed = () => {
+  const [questions, setQuestions] = useState([]);
+
+  const handleGetPolls = async () => {
+    const polls = [];
+    try {
+      const querySnapshot = await getDocs(
+        collection(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls")
+      );
+
+      console.log("success!");
+
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data());
+        polls.push(doc.data());
+      });
+
+      setQuestions(polls);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetPolls();
+  }, []);
+
   return (
-    <div className="screen-width">
+    <div className="Feed screen-width">
       <h1>Feed</h1>
-      <PollCard
-        question="I need help, which shoes should I wear tonight!!"
-        type="image"
-      />
-      <PollCard
-        question="Can someone choose a dress colour for me pleaseeeee"
-        type="text"
-      />
+
+      {questions.map((question) => (
+        <PollCard type={question.type} question={question.question} />
+      ))}
     </div>
   );
 };
