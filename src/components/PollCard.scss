@@ -1,0 +1,11 @@
+.poll-bar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.poll-bar {
+  height: 30px;
+  background: grey;
+}
