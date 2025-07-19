@@ -6,7 +6,7 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { db } from "../firebaseConfig";
 import "./PollCard.scss";
 
@@ -18,7 +18,13 @@ const PollCard = ({
   option2Content,
   id,
 }) => {
+  const [voteComplete, setVoteComplete] = useState(false);
+  const [hideCard, setHideCard] = useState(false);
+
   const [selectedOption, setSelectedOption] = useState(0);
+
+  const PollCardRef = useRef(null);
+  const [height, setHeight] = useState();
 
   const handleVote = async (option) => {
     try {
@@ -41,6 +47,12 @@ const PollCard = ({
         },
       });
 
+      setVoteComplete(true);
+
+      setTimeout(() => {
+        setHideCard(true);
+      }, 100);
+
       console.log("successfully updated!");
     } catch (error) {
       console.log("couldn't update votes, sorry!");
@@ -51,8 +63,18 @@ const PollCard = ({
     setSelectedOption(selectedOption);
   };
 
+  useEffect(() => {
+    setHeight(PollCardRef.current.offsetHeight);
+  },[]);
+
   return (
-    <div className="PollCard">
+    <div
+      className={`PollCard ${voteComplete && "fade-out"} ${
+        hideCard && "collapse"
+      }`}
+      ref={PollCardRef}
+      style={{ height: height }}
+    >
       <div className="poll-card-header">
         <h4>{name}</h4>
         <span>2 mins ago</span>

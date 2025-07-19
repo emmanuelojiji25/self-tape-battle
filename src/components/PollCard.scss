@@ -16,3 +16,28 @@
     width: 50%;
   }
 }
+
+.PollCard {
+  transition: height 0.2s ease-in-out;
+
+}
+
+.fade-out {
+  animation: fade-out 0.3s forwards;
+  @keyframes fade-out {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+  }
+}
+
+.collapse {
+  height: 0 !important;
+  overflow: none;
+}
