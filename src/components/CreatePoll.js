@@ -1,11 +1,46 @@
+import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
+import { db } from "../firebaseConfig";
 import "./CreatePoll.scss";
 
 const CreatePoll = () => {
   const [type, setType] = useState("text");
+
+  const [question, setQuestion] = useState("");
+  const [option1, setOption1] = useState("");
+  const [option2, setOption2] = useState("");
+  const [category, setCategory] = useState("unknown");
+
+  const handleCreatePoll = async () => {
+    try {
+      await addDoc(
+        collection(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls"),
+        {
+          type: type,
+          question: question,
+          id: "unknown",
+          option1: {
+            option: option1,
+            votes: 0,
+          },
+
+          option2: {
+            option: option2,
+            votes: 0,
+          },
+          category: category,
+        }
+      );
+    } catch (error) {}
+  };
+
   return (
     <div className="CreatePoll">
-      <input type="text" placeholder="write question.." />
+      <input
+        type="text"
+        placeholder="write question.."
+        onChange={(e) => setQuestion(e.target.value)}
+      />
       <span onClick={() => setType(type === "image" ? "text" : "image")}>
         Switch to {type === "image" ? "text" : "image"} poll
       </span>
@@ -26,15 +61,25 @@ const CreatePoll = () => {
               type="text"
               className="bar-input"
               placeholder="Option 1"
+              onChange={(e) => setOption1(e.target.value)}
             ></input>
             <input
               type="text"
               className="bar-input"
               placeholder="Option 2"
+              onChange={(e) => setOption2(e.target.value)}
             ></input>
           </div>
         )}
       </div>
+
+      <button
+        onClick={() => {
+          handleCreatePoll();
+        }}
+      >
+        Post
+      </button>
     </div>
   );
 };

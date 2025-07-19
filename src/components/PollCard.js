@@ -80,6 +80,7 @@ const PollCard = ({
         <span>2 mins ago</span>
       </div>
       <h3>{question}</h3>
+      <h4>#fashion</h4>
 
       {type === "text" && (
         <div className="poll-bar-container">
