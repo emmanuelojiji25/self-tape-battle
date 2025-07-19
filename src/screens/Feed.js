@@ -36,7 +36,12 @@ const Feed = () => {
       <h1>Feed</h1>
 
       {questions.map((question) => (
-        <PollCard type={question.type} question={question.question} />
+        <PollCard
+          type={question.type}
+          question={question.question}
+          option1={question.option1.option}
+          option2={question.option2.option}
+        />
       ))}
     </div>
   );
