@@ -1,4 +1,4 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebaseConfig";
 import "./CreatePoll.scss";
@@ -13,12 +13,12 @@ const CreatePoll = () => {
 
   const handleCreatePoll = async () => {
     try {
-      await addDoc(
+      const docRef = await addDoc(
         collection(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls"),
         {
           type: type,
           question: question,
-          id: "unknown",
+          id: "",
           option1: {
             option: option1,
             votes: 0,
@@ -31,8 +31,16 @@ const CreatePoll = () => {
           category: category,
         }
       );
+
+      await updateDoc(
+        doc(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls", docRef.id),
+        {
+          id: docRef.id,
+        }
+      );
     } catch (error) {}
   };
+  
 
   return (
     <div className="CreatePoll">
