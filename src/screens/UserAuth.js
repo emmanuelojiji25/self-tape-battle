@@ -30,6 +30,16 @@ const UserAuth = ({ setSignedIn }) => {
     }
   };
 
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("logged in!");
+      setSignedIn(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="UserAuth">
       {view === "sign-up" && (
@@ -68,9 +78,17 @@ const UserAuth = ({ setSignedIn }) => {
       {view === "sign-in" && (
         <div className="sign-up">
           <h1>Sign In</h1>
-          <input type="email" placeholder="email" />
-          <input type="password" placeholder="password" />
-          <button>sign in</button>
+          <input
+            type="email"
+            placeholder="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button onClick={() => handleSignIn()}>sign in</button>
           <span onClick={() => setView("sign-up")}>Sign Up instead</span>
         </div>
       )}
