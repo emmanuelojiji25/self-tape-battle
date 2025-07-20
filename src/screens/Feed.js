@@ -12,9 +12,7 @@ const Feed = () => {
   const handleGetPolls = async () => {
     const polls = [];
     try {
-      const querySnapshot = await getDocs(
-        collection(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls")
-      );
+      const querySnapshot = await getDocs(collection(db, "polls"));
 
       console.log("success!");
 
@@ -35,8 +33,6 @@ const Feed = () => {
 
   return (
     <div className="Feed screen-width">
-
-
       {questions.map((question) => (
         <PollCard
           type={question.type}

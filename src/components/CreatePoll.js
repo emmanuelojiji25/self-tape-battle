@@ -23,30 +23,24 @@ const CreatePoll = () => {
 
   const handleCreatePoll = async () => {
     try {
-      const docRef = await addDoc(
-        collection(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls"),
-        {
-          type,
-          question,
-          id: "",
-          option1: {
-            option: option1,
-            votes: 0,
-          },
-          option2: {
-            option: option2,
-            votes: 0,
-          },
-          category,
-        }
-      );
+      const docRef = await addDoc(collection(db, "polls"), {
+        type,
+        question,
+        id: "",
+        option1: {
+          option: option1,
+          votes: 0,
+        },
+        option2: {
+          option: option2,
+          votes: 0,
+        },
+        category,
+      });
 
-      await updateDoc(
-        doc(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls", docRef.id),
-        {
-          id: docRef.id,
-        }
-      );
+      await updateDoc(doc(db, "polls", docRef.id), {
+        id: docRef.id,
+      });
 
       if (type === "image") {
         const uploadFiles = [file1, file2].filter(Boolean);
@@ -64,13 +58,10 @@ const CreatePoll = () => {
           })
         );
 
-        await updateDoc(
-          doc(db, "users", "PCMDGkDXwFbwknOWgJGicTR98rh1", "polls", docRef.id),
-          {
-            "option1.option": urls[0] || "",
-            "option2.option": urls[1] || "",
-          }
-        );
+        await updateDoc(doc(db, "polls", docRef.id), {
+          "option1.option": urls[0] || "",
+          "option2.option": urls[1] || "",
+        });
       }
 
       console.log("Poll created!");

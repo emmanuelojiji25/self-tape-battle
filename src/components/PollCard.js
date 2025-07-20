@@ -29,13 +29,7 @@ const PollCard = ({
 
   const handleVote = async (option) => {
     try {
-      const docRef = doc(
-        db,
-        "users",
-        "PCMDGkDXwFbwknOWgJGicTR98rh1",
-        "polls",
-        id
-      );
+      const docRef = doc(db, "polls", id);
 
       const docSnapshot = await getDoc(docRef);
 
