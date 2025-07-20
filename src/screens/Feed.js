@@ -35,7 +35,7 @@ const Feed = () => {
 
   return (
     <div className="Feed screen-width">
-      <h1>Feed</h1>
+
 
       {questions.map((question) => (
         <PollCard
