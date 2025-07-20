@@ -72,7 +72,7 @@ const PollCard = ({
       style={{ height: `${height}px` }}
     >
       <div className="poll-card-header">
-        <h4>{name}</h4>
+        <h4>Jack</h4>
         <span>2 mins ago</span>
       </div>
       <h3>{question}</h3>
