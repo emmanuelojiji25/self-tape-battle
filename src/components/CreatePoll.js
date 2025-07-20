@@ -18,6 +18,9 @@ const CreatePoll = () => {
   const [file1, setFile1] = useState(null);
   const [file2, setFile2] = useState(null);
 
+  const [file1Preview, setFile1Preview] = useState("");
+  const [file2Preview, setFile2Preview] = useState("");
+
   const handleCreatePoll = async () => {
     try {
       const docRef = await addDoc(
@@ -82,6 +85,16 @@ const CreatePoll = () => {
     }
   };
 
+  const handleFilePreview = (e, setFile, setFilePreview) => {
+    const newFile = e.target.files[0];
+    setFile(newFile);
+    if (newFile) {
+      const preview = window.URL.createObjectURL(newFile);
+      console.log(preview);
+      setFilePreview(preview);
+    }
+  };
+
   return (
     <div className="CreatePoll">
       <input
@@ -102,12 +115,14 @@ const CreatePoll = () => {
               <div
                 className="placeholder"
                 onClick={() => option1Ref.current.click()}
+                style={{ backgroundImage: `url(${file1Preview})` }}
               >
                 1
               </div>
               <div
                 className="placeholder"
                 onClick={() => option2Ref.current.click()}
+                style={{ backgroundImage: `url(${file2Preview})` }}
               >
                 2
               </div>
@@ -118,14 +133,14 @@ const CreatePoll = () => {
               ref={option1Ref}
               style={{ display: "none" }}
               accept="image/*"
-              onChange={(e) => setFile1(e.target.files[0])}
+              onChange={(e) => handleFilePreview(e, setFile1, setFile1Preview)}
             />
             <input
               type="file"
               ref={option2Ref}
               style={{ display: "none" }}
               accept="image/*"
-              onChange={(e) => setFile2(e.target.files[0])}
+              onChange={(e) => handleFilePreview(e, setFile2, setFile2Preview)}
             />
           </div>
         )}

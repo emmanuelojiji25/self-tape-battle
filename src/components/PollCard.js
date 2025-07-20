@@ -19,7 +19,8 @@ const PollCard = ({
   id,
 }) => {
   const [voteComplete, setVoteComplete] = useState(false);
-  const [hideCard, setHideCard] = useState(false);
+  const [collapseCard, setCollapseCard] = useState(false);
+  const [removeCard, setRemoveCard] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState(0);
 
@@ -50,8 +51,12 @@ const PollCard = ({
       setVoteComplete(true);
 
       setTimeout(() => {
-        setHideCard(true);
-      }, 100);
+        setCollapseCard(true);
+      }, 300);
+
+      setTimeout(() => {
+        setRemoveCard(true);
+      }, 600);
 
       console.log("successfully updated!");
     } catch (error) {
@@ -66,8 +71,8 @@ const PollCard = ({
   return (
     <div
       className={`PollCard ${voteComplete && "fade-out"} ${
-        hideCard && "collapse"
-      }`}
+        collapseCard && "collapse"
+      } ${removeCard && "remove-card"}`}
       ref={PollCardRef}
       style={{ height: `${height}px` }}
     >
@@ -75,7 +80,7 @@ const PollCard = ({
         <span className="name">Jack</span>
         <span className="time">2 mins ago</span>
       </div>
-      <span className="question">{question}</span> 
+      <span className="question">{question}</span>
       <h4 className="category">#fashion</h4>
 
       {type === "text" && (

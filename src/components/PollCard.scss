@@ -47,25 +47,24 @@
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
-  
   }
 }
 
-.name{
+.name {
   font-size: 14px;
 }
 
-.time{
+.time {
   font-size: 14px;
 }
 
-.question{
+.question {
   font-weight: bold;
   font-size: 14px;
 }
 
-.category{
-  color: #BBBBBB;
+.category {
+  color: #bbbbbb;
   font-size: 12px;
 }
 
@@ -86,5 +85,10 @@
 
 .collapse {
   height: 0 !important;
-  overflow: none;
+  overflow: hidden;
+  padding: 0;
 }
+
+/*.remove-card {
+  display: none;
+}*/
