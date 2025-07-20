@@ -59,10 +59,6 @@ const PollCard = ({
     }
   };
 
-  const handleSelectedOption = (selectedOption) => {
-    setSelectedOption(selectedOption);
-  };
-
   useEffect(() => {
     setHeight(PollCardRef.current.offsetHeight);
   }, []);
@@ -73,7 +69,7 @@ const PollCard = ({
         hideCard && "collapse"
       }`}
       ref={PollCardRef}
-      style={{ height: height }}
+      style={{ height: `${height}px` }}
     >
       <div className="poll-card-header">
         <h4>{name}</h4>
@@ -87,7 +83,6 @@ const PollCard = ({
           <div
             className="poll-bar"
             onClick={() => {
-              handleSelectedOption(1);
               handleVote("option1");
             }}
           >
@@ -96,7 +91,6 @@ const PollCard = ({
           <div
             className="poll-bar"
             onClick={() => {
-              handleSelectedOption(2);
               handleVote("option2");
             }}
           >
@@ -107,20 +101,22 @@ const PollCard = ({
 
       {type === "image" && (
         <div className="poll-image-container">
-          <img
-            src={option1Content}
-            onClick={() => {
-              handleSelectedOption(1);
-              handleVote("option1");
-            }}
-          />
-          <img
-            src={option2Content}
-            onClick={() => {
-              handleSelectedOption(2);
-              handleVote("option2");
-            }}
-          />
+          <div className="image-container">
+            <img
+              src={option1Content}
+              onClick={() => {
+                handleVote("option1");
+              }}
+            />
+          </div>
+          <div className="image-container">
+            <img
+              src={option2Content}
+              onClick={() => {
+                handleVote("option2");
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

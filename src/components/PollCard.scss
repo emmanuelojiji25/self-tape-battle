@@ -12,14 +12,23 @@
 
 .poll-image-container {
   display: flex;
-  img {
+  gap: 10px;
+
+  .image-container {
+    height: 200px;
     width: 50%;
+    background: rgb(233, 233, 233);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
 .PollCard {
   transition: height 0.2s ease-in-out;
-
 }
 
 .fade-out {
