@@ -27,6 +27,7 @@ const CreatePoll = () => {
         type,
         question,
         id: "",
+        userId:"",
         option1: {
           option: option1,
           votes: 0,

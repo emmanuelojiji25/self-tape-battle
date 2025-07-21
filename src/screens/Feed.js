@@ -5,7 +5,7 @@ import PollCard from "../components/PollCard";
 import { db } from "../firebaseConfig";
 import "./Feed.scss";
 
-const Feed = () => {
+const Feed = ({ user }) => {
   const [isCreatePollVisible, setIsCreatePollVisible] = useState(false);
   const [questions, setQuestions] = useState([]);
 
@@ -35,6 +35,7 @@ const Feed = () => {
     <div className="Feed screen-width">
       {questions.map((question) => (
         <PollCard
+          user={user}
           type={question.type}
           question={question.question}
           category={question.category}
@@ -51,7 +52,7 @@ const Feed = () => {
         Create Poll
       </button>
 
-      {isCreatePollVisible && <CreatePoll />}
+      {isCreatePollVisible && <CreatePoll user={user} />}
     </div>
   );
 };
