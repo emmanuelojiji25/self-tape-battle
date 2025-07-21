@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { db, storage } from "../firebaseConfig";
 import "./CreatePoll.scss";
 
-const CreatePoll = () => {
+const CreatePoll = ({ user }) => {
   const [type, setType] = useState("text");
 
   const [question, setQuestion] = useState("");
@@ -27,7 +27,7 @@ const CreatePoll = () => {
         type,
         question,
         id: "",
-        userId:"",
+        userId: user.uid,
         option1: {
           option: option1,
           votes: 0,

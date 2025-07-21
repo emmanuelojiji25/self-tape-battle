@@ -18,6 +18,7 @@ const PollCard = ({
   option1Content,
   option2Content,
   id,
+  userId,
 }) => {
   const [voteComplete, setVoteComplete] = useState(false);
   const [collapseCard, setCollapseCard] = useState(false);
@@ -27,6 +28,8 @@ const PollCard = ({
 
   const PollCardRef = useRef(null);
   const [height, setHeight] = useState();
+
+  const [username, setUsername] = useState();
 
   const handleVote = async (option) => {
     try {
@@ -59,8 +62,19 @@ const PollCard = ({
     }
   };
 
+  const getUsername = async () => {
+    try {
+      const docRef = doc(db, "users", userId);
+      const docSnapshot = await getDoc(docRef);
+      setUsername(docSnapshot.data().username);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     setHeight(PollCardRef.current.offsetHeight);
+    getUsername();
   }, []);
 
   return (
@@ -72,7 +86,7 @@ const PollCard = ({
       style={{ height: `${height}px` }}
     >
       <div className="poll-card-header">
-        <span className="name">username</span>
+        <span className="name">{username}</span>
         <span className="time">2 mins ago</span>
       </div>
       <span className="question">{question}</span>

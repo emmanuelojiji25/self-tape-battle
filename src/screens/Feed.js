@@ -42,6 +42,7 @@ const Feed = ({ user }) => {
           option1Content={question.option1.option}
           option2Content={question.option2.option}
           id={question.id}
+          userId={question.userId}
         />
       ))}
 
