@@ -4,6 +4,8 @@ import UserAuth from "./screens/UserAuth";
 import Feed from "./screens/Feed";
 import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import { Route, Routes } from "react-router-dom";
+import Profile from "./screens/Profile";
 
 function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -19,8 +21,11 @@ function App() {
 
   return (
     <div className="App">
-      {user && <Feed user={user} />}{" "}
-      {!user && <UserAuth setSignedIn={setSignedIn} />}
+      <Routes>
+        <Route path="/" element={user ? <Feed user={user} /> : <UserAuth />} />
+        <Route path="/userAuth" element={<UserAuth />} />
+        <Route path="/profile/:username" element={<Profile />} />
+      </Routes>
     </div>
   );
 }

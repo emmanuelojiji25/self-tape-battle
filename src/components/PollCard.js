@@ -7,6 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import "./PollCard.scss";
 
@@ -86,7 +87,9 @@ const PollCard = ({
       style={{ height: `${height}px` }}
     >
       <div className="poll-card-header">
-        <span className="name">{username}</span>
+        <Link to={`/profile/${username}`}>
+          <span className="name">{username}</span>
+        </Link>
         <span className="time">2 mins ago</span>
       </div>
       <span className="question">{question}</span>
