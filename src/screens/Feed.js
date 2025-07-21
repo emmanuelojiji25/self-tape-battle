@@ -37,6 +37,7 @@ const Feed = () => {
         <PollCard
           type={question.type}
           question={question.question}
+          category={question.category}
           option1Content={question.option1.option}
           option2Content={question.option2.option}
           id={question.id}

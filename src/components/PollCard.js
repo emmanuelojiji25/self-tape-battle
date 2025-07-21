@@ -14,6 +14,7 @@ const PollCard = ({
   type,
   name,
   question,
+  category,
   option1Content,
   option2Content,
   id,
@@ -71,11 +72,11 @@ const PollCard = ({
       style={{ height: `${height}px` }}
     >
       <div className="poll-card-header">
-        <span className="name">@Jack19</span>
+        <span className="name">username</span>
         <span className="time">2 mins ago</span>
       </div>
       <span className="question">{question}</span>
-      <h4 className="category">#fashion</h4>
+      <h4 className="category">#{category}</h4>
 
       {type === "text" && (
         <div className="poll-bar-container">
