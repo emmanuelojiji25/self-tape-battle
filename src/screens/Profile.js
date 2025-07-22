@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import PollCard from "../components/PollCard";
+import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -24,11 +24,8 @@ const Profile = () => {
 
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
-  const [followers, setFollowers] = useState(null);
-  const [following, setFollowing] = useState(null);
-  const [polls, setPolls] = useState([]);
 
-  const [userIsFollowing, setUserIsFollowing] = useState(null);
+  const [battles, setBattles] = useState([]);
 
   const getUser = async () => {
     try {
@@ -39,19 +36,17 @@ const Profile = () => {
       userDoc.forEach((doc) => {
         setUsername(doc.data().username);
         setUserId(doc.data().userId);
-        setFollowers(doc.data().followers);
-        setFollowing(doc.data().following);
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getUserPolls = async () => {
+  const getUserBattles = async () => {
     if (!userId) return;
     try {
-      const pollsCollection = collection(db, "polls");
-      const q = query(pollsCollection, where("userId", "==", userId));
+      const battlesCollection = collection(db, "battles");
+      const q = query(battlesCollection, where("userId", "==", userId));
       const docs = await getDocs(q);
 
       let data = [];
@@ -59,7 +54,7 @@ const Profile = () => {
       docs.forEach((doc) => {
         data.push(doc.data());
       });
-      setPolls(data);
+      setBattles(data);
 
       console.log(data);
     } catch (error) {
@@ -67,68 +62,17 @@ const Profile = () => {
     }
   };
 
-  const handleFollow = async () => {
-    if (!userId) return;
-    try {
-      const userRef = doc(db, "users", userId);
-      if (!userIsFollowing) {
-        await updateDoc(userRef, {
-          followers: arrayUnion(loggedInUser.uid),
-        });
-      } else {
-        await updateDoc(userRef, {
-          followers: arrayRemove(loggedInUser.uid),
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const followingCheck = async () => {
-    if (!userId) return;
-    const userRef = doc(db, "users", userId);
-
-    const snapshot = await getDoc(userRef);
-
-    const followers = snapshot.data().followers;
-
-    if (followers.includes(loggedInUser.uid)) {
-      setUserIsFollowing(true);
-    } else {
-      setUserIsFollowing(false);
-    }
-  };
-
   useEffect(() => {
     getUser();
   }, [params.username]);
-
-  useEffect(() => {
-    getUserPolls();
-    followingCheck();
-  }, [userId]);
 
   return (
     <div className="Profile">
       <h1>{username}</h1>
       <span>Bio here</span>
-      <span>{followers?.length}Followers</span>
-      <span>{following?.length}Following</span>
 
-      <button onClick={() => handleFollow()}>
-        {userIsFollowing ? "Unfollow" : "Follow"}
-      </button>
-      {polls.map((poll) => (
-        <PollCard
-          type={poll.type}
-          question={poll.question}
-          category={poll.category}
-          option1Content={poll.option1.option}
-          option2Content={poll.option2.option}
-          id={poll.id}
-          userId={poll.userId}
-        />
+      {battles.map((poll) => (
+        <BattleCard />
       ))}
     </div>
   );

@@ -1,7 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import CreatePoll from "../components/CreatePoll";
-import PollCard from "../components/PollCard";
+import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import "./Feed.scss";
 
@@ -29,14 +29,10 @@ const Feed = ({ user }) => {
 
   return (
     <div className="Feed screen-width">
-      <h1>Battles</h1>
-      {battles.map((question) => (
-        <PollCard
-         
-        />
+      <h1>Arena</h1>
+      {battles.map((battle) => (
+        <BattleCard name={battle.name} battleId={battle.id} />
       ))}
-
- 
     </div>
   );
 };
