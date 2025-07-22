@@ -1,12 +1,16 @@
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { ref, uploadBytes } from "firebase/storage";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
-import { db } from "../firebaseConfig";
+import { AuthContext } from "../contexts/AuthContext";
+import { db, storage } from "../firebaseConfig";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
   const [entries, setEntries] = useState([]);
+
+  const { loggedInUser } = useContext(AuthContext);
 
   const { battleId } = useParams();
 
@@ -28,19 +32,43 @@ const Battle = () => {
 
     setEntries(entries);
 
-
     try {
     } catch (error) {}
   };
 
+  const inputRef = useRef(null);
+  const [file, setFile] = useState(null);
+
   useEffect(() => {
     getBattle();
   }, []);
+
+  const handleUploadBattle = async () => {
+    const storageRef = ref(storage, `battles/${battleId}/${loggedInUser.uid}`);
+
+    try {
+      await uploadBytes(storageRef, file);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="Battle">
       <Link to="/">Back</Link>
       <h1>{title}</h1>
-      <button>Join Battle</button>
+      <button onClick={() => inputRef.current.click()}>Join Battle</button>
+      {file && <button onClick={() => handleUploadBattle()}>Upload</button>}
+
+      {file && <span>{file.name}</span>}
+      <input
+        type="file"
+        ref={inputRef}
+        style={{ display: "none" }}
+        onChange={(e) => {
+          const file = e.target.files;
+          setFile(file[0]);
+        }}
+      ></input>
 
       {entries.map((entry) => {
         return <EntryCard src={entry.url} uid={entry.uid} />;
