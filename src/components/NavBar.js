@@ -1,10 +1,13 @@
 import "./NavBar.scss";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { AuthContext } from "../contexts/AuthContext";
 
-const NavBar = ({ user }) => {
+const NavBar = () => {
+  const { user } = useContext(AuthContext);
+
   const [username, setUsername] = useState("");
   const getUser = async () => {
     try {
@@ -18,13 +21,12 @@ const NavBar = ({ user }) => {
   };
 
   useEffect(() => {
-    if (user) {
-      getUser();
-    }
+    getUser();
   }, [user]);
 
   return (
     <div className="NavBar">
+      <Link to={`/`}>Home</Link>
       {username && <Link to={`/profile/${username}`}>Profile</Link>}
     </div>
   );
