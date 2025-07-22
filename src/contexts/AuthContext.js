@@ -5,11 +5,14 @@ import { auth } from "../firebaseConfig";
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const cachedUser = JSON.parse(localStorage.getItem("localUser"));
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+    console.log("Setting up");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      console.log("new user" + user.email);
     });
     return () => unsubscribe();
   }, []);

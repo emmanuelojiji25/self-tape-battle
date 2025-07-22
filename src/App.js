@@ -19,6 +19,7 @@ function App() {
         <Route path="/userAuth" element={<UserAuth />} />
         <Route path="/profile/:username" element={<Profile />} />
       </Routes>
+
       <NavBar />
     </div>
   );
