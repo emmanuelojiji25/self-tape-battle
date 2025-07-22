@@ -1,6 +1,7 @@
 import "./Profile.scss";
 
 import {
+  arrayRemove,
   arrayUnion,
   collection,
   doc,
@@ -70,10 +71,15 @@ const Profile = () => {
     if (!userId) return;
     try {
       const userRef = doc(db, "users", userId);
-
-      await updateDoc(userRef, {
-        followers: arrayUnion(loggedInUser.uid),
-      });
+      if (!userIsFollowing) {
+        await updateDoc(userRef, {
+          followers: arrayUnion(loggedInUser.uid),
+        });
+      } else {
+        await updateDoc(userRef, {
+          followers: arrayRemove(loggedInUser.uid),
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -107,8 +113,8 @@ const Profile = () => {
     <div className="Profile">
       <h1>{username}</h1>
       <span>Bio here</span>
-      <span>Followers</span>
-      <span>Following</span>
+      <span>{followers?.length}Followers</span>
+      <span>{following?.length}Following</span>
 
       <button onClick={() => handleFollow()}>
         {userIsFollowing ? "Unfollow" : "Follow"}
