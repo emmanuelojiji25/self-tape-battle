@@ -10,12 +10,12 @@ import NavBar from "./components/NavBar";
 import { AuthContext } from "./contexts/AuthContext";
 
 function App() {
-  const { user } = useContext(AuthContext);
+  const { loggedInUser } = useContext(AuthContext);
 
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={user ? <Feed /> : <UserAuth />} />
+        <Route path="/" element={loggedInUser ? <Feed /> : <UserAuth />} />
         <Route path="/userAuth" element={<UserAuth />} />
         <Route path="/profile/:username" element={<Profile />} />
       </Routes>

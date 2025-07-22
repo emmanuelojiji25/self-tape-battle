@@ -1,22 +1,33 @@
+import "./Profile.scss";
+
 import {
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PollCard from "../components/PollCard";
 import { db } from "../firebaseConfig";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Profile = () => {
   const params = useParams();
 
+  const { loggedInUser } = useContext(AuthContext);
+
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
+  const [followers, setFollowers] = useState(null);
+  const [following, setFollowing] = useState(null);
   const [polls, setPolls] = useState([]);
+
+  const [userIsFollowing, setUserIsFollowing] = useState(null);
 
   const getUser = async () => {
     try {
@@ -27,6 +38,8 @@ const Profile = () => {
       userDoc.forEach((doc) => {
         setUsername(doc.data().username);
         setUserId(doc.data().userId);
+        setFollowers(doc.data().followers);
+        setFollowing(doc.data().following);
       });
     } catch (error) {
       console.log(error);
@@ -34,6 +47,7 @@ const Profile = () => {
   };
 
   const getUserPolls = async () => {
+    if (!userId) return;
     try {
       const pollsCollection = collection(db, "polls");
       const q = query(pollsCollection, where("userId", "==", userId));
@@ -43,8 +57,8 @@ const Profile = () => {
 
       docs.forEach((doc) => {
         data.push(doc.data());
-        setPolls(data);
       });
+      setPolls(data);
 
       console.log(data);
     } catch (error) {
@@ -52,17 +66,53 @@ const Profile = () => {
     }
   };
 
+  const handleFollow = async () => {
+    if (!userId) return;
+    try {
+      const userRef = doc(db, "users", userId);
+
+      await updateDoc(userRef, {
+        followers: arrayUnion(loggedInUser.uid),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const followingCheck = async () => {
+    if (!userId) return;
+    const userRef = doc(db, "users", userId);
+
+    const snapshot = await getDoc(userRef);
+
+    const followers = snapshot.data().followers;
+
+    if (followers.includes(loggedInUser.uid)) {
+      setUserIsFollowing(true);
+    } else {
+      setUserIsFollowing(false);
+    }
+  };
+
   useEffect(() => {
     getUser();
-  });
+  }, [params.username]);
 
   useEffect(() => {
     getUserPolls();
+    followingCheck();
   }, [userId]);
 
   return (
     <div className="Profile">
       <h1>{username}</h1>
+      <span>Bio here</span>
+      <span>Followers</span>
+      <span>Following</span>
+
+      <button onClick={() => handleFollow()}>
+        {userIsFollowing ? "Unfollow" : "Follow"}
+      </button>
       {polls.map((poll) => (
         <PollCard
           type={poll.type}

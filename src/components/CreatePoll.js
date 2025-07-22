@@ -1,10 +1,13 @@
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 import { db, storage } from "../firebaseConfig";
 import "./CreatePoll.scss";
 
-const CreatePoll = ({ user }) => {
+const CreatePoll = ({}) => {
+  const { loggedInUser } = useContext(AuthContext);
+
   const [type, setType] = useState("text");
 
   const [question, setQuestion] = useState("");
@@ -27,7 +30,7 @@ const CreatePoll = ({ user }) => {
         type,
         question,
         id: "",
-        userId: user.uid,
+        userId: loggedInUser.uid,
         option1: {
           option: option1,
           votes: 0,

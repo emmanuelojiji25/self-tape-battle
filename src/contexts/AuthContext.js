@@ -6,19 +6,21 @@ export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const cachedUser = JSON.parse(localStorage.getItem("localUser"));
-  const [user, setUser] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
     console.log("Setting up");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+      setLoggedInUser(user);
       console.log("new user" + user.email);
     });
     return () => unsubscribe();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ loggedInUser }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
