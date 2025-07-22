@@ -2,7 +2,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 
-const EntryCard = ({ url, firstname, lastname, uid }) => {
+const EntryCard = ({ url, uid }) => {
   const [name, setName] = useState("");
 
   const getName = async () => {

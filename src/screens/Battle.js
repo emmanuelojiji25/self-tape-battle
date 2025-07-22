@@ -1,5 +1,12 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
@@ -47,7 +54,23 @@ const Battle = () => {
     const storageRef = ref(storage, `battles/${battleId}/${loggedInUser.uid}`);
 
     try {
-      await uploadBytes(storageRef, file);
+      await uploadBytes(storageRef, file).then(() => {
+        getDownloadURL(
+          ref(storage, `battles/${battleId}/${loggedInUser.uid}`)
+        ).then(async (url) => {
+          const docRef = doc(
+            db,
+            "battles",
+            battleId,
+            "entries",
+            loggedInUser.uid
+          );
+          await setDoc(docRef, {
+            uid: `${loggedInUser.uid}`,
+            url: `${url}`,
+          });
+        });
+      });
     } catch (error) {
       console.log(error);
     }
