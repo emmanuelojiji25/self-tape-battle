@@ -9,12 +9,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDNO5-92mgR54QwR66kL0sA9UmVcsFVdzw",
-  authDomain: "poll-3efce.firebaseapp.com",
-  projectId: "poll-3efce",
-  storageBucket: "poll-3efce.firebasestorage.app",
-  messagingSenderId: "932109518570",
-  appId: "1:932109518570:web:66a7294e4b0dbfe9463993",
+  apiKey: "AIzaSyAJsJiKI2GDEdNoEGp0hHa3OJ1TnySl7pY",
+  authDomain: "self-tape-battle.firebaseapp.com",
+  projectId: "self-tape-battle",
+  storageBucket: "self-tape-battle.appspot.com",
+  messagingSenderId: "746282940351",
+  appId: "1:746282940351:web:d117a1a8a7c94cd27e130a"
 };
 
 // Initialize Firebase

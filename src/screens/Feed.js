@@ -6,53 +6,37 @@ import { db } from "../firebaseConfig";
 import "./Feed.scss";
 
 const Feed = ({ user }) => {
-  const [isCreatePollVisible, setIsCreatePollVisible] = useState(false);
-  const [questions, setQuestions] = useState([]);
+  const [battles, setBattles] = useState([]);
 
-  const handleGetPolls = async () => {
-    const polls = [];
+  const handleGetBattles = async () => {
+    const battles = [];
     try {
-      const querySnapshot = await getDocs(collection(db, "polls"));
-
-      console.log("success!");
+      const querySnapshot = await getDocs(collection(db, "battles"));
 
       querySnapshot.forEach((doc) => {
-        polls.push(doc.data());
+        battles.push(doc.data());
       });
 
-      setQuestions(polls);
+      setBattles(battles);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    handleGetPolls();
+    handleGetBattles();
   }, []);
 
   return (
     <div className="Feed screen-width">
-      {questions.map((question) => (
+      <h1>Battles</h1>
+      {battles.map((question) => (
         <PollCard
-          user={user}
-          type={question.type}
-          question={question.question}
-          category={question.category}
-          option1Content={question.option1.option}
-          option2Content={question.option2.option}
-          id={question.id}
-          userId={question.userId}
+         
         />
       ))}
 
-      <button
-        className="create-poll"
-        onClick={() => setIsCreatePollVisible(true)}
-      >
-        Create Poll
-      </button>
-
-      {isCreatePollVisible && <CreatePoll user={user} />}
+ 
     </div>
   );
 };
