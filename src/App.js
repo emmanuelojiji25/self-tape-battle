@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import UserAuth from "./screens/UserAuth";
 import Feed from "./screens/Feed";
@@ -6,17 +6,17 @@ import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { Route, Routes } from "react-router-dom";
 import Profile from "./screens/Profile";
+import NavBar from "./components/NavBar";
 
 function App() {
-
   const [user, setUser] = useState();
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      console.log(user.email);
-    }
-  });
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="App">
@@ -25,6 +25,7 @@ function App() {
         <Route path="/userAuth" element={<UserAuth />} />
         <Route path="/profile/:username" element={<Profile />} />
       </Routes>
+      <NavBar user={user} />
     </div>
   );
 }

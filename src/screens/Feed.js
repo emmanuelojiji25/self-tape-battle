@@ -17,7 +17,6 @@ const Feed = ({ user }) => {
       console.log("success!");
 
       querySnapshot.forEach((doc) => {
-        console.log(doc.data());
         polls.push(doc.data());
       });
 

@@ -24,8 +24,6 @@ const Profile = () => {
       userDoc.forEach((doc) => {
         setUsername(doc.data().username);
       });
-
-      console.log(userDoc);
     } catch (error) {
       console.log(error);
     }
