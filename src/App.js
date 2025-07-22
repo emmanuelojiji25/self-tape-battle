@@ -8,7 +8,6 @@ import { Route, Routes } from "react-router-dom";
 import Profile from "./screens/Profile";
 
 function App() {
-  const [signedIn, setSignedIn] = useState(false);
 
   const [user, setUser] = useState();
 
