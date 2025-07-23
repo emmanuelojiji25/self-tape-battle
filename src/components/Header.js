@@ -29,8 +29,9 @@ const Header = () => {
 
   return (
     <div className="Header screen-width">
-      <h4>Self Tape Battle</h4>
-      <span>Coins: {coins}</span>
+      <div className="header-inner">
+        <span>Coins: {coins}</span>
+      </div>
     </div>
   );
 };

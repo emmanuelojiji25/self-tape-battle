@@ -1,0 +1,16 @@
+.Battle {
+  background: #f5f5f5;
+}
+
+.entries-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.battle-title {
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 28px;
+}

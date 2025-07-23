@@ -12,6 +12,7 @@ import { Link, useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
 import { AuthContext } from "../contexts/AuthContext";
 import { db, storage } from "../firebaseConfig";
+import "./Battle.scss"
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -83,7 +84,7 @@ const Battle = () => {
   return (
     <div className="Battle screen-width">
       <Link to="/">Back</Link>
-      <h1>{title}</h1>
+      <h3 className="battle-title">{title}</h3>
       {!userHasJoined && (
         <button onClick={() => inputRef.current.click()}>Join Battle</button>
       )}
@@ -100,16 +101,18 @@ const Battle = () => {
         }}
       ></input>
 
-      {entries.map((entry) => {
-        return (
-          <EntryCard
-            url={entry.url}
-            uid={entry.uid}
-            battleId={battleId}
-            voteButtonVisible={entry.uid != loggedInUser.uid}
-          />
-        );
-      })}
+      <div className="entries-container">
+        {entries.map((entry) => {
+          return (
+            <EntryCard
+              url={entry.url}
+              uid={entry.uid}
+              battleId={battleId}
+              voteButtonVisible={entry.uid != loggedInUser.uid}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -27,6 +27,9 @@ const Profile = () => {
 
   const [battles, setBattles] = useState([]);
 
+  const [bio, setBio] = useState("");
+  const [link, setLink] = useState("");
+
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
@@ -34,8 +37,11 @@ const Profile = () => {
       const userDoc = await getDocs(q);
 
       userDoc.forEach((doc) => {
-        setUsername(doc.data().username);
-        setUserId(doc.data().userId);
+        const data = doc.data();
+        setUsername(data.username);
+        setUserId(data.userId);
+        setBio(data.bio);
+        setLink(data.link);
       });
     } catch (error) {
       console.log(error);
@@ -69,7 +75,8 @@ const Profile = () => {
   return (
     <div className="Profile">
       <h1>{username}</h1>
-      <span>Bio here</span>
+      <span>{bio}</span>
+      <span>{link}</span>
 
       {battles.map((poll) => (
         <BattleCard />
