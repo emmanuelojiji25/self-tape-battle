@@ -4,6 +4,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,
@@ -16,6 +17,7 @@ import { useParams } from "react-router-dom";
 import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
+import EntryCard from "../components/EntryCard";
 
 const Profile = () => {
   const params = useParams();
@@ -39,7 +41,7 @@ const Profile = () => {
       userDoc.forEach((doc) => {
         const data = doc.data();
         setUsername(data.username);
-        setUserId(data.userId);
+        setUserId(data.uid);
         setBio(data.bio);
         setLink(data.link);
       });
@@ -49,11 +51,12 @@ const Profile = () => {
   };
 
   const getUserBattles = async () => {
-    if (!userId) return;
     try {
-      const battlesCollection = collection(db, "battles");
-      const q = query(battlesCollection, where("userId", "==", userId));
+      const battlesCollection = collectionGroup(db, "entries");
+      const q = query(battlesCollection, where("uid", "==", userId));
       const docs = await getDocs(q);
+
+      console.log(docs.empty);
 
       let data = [];
 
@@ -61,8 +64,6 @@ const Profile = () => {
         data.push(doc.data());
       });
       setBattles(data);
-
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -72,14 +73,24 @@ const Profile = () => {
     getUser();
   }, [params.username]);
 
+  useEffect(() => {
+    getUserBattles();
+  }, [userId]);
+
   return (
-    <div className="Profile">
+    <div className="Profile screen-width">
       <h1>{username}</h1>
       <span>{bio}</span>
       <span>{link}</span>
 
-      {battles.map((poll) => (
-        <BattleCard />
+      {battles.map((battle) => (
+        <>
+          <EntryCard
+            url={battle.url}
+            uid={battle.uid}
+            battleId={battle.battleId}
+          />
+        </>
       ))}
     </div>
   );
