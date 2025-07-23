@@ -28,8 +28,8 @@ const Header = () => {
   }, [loggedInUser]);
 
   return (
-    <div className="Header">
-      <h1>Self Tape Battle</h1>
+    <div className="Header screen-width">
+      <h4>Self Tape Battle</h4>
       <span>Coins: {coins}</span>
     </div>
   );

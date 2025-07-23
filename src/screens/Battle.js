@@ -81,7 +81,7 @@ const Battle = () => {
     }
   };
   return (
-    <div className="Battle">
+    <div className="Battle screen-width">
       <Link to="/">Back</Link>
       <h1>{title}</h1>
       {!userHasJoined && (

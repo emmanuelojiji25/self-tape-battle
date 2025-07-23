@@ -26,7 +26,7 @@ const NavBar = () => {
 
   return (
     <div className="NavBar">
-      <Link to={`/`}>Home</Link>
+      <Link to={`/`}>Arena</Link>
       {username && <Link to={`/profile/${username}`}>Profile</Link>}
     </div>
   );
