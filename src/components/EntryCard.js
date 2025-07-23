@@ -59,7 +59,9 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
     <div className="EntryCard">
       <h1>Entry card</h1>
       <span>{name}</span>
-      <video src={url} />
+      <div className="video-container">
+        <video src={url} />
+      </div>
       <span>Votes {votes}</span>
       {voteButtonVisible && <buton onClick={() => handleVote()}>Vote</buton>}
     </div>

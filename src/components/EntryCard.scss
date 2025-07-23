@@ -1,3 +1,11 @@
+.video-container {
+  width: 100%;
+
+  video {
+    width: 100%;
+  }
+}
+
 .EntryCard {
   display: flex;
   flex-direction: column;

@@ -73,6 +73,7 @@ const Battle = () => {
             url: `${url}`,
             votes: [],
           });
+          console.log("complete!");
         });
       });
     } catch (error) {
@@ -102,7 +103,7 @@ const Battle = () => {
       {entries.map((entry) => {
         return (
           <EntryCard
-            src={entry.url}
+            url={entry.url}
             uid={entry.uid}
             battleId={battleId}
             voteButtonVisible={entry.uid != loggedInUser.uid}

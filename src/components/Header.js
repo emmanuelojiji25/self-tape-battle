@@ -6,10 +6,10 @@ import "./Header.scss";
 
 const Header = () => {
   const { loggedInUser } = useContext(AuthContext);
-  const [coins, setCoins] = useState(0); 
+  const [coins, setCoins] = useState(0);
 
   useEffect(() => {
-    if (!loggedInUser) return; 
+    if (!loggedInUser) return;
 
     const userRef = doc(db, "users", loggedInUser.uid);
 
@@ -29,7 +29,7 @@ const Header = () => {
 
   return (
     <div className="Header">
-      <h1>Header</h1>
+      <h1>Self Tape Battle</h1>
       <span>Coins: {coins}</span>
     </div>
   );
