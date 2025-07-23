@@ -9,12 +9,14 @@ import Profile from "./screens/Profile";
 import NavBar from "./components/NavBar";
 import { AuthContext } from "./contexts/AuthContext";
 import Battle from "./screens/Battle";
+import Header from "./components/Header";
 
 function App() {
   const { loggedInUser } = useContext(AuthContext);
 
   return (
     <div className="App">
+      <Header/>
       <Routes>
         <Route path="/" element={loggedInUser ? <Feed /> : <UserAuth />} />
         <Route path="/userAuth" element={<UserAuth />} />

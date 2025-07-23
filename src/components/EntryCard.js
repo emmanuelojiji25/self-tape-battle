@@ -42,10 +42,16 @@ const EntryCard = ({ url, uid, battleId }) => {
   const handleVote = async () => {
     const entryRef = doc(db, "battles", battleId, "entries", uid);
     await updateDoc(entryRef, {
-      votes: arrayUnion(`${loggedInUser}`),
+      votes: arrayUnion(`${loggedInUser.uid}`),
     });
     onSnapshot(entryRef, async (snapshot) => {
       setVotes(snapshot.data().votes.length);
+    });
+
+    //Update Coins
+    const userSnapshot = await getDoc(docRef);
+    await updateDoc(docRef, {
+      coins: userSnapshot.data().coins + 1,
     });
   };
 

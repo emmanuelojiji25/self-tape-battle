@@ -22,8 +22,11 @@ const UserAuth = ({ setSignedIn }) => {
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         username: username,
         email: email,
-        followers: [],
-        following: [],
+        firstName: "",
+        lastName: "",
+        bio: "",
+        coins: 0,
+        link: "",
       });
 
       setSignedIn(true);

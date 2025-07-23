@@ -8,6 +8,7 @@ const AuthProvider = ({ children }) => {
   const cachedUser = JSON.parse(localStorage.getItem("localUser"));
   const [loggedInUser, setLoggedInUser] = useState(null);
 
+
   useEffect(() => {
     console.log("Setting up");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
