@@ -60,7 +60,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
       <span className="name">{name}</span>
       <div className="video-container">
         <video src={url} />
-        <span className="votes">Votes {votes}</span>
+        <span className="votes">{votes > 0 ? votes : "No"} Votes</span>
       </div>
 
       {voteButtonVisible && <buton onClick={() => handleVote()}>Vote</buton>}

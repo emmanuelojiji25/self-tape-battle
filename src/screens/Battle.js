@@ -12,7 +12,7 @@ import { Link, useParams } from "react-router-dom";
 import EntryCard from "../components/EntryCard";
 import { AuthContext } from "../contexts/AuthContext";
 import { db, storage } from "../firebaseConfig";
-import "./Battle.scss"
+import "./Battle.scss";
 
 const Battle = () => {
   const [title, setTitle] = useState("");

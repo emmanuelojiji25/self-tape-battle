@@ -89,6 +89,7 @@ const Profile = () => {
             url={battle.url}
             uid={battle.uid}
             battleId={battle.battleId}
+            
           />
         </>
       ))}
