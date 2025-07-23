@@ -10,7 +10,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
 import "./EntryCard.scss";
 
-const EntryCard = ({ url, uid, battleId }) => {
+const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
   const { loggedInUser } = useContext(AuthContext);
 
   const [name, setName] = useState("");
@@ -61,7 +61,7 @@ const EntryCard = ({ url, uid, battleId }) => {
       <span>{name}</span>
       <video src={url} />
       <span>Votes {votes}</span>
-      <buton onClick={() => handleVote()}>Vote</buton>
+      {voteButtonVisible && <buton onClick={() => handleVote()}>Vote</buton>}
     </div>
   );
 };

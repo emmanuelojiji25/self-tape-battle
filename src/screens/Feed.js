@@ -31,7 +31,7 @@ const Feed = ({ user }) => {
     <div className="Feed screen-width">
       <h1>Arena</h1>
       {battles.map((battle) => (
-        <BattleCard name={battle.title} battleId={battle.id} />
+        <BattleCard name={battle.title} battleId={battle.id}  />
       ))}
     </div>
   );

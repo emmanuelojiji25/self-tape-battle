@@ -19,6 +19,8 @@ const Battle = () => {
 
   const { loggedInUser } = useContext(AuthContext);
 
+  const userHasJoined = entries.some((entry) => entry.uid === loggedInUser.uid);
+
   const { battleId } = useParams();
 
   const getBattle = async () => {
@@ -38,6 +40,7 @@ const Battle = () => {
     });
 
     setEntries(entries);
+    console.log(entries);
 
     try {
     } catch (error) {}
@@ -80,7 +83,9 @@ const Battle = () => {
     <div className="Battle">
       <Link to="/">Back</Link>
       <h1>{title}</h1>
-      <button onClick={() => inputRef.current.click()}>Join Battle</button>
+      {!userHasJoined && (
+        <button onClick={() => inputRef.current.click()}>Join Battle</button>
+      )}
       {file && <button onClick={() => handleUploadBattle()}>Upload</button>}
 
       {file && <span>{file.name}</span>}
@@ -96,7 +101,12 @@ const Battle = () => {
 
       {entries.map((entry) => {
         return (
-          <EntryCard src={entry.url} uid={entry.uid} battleId={battleId} />
+          <EntryCard
+            src={entry.url}
+            uid={entry.uid}
+            battleId={battleId}
+            voteButtonVisible={entry.uid != loggedInUser.uid}
+          />
         );
       })}
     </div>
