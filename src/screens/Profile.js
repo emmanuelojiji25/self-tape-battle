@@ -23,7 +23,7 @@ const Profile = () => {
   const params = useParams();
 
   const { loggedInUser } = useContext(AuthContext);
-
+  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
 
@@ -42,6 +42,7 @@ const Profile = () => {
         const data = doc.data();
         setUsername(data.username);
         setUserId(data.uid);
+        setName(`${data.firstName + " " + data.lastName}`);
         setBio(data.bio);
         setLink(data.link);
       });
@@ -79,7 +80,13 @@ const Profile = () => {
 
   return (
     <div className="Profile screen-width">
-      <h1>{username}</h1>
+      <div className="profile-headshot-container">
+        <img
+          className="profile-headshot"
+          src="https://images.squarespace-cdn.com/content/v1/624f4bb135fbf60489e1bccf/c9ba8deb-7981-49d4-b7ec-49c1230a5057/Actress+Headshot+Los+Angeles.jpg"
+        />
+      </div>
+      <h1>{name}</h1>
       <span>{bio}</span>
       <span>{link}</span>
 
@@ -89,7 +96,6 @@ const Profile = () => {
             url={battle.url}
             uid={battle.uid}
             battleId={battle.battleId}
-            
           />
         </>
       ))}
