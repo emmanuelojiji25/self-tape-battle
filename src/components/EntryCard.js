@@ -1,4 +1,10 @@
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
@@ -26,7 +32,6 @@ const EntryCard = ({ url, uid, battleId }) => {
   const getVotes = async () => {
     const docRef = doc(db, "battles", battleId, "entries", uid);
     try {
-      console.log(db);
       const snapshot = await getDoc(docRef);
       setVotes(snapshot.data().votes.length);
     } catch (error) {
@@ -38,6 +43,9 @@ const EntryCard = ({ url, uid, battleId }) => {
     const entryRef = doc(db, "battles", battleId, "entries", uid);
     await updateDoc(entryRef, {
       votes: arrayUnion(`${loggedInUser}`),
+    });
+    onSnapshot(entryRef, async (snapshot) => {
+      setVotes(snapshot.data().votes.length);
     });
   };
 
