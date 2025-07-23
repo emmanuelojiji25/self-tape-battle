@@ -1,9 +1,12 @@
-import { doc, getDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
 import "./EntryCard.scss";
 
 const EntryCard = ({ url, uid, battleId }) => {
+  const { loggedInUser } = useContext(AuthContext);
+
   const [name, setName] = useState("");
   const [votes, setVotes] = useState([]);
 
@@ -32,9 +35,10 @@ const EntryCard = ({ url, uid, battleId }) => {
   };
 
   const handleVote = async () => {
-    const docSnapshot = await getDoc(docRef);
-    const data = docSnapshot.data();
-    setVotes(data.votes);
+    const entryRef = doc(db, "battles", battleId, "entries", uid);
+    await updateDoc(entryRef, {
+      votes: arrayUnion(`${loggedInUser}`),
+    });
   };
 
   return (
@@ -43,7 +47,7 @@ const EntryCard = ({ url, uid, battleId }) => {
       <span>{name}</span>
       <video src={url} />
       <span>Votes {votes}</span>
-      <buton>Vote</buton>
+      <buton onClick={() => handleVote()}>Vote</buton>
     </div>
   );
 };
