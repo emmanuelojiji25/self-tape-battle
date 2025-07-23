@@ -68,6 +68,7 @@ const Battle = () => {
           await setDoc(docRef, {
             uid: `${loggedInUser.uid}`,
             url: `${url}`,
+            votes: [],
           });
         });
       });
@@ -94,7 +95,9 @@ const Battle = () => {
       ></input>
 
       {entries.map((entry) => {
-        return <EntryCard src={entry.url} uid={entry.uid} />;
+        return (
+          <EntryCard src={entry.url} uid={entry.uid} battleId={battleId} />
+        );
       })}
     </div>
   );
