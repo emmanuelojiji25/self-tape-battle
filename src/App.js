@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header/>
+    
       <Routes>
         <Route path="/" element={loggedInUser ? <Feed /> : <UserAuth />} />
         <Route path="/userAuth" element={<UserAuth />} />

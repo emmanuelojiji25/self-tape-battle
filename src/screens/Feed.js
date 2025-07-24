@@ -11,6 +11,7 @@ import CreatePoll from "../components/CreatePoll";
 import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import "./Feed.scss";
+import Header from "../components/Header";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
@@ -59,12 +60,19 @@ const Feed = ({ user }) => {
   }, []);
 
   return (
-    <div className="Feed screen-width">
-      <BattleCard name={mostPopular.title} battleId={mostPopular.id} mostPopular={true} />
-      {battles.map((battle) => (
-        <BattleCard name={battle.title} battleId={battle.id} />
-      ))}
-    </div>
+    <>
+      <Header />
+      <div className="Feed screen-width">
+        <BattleCard
+          name={mostPopular.title}
+          battleId={mostPopular.id}
+          mostPopular={true}
+        />
+        {battles.map((battle) => (
+          <BattleCard name={battle.title} battleId={battle.id} />
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -83,8 +83,9 @@ const Battle = () => {
   };
   return (
     <div className="Battle screen-width">
-      <Link to="/">Back</Link>
+      <Link to="/" className="back">Back</Link>
       <h3 className="battle-title">{title}</h3>
+      <span className="prize-pill">Spotlight Membership</span>
       {!userHasJoined && (
         <button onClick={() => inputRef.current.click()}>Join Battle</button>
       )}
