@@ -21,7 +21,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
   const getName = async () => {
     const docSnapshot = await getDoc(docRef);
     const data = docSnapshot.data();
-    setName(data.firstName + " " + data.lastName);
+    setName(data?.firstName + " " + data?.lastName);
   };
 
   useEffect(() => {
