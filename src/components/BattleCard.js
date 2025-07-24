@@ -26,8 +26,9 @@ const BattleCard = ({ name, battleId }) => {
   return (
     <div className="PollCard">
       <span className="title">{name}</span>
+      <span className="prize">Spotlight Membership</span>
       <Link to={`/arena/${battleId}`}>
-        <button>Join Battle</button>
+        <button>Join</button>
       </Link>
     </div>
   );

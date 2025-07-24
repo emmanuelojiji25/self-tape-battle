@@ -1,12 +1,24 @@
 .NavBar {
-  height: 70px;
-  background: grey;
   width: 100%;
   position: fixed;
-  bottom: 0;
+  bottom: 30px;
   left: 0;
-  display: flex;
   gap: 30px;
   justify-content: center;
   align-items: center;
+  border-radius: 50px;
+  display: flex;
+display: none;
+}
+
+.nav-bar-inner {
+  width: 300px;
+  background: rgb(255, 102, 6);
+  height: 70px;
+  border-radius: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  
 }

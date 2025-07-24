@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
 import "./Header.scss";
+import coin from "../media/coin.svg";
 
 const Header = () => {
   const { loggedInUser } = useContext(AuthContext);
@@ -30,7 +31,14 @@ const Header = () => {
   return (
     <div className="Header screen-width">
       <div className="header-inner">
-        <span>Coins: {coins}</span>
+        <div className="greeting-container">
+          <h2 className="greeting">Welcome, Jack</h2>
+          <p>Your next battle awaits you!</p>
+        </div>
+        <div className="coins-container">
+          <img src={coin} />
+          {coins}
+        </div>
       </div>
     </div>
   );

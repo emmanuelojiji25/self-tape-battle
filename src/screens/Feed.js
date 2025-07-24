@@ -29,7 +29,6 @@ const Feed = ({ user }) => {
 
   return (
     <div className="Feed screen-width">
-      <h1>Arena</h1>
       {battles.map((battle) => (
         <BattleCard name={battle.title} battleId={battle.id}  />
       ))}

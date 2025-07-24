@@ -80,25 +80,31 @@ const Profile = () => {
 
   return (
     <div className="Profile screen-width">
-      <div className="profile-headshot-container">
-        <img
-          className="profile-headshot"
-          src="https://images.squarespace-cdn.com/content/v1/624f4bb135fbf60489e1bccf/c9ba8deb-7981-49d4-b7ec-49c1230a5057/Actress+Headshot+Los+Angeles.jpg"
-        />
-      </div>
-      <h1>{name}</h1>
-      <span>{bio}</span>
-      <span>{link}</span>
-
-      {battles.map((battle) => (
-        <>
-          <EntryCard
-            url={battle.url}
-            uid={battle.uid}
-            battleId={battle.battleId}
+      <div className="profile-header">
+        <div className="profile-headshot-container">
+          <img
+            className="profile-headshot"
+            src="https://images.squarespace-cdn.com/content/v1/624f4bb135fbf60489e1bccf/c9ba8deb-7981-49d4-b7ec-49c1230a5057/Actress+Headshot+Los+Angeles.jpg"
           />
-        </>
-      ))}
+        </div>
+        <div className="profile-info">
+          <h1>{name}</h1>
+          <span>{bio}</span>
+          <span>{link}</span>
+        </div>
+      </div>
+
+      <div className="entries-container">
+        {battles.map((battle) => (
+          <>
+            <EntryCard
+              url={battle.url}
+              uid={battle.uid}
+              battleId={battle.battleId}
+            />
+          </>
+        ))}
+      </div>
     </div>
   );
 };

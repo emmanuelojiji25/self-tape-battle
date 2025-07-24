@@ -26,8 +26,10 @@ const NavBar = () => {
 
   return (
     <div className="NavBar">
-      <Link to={`/`}>Arena</Link>
-      {username && <Link to={`/profile/${username}`}>Profile</Link>}
+      <div className="nav-bar-inner">
+        <Link to={`/`}>Arena</Link>
+        {username && <Link to={`/profile/${username}`}>Profile</Link>}
+      </div>
     </div>
   );
 };
