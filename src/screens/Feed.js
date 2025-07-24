@@ -1,4 +1,11 @@
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  collectionGroup,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import CreatePoll from "../components/CreatePoll";
 import BattleCard from "../components/BattleCard";
@@ -7,6 +14,8 @@ import "./Feed.scss";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
+
+  const [mostPopular, setMostPopular] = useState([]);
 
   const handleGetBattles = async () => {
     const battles = [];
@@ -18,6 +27,28 @@ const Feed = ({ user }) => {
       });
 
       setBattles(battles);
+
+      //Get Most popular
+      const entriesArray = [];
+
+      querySnapshot.forEach(async (battle) => {
+        const entries = await getDocs(
+          collection(db, "battles", battle.id, "entries")
+        );
+        entriesArray.push(entries);
+
+        const sorted = entriesArray?.sort((a, b) => b.size - a.size)[0];
+
+        const mostPopular = sorted.query._path.segments[1];
+
+        console.log(mostPopular);
+
+        const mostPopularRef = doc(db, "battles", mostPopular);
+
+        const mostPopularSnapshot = await getDoc(mostPopularRef);
+
+        setMostPopular(mostPopularSnapshot.data());
+      });
     } catch (error) {
       console.log(error);
     }
@@ -29,8 +60,9 @@ const Feed = ({ user }) => {
 
   return (
     <div className="Feed screen-width">
+      <BattleCard name={mostPopular.title} battleId={mostPopular.id} mostPopular={true} />
       {battles.map((battle) => (
-        <BattleCard name={battle.title} battleId={battle.id}  />
+        <BattleCard name={battle.title} battleId={battle.id} />
       ))}
     </div>
   );

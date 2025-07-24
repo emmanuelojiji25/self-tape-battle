@@ -10,8 +10,9 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import "./BattleCard.scss";
+import gift from "../media/gift.svg";
 
-const BattleCard = ({ name, battleId }) => {
+const BattleCard = ({ name, battleId, mostPopular }) => {
   const [voteComplete, setVoteComplete] = useState(false);
   const [collapseCard, setCollapseCard] = useState(false);
   const [removeCard, setRemoveCard] = useState(false);
@@ -24,9 +25,12 @@ const BattleCard = ({ name, battleId }) => {
   const [username, setUsername] = useState();
 
   return (
-    <div className="PollCard">
+    <div className={`PollCard ${mostPopular && "most-popular"}`}>
       <span className="title">{name}</span>
-      <span className="prize">Spotlight Membership</span>
+      <span className="prize">
+        <img src={gift} />
+        Spotlight Membership
+      </span>
       <Link to={`/arena/${battleId}`}>
         <button>Join</button>
       </Link>

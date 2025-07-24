@@ -20,6 +20,11 @@
   }
 }
 
+.header-right {
+  display: flex;
+  gap: 10px;
+}
+
 .greeting-container {
   h2 {
     color: white;
@@ -41,8 +46,18 @@
   padding: 5px 10px;
   padding-left: 7px;
 
-  img{
+  img {
     margin-right: 5px;
     width: 20px;
   }
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  background: grey;
+  border-radius: 300px;
+  background-image: url("../media/headshot.jpg");
+  background-position: center;
+  background-size: cover;
 }

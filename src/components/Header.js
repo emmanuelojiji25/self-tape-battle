@@ -35,9 +35,12 @@ const Header = () => {
           <h2 className="greeting">Welcome, Jack</h2>
           <p>Your next battle awaits you!</p>
         </div>
-        <div className="coins-container">
-          <img src={coin} />
-          {coins}
+        <div className="header-right">
+          <div className="coins-container">
+            <img src={coin} />
+            {coins}
+          </div>
+          <div className="avatar"></div>
         </div>
       </div>
     </div>
