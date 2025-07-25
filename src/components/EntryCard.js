@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { auth, db } from "../firebaseConfig";
 import "./EntryCard.scss";
+import ConfettiExplosion from "react-confetti-explosion";
 
 const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
   const { loggedInUser } = useContext(AuthContext);
@@ -16,6 +17,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
   const [name, setName] = useState("");
   const [votes, setVotes] = useState([]);
   const [userhasVoted, setUserHasVoted] = useState(false);
+  const [isExploding, setIsExploding] = useState(false);
 
   const docRef = doc(db, "users", uid);
 
@@ -64,11 +66,13 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
       await updateDoc(authUserRef, {
         coins: authUserSnapshot.data().coins + 1,
       });
+      setIsExploding(true);
     } else return null;
   };
 
   return (
     <div className="EntryCard">
+      {isExploding && <ConfettiExplosion />}
       <span className="name">{name}</span>
       <div className="video-container">
         <video src={url} />
