@@ -9,6 +9,7 @@ import {
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Button from "../components/Button";
 import EntryCard from "../components/EntryCard";
 import { AuthContext } from "../contexts/AuthContext";
 import { db, storage } from "../firebaseConfig";
@@ -20,7 +21,9 @@ const Battle = () => {
 
   const { loggedInUser } = useContext(AuthContext);
 
-  const userHasJoined = entries.some((entry) => entry.uid === loggedInUser.uid);
+  //const userHasJoined = entries.some((entry) => entry.uid === loggedInUser.uid);
+
+  const userHasJoined = false;
 
   const { battleId } = useParams();
 
@@ -83,15 +86,28 @@ const Battle = () => {
   };
   return (
     <div className="Battle screen-width">
-      <Link to="/" className="back">Back</Link>
+      <Link to="/" className="back">
+        Back
+      </Link>
       <h3 className="battle-title">{title}</h3>
       <span className="prize-pill">Spotlight Membership</span>
-      {!userHasJoined && (
-        <button onClick={() => inputRef.current.click()}>Join Battle</button>
+      {!userHasJoined && !file && (
+        <Button
+          onClick={() => inputRef.current.click()}
+          text="Upload Tape"
+          className="upload-tape"
+          filled
+        />
       )}
-      {file && <button onClick={() => handleUploadBattle()}>Upload</button>}
-
-      {file && <span>{file.name}</span>}
+      {file && (
+        <div className="file-container">
+          <p className="file-name">{file.name}</p>
+          <div className="button-container">
+            <Button onClick={() => handleUploadBattle()} text="Post" filled />
+            <Button onClick={() => setFile(null)} text="Cancel" outline />
+          </div>
+        </div>
+      )}
       <input
         type="file"
         ref={inputRef}

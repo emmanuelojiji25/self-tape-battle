@@ -12,6 +12,7 @@ import { db } from "../firebaseConfig";
 import "./BattleCard.scss";
 import gift from "../media/gift.svg";
 import fire from "../media/fire.svg";
+import Button from "./Button";
 
 const BattleCard = ({ name, battleId, mostPopular }) => {
   const [voteComplete, setVoteComplete] = useState(false);
@@ -44,7 +45,7 @@ const BattleCard = ({ name, battleId, mostPopular }) => {
         Spotlight Membership
       </span>
       <Link to={`/arena/${battleId}`}>
-        <button>Join</button>
+        <Button text="Join" filled/>
       </Link>
     </div>
   );

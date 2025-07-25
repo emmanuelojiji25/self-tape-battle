@@ -3,12 +3,12 @@
   min-height: 100svh;
 }
 
-.back{
+.back {
   color: white;
 }
 
 .entries-container {
-  margin-top: 20px;
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -28,4 +28,26 @@
   background: #048565;
   color: white;
   padding: 3px 10px;
+  margin-bottom: 30px;
+  display: block;
+  width: fit-content;
+}
+
+.upload-tape{
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.file-name{
+  color: white;
+  margin-bottom: 10px;
+}
+
+.file-container{
+  
+
+  .button-container{
+    display: flex;
+    gap: 10px;
+  }
 }

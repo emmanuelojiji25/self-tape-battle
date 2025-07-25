@@ -1,0 +1,16 @@
+button {
+  border: 0;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: white;
+  display: block;
+
+  &.filled {
+    background: #4b7cff;
+  }
+
+  &.outline {
+    background: none;
+    border: solid 1px #4b7cff;
+  }
+}
