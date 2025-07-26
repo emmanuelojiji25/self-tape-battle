@@ -21,9 +21,9 @@ const Battle = () => {
 
   const { loggedInUser } = useContext(AuthContext);
 
-  //const userHasJoined = entries.some((entry) => entry.uid === loggedInUser.uid);
+  const userHasJoined = entries.some((entry) => entry.uid === loggedInUser.uid);
 
-  const userHasJoined = false;
+  //const userHasJoined = false;
 
   const { battleId } = useParams();
 

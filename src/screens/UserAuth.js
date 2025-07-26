@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import Button from "../components/Button";
 
 const UserAuth = ({ setSignedIn }) => {
   const [view, setView] = useState("sign-up");
@@ -46,7 +47,7 @@ const UserAuth = ({ setSignedIn }) => {
   };
 
   return (
-    <div className="UserAuth">
+    <div className="UserAuth screen-width">
       {view === "sign-up" && (
         <div className="sign-up">
           <h1>Sign Up</h1>
@@ -74,9 +75,13 @@ const UserAuth = ({ setSignedIn }) => {
               console.log(password);
             }}
           />
-          <button onClick={() => handleSignUp()}>sign up</button>
+          <Button onClick={() => handleSignUp()} text="Sign Up" filled>
+            sign up
+          </Button>
 
-          <span onClick={() => setView("sign-in")}>Sign In instead</span>
+          <span onClick={() => setView("sign-in")} className="auth-switch">
+            Sign In instead
+          </span>
         </div>
       )}
 
@@ -93,8 +98,10 @@ const UserAuth = ({ setSignedIn }) => {
             placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={() => handleSignIn()}>sign in</button>
-          <span onClick={() => setView("sign-up")}>Sign Up instead</span>
+          <Button onClick={() => handleSignIn()} text="Sign In" filled />
+          <span onClick={() => setView("sign-up")} className="auth-switch">
+            Sign Up instead
+          </span>
         </div>
       )}
     </div>

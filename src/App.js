@@ -14,11 +14,12 @@ import Header from "./components/Header";
 function App() {
   const { loggedInUser } = useContext(AuthContext);
 
+  const loggedInUserr = false;
+
   return (
     <div className="App">
-    
       <Routes>
-        <Route path="/" element={loggedInUser ? <Feed /> : <UserAuth />} />
+        <Route path="/" element={loggedInUserr ? <Feed /> : <UserAuth />} />
         <Route path="/userAuth" element={<UserAuth />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/arena/:battleId" element={<Battle />} />
