@@ -32,7 +32,10 @@ const UserAuth = ({ setSignedIn }) => {
   const handleUsernameCheck = async () => {
     try {
       const collectionRef = collection(db, "users");
-      const q = query(collectionRef, where("username", "==", username));
+      const q = query(
+        collectionRef,
+        where("username", "==", username.toLowerCase())
+      );
 
       const querySnapshot = await getDocs(q);
 
@@ -57,7 +60,7 @@ const UserAuth = ({ setSignedIn }) => {
   const handleEmailCheck = async () => {
     try {
       const collectionRef = collection(db, "users");
-      const q = query(collectionRef, where("email", "==", email));
+      const q = query(collectionRef, where("email", "==", email.toLowerCase()));
 
       const querySnapshot = await getDocs(q);
 
