@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./UserAuth.scss";
 import { auth, db } from "../firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import Button from "../components/Button";
 
 const UserAuth = ({ setSignedIn }) => {
@@ -14,6 +22,41 @@ const UserAuth = ({ setSignedIn }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
+
+  const [showUsernameMessage, setShowUsernameMessage] = useState();
+
+  const handleUsernameCheck = async () => {
+    try {
+      const collectionRef = collection(db, "users");
+      const q = query(collectionRef, where("username", "==", username));
+
+      const querySnapshot = await getDocs(q);
+
+      console.log(querySnapshot.docs);
+
+      setShowUsernameMessage(true);
+
+      if (querySnapshot.docs.length === 0) {
+        console.log("Available!");
+        setIsUsernameAvailable(true);
+      }
+
+      if (querySnapshot.docs.length === 1) {
+        console.log("Unavailable!");
+        setIsUsernameAvailable(false);
+      }
+
+      console.log(isUsernameAvailable);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleUsernameCheck();
+  }, [username]);
 
   const handleSignUp = async () => {
     try {
@@ -59,6 +102,12 @@ const UserAuth = ({ setSignedIn }) => {
               console.log(username);
             }}
           />
+          {showUsernameMessage && (
+            <span style={{ color: "white" }}>
+              {isUsernameAvailable ? "Available" : "Not available"}
+            </span>
+          )}
+
           <input
             type="email"
             placeholder="email"
