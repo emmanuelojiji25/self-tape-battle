@@ -24,8 +24,10 @@ const UserAuth = ({ setSignedIn }) => {
   const [password, setPassword] = useState("");
 
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
+  const [isEmailAvailable, setIsEmailAvailable] = useState(null);
 
-  const [showUsernameMessage, setShowUsernameMessage] = useState();
+  const [showUsernameMessage, setShowUsernameMessage] = useState(false);
+  const [showEmailMessage, setShowEmailMessage] = useState(false);
 
   const handleUsernameCheck = async () => {
     try {
@@ -35,8 +37,6 @@ const UserAuth = ({ setSignedIn }) => {
       const querySnapshot = await getDocs(q);
 
       console.log(querySnapshot.docs);
-
-      setShowUsernameMessage(true);
 
       if (querySnapshot.docs.length === 0) {
         console.log("Available!");
@@ -54,9 +54,38 @@ const UserAuth = ({ setSignedIn }) => {
     }
   };
 
+  const handleEmailCheck = async () => {
+    try {
+      const collectionRef = collection(db, "users");
+      const q = query(collectionRef, where("email", "==", email));
+
+      const querySnapshot = await getDocs(q);
+
+      console.log(querySnapshot.docs);
+
+      if (querySnapshot.docs.length === 0) {
+        console.log("Available!");
+        setIsEmailAvailable(true);
+      }
+
+      if (querySnapshot.docs.length === 1) {
+        console.log("Unavailable!");
+        setIsEmailAvailable(false);
+      }
+
+      console.log(isEmailAvailable);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     handleUsernameCheck();
   }, [username]);
+
+  useEffect(() => {
+    handleEmailCheck();
+  }, [email]);
 
   const handleSignUp = async () => {
     try {
@@ -100,6 +129,7 @@ const UserAuth = ({ setSignedIn }) => {
             onChange={(e) => {
               setUsername(e.target.value);
               console.log(username);
+              setShowUsernameMessage(true);
             }}
           />
           {showUsernameMessage && (
@@ -114,8 +144,16 @@ const UserAuth = ({ setSignedIn }) => {
             onChange={(e) => {
               setEmail(e.target.value);
               console.log(email);
+              setShowEmailMessage(true);
             }}
           />
+
+          {showEmailMessage && (
+            <span style={{ color: "white" }}>
+              {isEmailAvailable ? "Available" : "Not available"}
+            </span>
+          )}
+
           <input
             type="password"
             placeholder="password"
