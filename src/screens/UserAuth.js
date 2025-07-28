@@ -103,6 +103,7 @@ const UserAuth = ({ setSignedIn }) => {
         bio: "",
         coins: 0,
         link: "",
+        isOnboardingComplete: false,
       });
 
       setSignedIn(true);
