@@ -10,6 +10,7 @@ import NavBar from "./components/NavBar";
 import { AuthContext } from "./contexts/AuthContext";
 import Battle from "./screens/Battle";
 import Header from "./components/Header";
+import Onboarding from "./screens/Onboarding";
 
 function App() {
   const { loggedInUser } = useContext(AuthContext);
@@ -23,6 +24,7 @@ function App() {
         <Route path="/userAuth" element={<UserAuth />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/arena/:battleId" element={<Battle />} />
+        <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
 
       <NavBar />

@@ -1,0 +1,27 @@
+.Onboarding {
+  color: white;
+}
+
+.Onboarding {
+  color: white;
+}
+
+.carousel {
+  overflow: hidden;
+  height: 100svh;
+}
+
+.carousel-inner {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.5s ease;
+  height: 100svh;
+}
+
+.carousel-item {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
