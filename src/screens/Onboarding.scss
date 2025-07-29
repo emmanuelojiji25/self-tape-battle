@@ -24,4 +24,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: start;
+
+  button {
+    display: inline-block;
+    margin-right: 12px;
+  }
+
+  &.centered{
+    align-items: center;
+    justify-content: center;
+  }
 }
