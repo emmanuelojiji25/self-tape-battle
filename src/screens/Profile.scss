@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100svh;
+  color: white;
 }
 
 .profile-header {
@@ -12,7 +13,7 @@
   display: flex;
   flex-direction: column;
 
-  h1{
+  h1 {
     font-size: 20px;
   }
 }

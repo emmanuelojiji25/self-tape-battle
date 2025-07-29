@@ -15,7 +15,7 @@ import Onboarding from "./screens/Onboarding";
 function App() {
   const { loggedInUser } = useContext(AuthContext);
 
-  const loggedInUserr = false;
+  const loggedInUserr = true;
 
   return (
     <div className="App">

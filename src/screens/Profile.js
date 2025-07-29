@@ -44,7 +44,7 @@ const Profile = () => {
         setUserId(data.uid);
         setName(`${data.firstName + " " + data.lastName}`);
         setBio(data.bio);
-        setLink(data.link);
+        setLink(data.webLink);
       });
     } catch (error) {
       console.log(error);
@@ -97,11 +97,13 @@ const Profile = () => {
       <div className="entries-container">
         {battles.map((battle) => (
           <>
-            <EntryCard
-              url={battle.url}
-              uid={battle.uid}
-              battleId={battle.battleId}
-            />
+            {
+              <EntryCard
+                url={battle.url}
+                uid={battle.uid}
+                battleId={battle.battleId}
+              />
+            }
           </>
         ))}
       </div>
