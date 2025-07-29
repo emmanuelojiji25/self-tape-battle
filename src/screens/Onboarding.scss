@@ -30,8 +30,20 @@
     margin-right: 12px;
   }
 
-  &.centered{
+  &.centered {
     align-items: center;
     justify-content: center;
   }
+}
+
+.headshot-placeholder {
+  width: 200px;
+  height: 200px;
+  background: rgb(184, 184, 184);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
 }
