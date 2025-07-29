@@ -32,6 +32,7 @@ const Profile = () => {
 
   const [bio, setBio] = useState("");
   const [link, setLink] = useState("");
+  const [headshot, setHeadshot] = useState("");
 
   const getUser = async () => {
     try {
@@ -46,6 +47,7 @@ const Profile = () => {
         setName(`${data.firstName + " " + data.lastName}`);
         setBio(data.bio);
         setLink(data.webLink);
+        setHeadshot(data.headshot);
       });
     } catch (error) {
       console.log(error);
@@ -94,10 +96,7 @@ const Profile = () => {
     <div className="Profile screen-width">
       <div className="profile-header">
         <div className="profile-headshot-container">
-          <img
-            className="profile-headshot"
-            src="https://images.squarespace-cdn.com/content/v1/624f4bb135fbf60489e1bccf/c9ba8deb-7981-49d4-b7ec-49c1230a5057/Actress+Headshot+Los+Angeles.jpg"
-          />
+          <img className="profile-headshot" src={headshot} />
         </div>
         <div className="profile-info">
           <h1>{name}</h1>
