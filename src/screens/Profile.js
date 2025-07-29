@@ -18,6 +18,7 @@ import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
 import EntryCard from "../components/EntryCard";
+import Button from "../components/Button";
 
 const Profile = () => {
   const params = useParams();
@@ -78,6 +79,17 @@ const Profile = () => {
     getUserBattles();
   }, [userId]);
 
+  const handleCopyProfile = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `http://localhost:3000/profile/${params.username}`
+      );
+      console.log(navigator.clipboard.readText());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="Profile screen-width">
       <div className="profile-header">
@@ -91,6 +103,11 @@ const Profile = () => {
           <h1>{name}</h1>
           <span>{bio}</span>
           <span>{link}</span>
+          <Button
+            filled
+            text="Share Card"
+            onClick={() => handleCopyProfile()}
+          ></Button>
         </div>
       </div>
 
