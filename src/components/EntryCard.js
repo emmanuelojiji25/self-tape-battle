@@ -70,6 +70,12 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
         setVotes(snapshot.data().votes.length);
       });
 
+      await updateDoc(
+        doc(db, "battles", {
+          voters: arrayUnion(loggedInUser),
+        })
+      );
+
       //Update Coins
       const authUserSnapshot = await getDoc(doc(db, "users", loggedInUser.uid));
       const authUserRef = doc(db, "users", loggedInUser.uid);
@@ -90,12 +96,12 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
         <video src={url} />
         <div className="user-actions">
           {voteButtonVisible && (
-            <button
+            <span
               onClick={() => handleVote()}
               className={`vote-button ${userhasVoted && "voted"}`}
             >
-              {!userhasVoted ? "Vote" : "Voted"}
-            </button>
+              {!userhasVoted ? "Vote" : "You voted!"}
+            </span>
           )}
           {(uid === loggedInUser.uid || battleStatus === "closed") && (
             <span className="votes">

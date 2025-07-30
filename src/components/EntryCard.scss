@@ -40,13 +40,12 @@
 }
 
 .vote-button {
-  border-radius: 100px;
-  max-height: 30px;
-  max-width: 30px;
-  min-height: 50px;
-  min-width: 50px;
-  border: 0;
   background: white;
+  border-radius: 50px;
+  width: fit-content;
+  font-weight: bold;
+  padding: 8px 15px;
+  color: black;
 }
 
 .user-actions {
@@ -60,6 +59,6 @@
 }
 
 .voted {
-  background: purple;
-  color: white;
+  background: gold;
+  color: rgb(87, 74, 0);
 }
