@@ -22,6 +22,10 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
 
   const [username, setUsername] = useState("");
 
+  const [entryUid, setEntryUid] = useState("");
+  const [isUserEntry, setIsUserEntry] = useState(false);
+  const [battleStatus, setBattleStatus] = useState("open");
+
   const docRef = doc(db, "users", uid);
 
   const getName = async () => {
@@ -29,11 +33,13 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
     const data = docSnapshot.data();
     setName(data?.firstName + " " + data?.lastName);
     setUsername(data?.username);
+    setEntryUid(data.uid);
   };
 
   useEffect(() => {
     getName();
     getVotes();
+    console.log(loggedInUser);
   });
 
   useEffect(() => {}, loggedInUser);
@@ -91,9 +97,11 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
               {!userhasVoted ? "Vote" : "Voted"}
             </button>
           )}
-          <span className="votes">
-            {votes > 0 ? votes : "No"} Vote {votes > 0 && votes !== 1 && "s"}
-          </span>
+          {(uid === loggedInUser.uid || battleStatus === "closed") && (
+            <span className="votes">
+              {votes > 0 ? votes : "No"} Vote {votes > 0 && votes !== 1 && "s"}
+            </span>
+          )}
         </div>
       </div>
     </div>
