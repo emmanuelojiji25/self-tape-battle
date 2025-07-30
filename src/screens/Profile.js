@@ -110,6 +110,21 @@ const Profile = () => {
         </div>
       </div>
 
+      <div className="stat-card-container">
+        <div className="stat-card">
+          <h2>20</h2>
+          <h4>Battles Entered</h4>
+        </div>
+        <div className="stat-card">
+        <h2>20</h2>
+          <h4>Battles Won</h4>
+        </div>
+        <div className="stat-card">
+        <h2>20</h2>
+          <h4>Total votes</h4>
+        </div>
+      </div>
+
       <div className="entries-container">
         {battles.map((battle) => (
           <>

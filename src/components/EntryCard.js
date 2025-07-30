@@ -93,7 +93,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
         {name}
       </Link>
       <div className="video-container">
-        <video src={url} />
+        <video src={url} controls />
         <div className="user-actions">
           {voteButtonVisible && (
             <span

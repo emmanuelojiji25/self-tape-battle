@@ -31,3 +31,20 @@
     border-radius: 12px;
   }
 }
+
+.stat-card-container {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.stat-card {
+  background: #0f121a;
+  color: white;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
