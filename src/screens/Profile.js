@@ -101,7 +101,7 @@ const Profile = () => {
         <div className="profile-info">
           <h1>{name}</h1>
           <span>{bio}</span>
-          <span>{link}</span>
+          <span className="web-link">{link}</span>
           <Button
             filled
             text="Share Card"
