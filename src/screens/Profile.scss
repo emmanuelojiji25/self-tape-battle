@@ -9,6 +9,7 @@
 .profile-header {
   display: flex;
   gap: 20px;
+  flex-direction: column;
 }
 .profile-info {
   display: flex;
@@ -19,8 +20,8 @@
   }
 }
 .profile-headshot-container {
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
   border-radius: 50px;
   border-radius: 12px;
 
