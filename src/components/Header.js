@@ -11,6 +11,7 @@ const Header = () => {
   const [coins, setCoins] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [username, setUsername] = useState("");
+  const [headshot, setHeadshot] = useState("");
 
   useEffect(() => {
     if (!loggedInUser) return;
@@ -25,6 +26,7 @@ const Header = () => {
         setCoins(data?.coins ?? 0); // defensive: if coins is undefined, fallback to 0
         setFirstName(data.firstName);
         setUsername(data.username);
+        setHeadshot(data.headshot);
       },
       (error) => {
         console.error("Error fetching user coins:", error);
@@ -47,7 +49,10 @@ const Header = () => {
             {coins}
           </div>
           <Link to={`/profile/${username}`}>
-            <div className="avatar"></div>
+            <div
+              className="avatar"
+              style={{ backgroundImage: `url(${headshot})` }}
+            ></div>
           </Link>
         </div>
       </div>
