@@ -13,7 +13,6 @@ const AuthProvider = ({ children }) => {
     console.log("Setting up");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setLoggedInUser(user);
-      console.log("new user" + user.email);
     });
     return () => unsubscribe();
   }, []);
