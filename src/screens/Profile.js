@@ -35,6 +35,7 @@ const Profile = () => {
   const [headshot, setHeadshot] = useState("");
 
   const [battlesWon, setBattlesWon] = useState(0);
+  const [totalVotes, setTotalVotes] = useState(0);
 
   const getUser = async () => {
     try {
@@ -77,10 +78,35 @@ const Profile = () => {
     try {
       const collectionRef = collection(db, "battles");
       const q = query(collectionRef, where("winner", "==", userId));
-      console.log("user Id" + userId);
       const docs = await getDocs(q);
 
       setBattlesWon(docs.size);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getTotalVotes = async () => {
+    try {
+      const collectionRef = collectionGroup(db, "entries");
+      const q = query(
+        collectionRef,
+        where("uid", "==", "3sfGK3I6anY1trjMnan8lbGdGag1")
+      );
+
+      const docs = await getDocs(q);
+
+      const votes = [];
+
+      docs.forEach((doc) => {
+        votes.push(doc.data().votes.length);
+      });
+
+      const calculation = votes.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue;
+      }, 0);
+
+      setTotalVotes(calculation);
     } catch (error) {
       console.log(error);
     }
@@ -93,6 +119,7 @@ const Profile = () => {
   useEffect(() => {
     getUserBattles();
     getBattlesWon();
+    getTotalVotes();
   }, [userId]);
 
   const handleCopyProfile = async () => {
@@ -134,7 +161,7 @@ const Profile = () => {
           <h4>Battles Won</h4>
         </div>
         <div className="stat-card">
-          <h2>20</h2>
+          <h2>{totalVotes}</h2>
           <h4>Total votes</h4>
         </div>
       </div>
