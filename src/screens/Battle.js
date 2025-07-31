@@ -12,6 +12,7 @@ import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import EntryCard from "../components/EntryCard";
 import { AuthContext } from "../contexts/AuthContext";
+import icon_download from "../media/download.svg";
 import { db, storage } from "../firebaseConfig";
 import "./Battle.scss";
 
@@ -89,8 +90,23 @@ const Battle = () => {
       <Link to="/" className="back">
         Back
       </Link>
-      <h3 className="battle-title">{title}</h3>
-      <span className="prize-pill">Spotlight Membership</span>
+      <div className="battle-header">
+        <div className="battle-header-left">
+          <h3 className="battle-title">{title}</h3>
+          <span className="prize-pill">Spotlight Membership</span>
+          <span className="prize-pill">Horror</span>
+        </div>
+
+        <a
+          href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/960px-Cat_November_2010-1a.jpg"
+          download
+        >
+          <div className="download">
+            <img src={icon_download}/>
+          </div>
+        </a>
+      </div>
+
       {!userHasJoined && !file && (
         <Button
           onClick={() => inputRef.current.click()}

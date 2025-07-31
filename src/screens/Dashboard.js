@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [battles, setBattles] = useState([]);
 
   const [title, setTitle] = useState("");
+  const [genre, setGenre] = useState("");
   const [prize, setPrize] = useState("");
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,6 +42,7 @@ const Dashboard = () => {
         winner: "",
         voters: [],
         active: true,
+        genre: "",
       });
     } catch (error) {
       console.log(error);
@@ -53,8 +55,11 @@ const Dashboard = () => {
   return (
     <div className="Dashboard">
       <h1>Dashboard</h1>
-      <h2>Battles</h2>
-      <h2>Users</h2>
+
+      <div className="menu">
+        <h3>Battles</h3>
+        <h3>Users</h3>
+      </div>
 
       {isModalVisible && (
         <div className="create-battle-modal-container">
@@ -85,20 +90,26 @@ const Dashboard = () => {
 
       {view === "battles" && (
         <>
+          <h2>Battles</h2>
           <Button
             filled
             text="New Battle"
             onClick={() => setIsModalVisible(true)}
           />
-          <h2>Battles</h2>
-          {battles.map((battle) => (
-            <>
-              <h3>{battle.title}</h3>
-              <p>{battle.id}</p>
-              <p>{battle.prize}</p>
-              <p>{battle.active ? "active" : "closed"}</p>
-            </>
-          ))}
+          <div className="battles-container">
+            {battles.map((battle) => (
+              <div className="admin-battle-card">
+                <h3>{battle.title}</h3>
+                <p>{battle.id}</p>
+                <p>{battle.prize}</p>
+                <p>{battle.active ? "active" : "closed"}</p>
+                <Button
+                  filled
+                  text={battle.active ? "Close Battle" : "Open Battle"}
+                />
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>

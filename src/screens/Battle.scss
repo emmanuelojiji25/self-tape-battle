@@ -14,6 +14,11 @@
   gap: 30px;
 }
 
+.battle-header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .battle-title {
   //text-transform: uppercase;
   font-weight: 800;
@@ -23,31 +28,43 @@
 }
 
 .prize-pill {
-  border: solid 1px #00ffb7;
+  border: solid 1px #FFA930;
   border-radius: 50px;
-  background: #048565;
+  background: #ffa93061;
   color: white;
   padding: 3px 10px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   display: block;
   width: fit-content;
 }
 
-.upload-tape{
+.upload-tape {
   margin-top: 20px;
   font-size: 16px;
 }
 
-.file-name{
+.file-name {
   color: white;
   margin-bottom: 10px;
 }
 
-.file-container{
-  
-
-  .button-container{
+.file-container {
+  .button-container {
     display: flex;
     gap: 10px;
+  }
+}
+
+.download {
+  width: 50px;
+  height: 50px;
+  background: #0F121A;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img{
+    width: 25px;
   }
 }
