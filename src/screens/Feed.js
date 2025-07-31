@@ -12,11 +12,14 @@ import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import "./Feed.scss";
 import Header from "../components/Header";
+import logo from "../media/logo-icon.svg";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
 
   const [mostPopular, setMostPopular] = useState([]);
+
+  const [loading, setLoading] = useState(true);
 
   const handleGetBattles = async () => {
     const battles = [];
@@ -49,6 +52,10 @@ const Feed = ({ user }) => {
         const mostPopularSnapshot = await getDoc(mostPopularRef);
 
         setMostPopular(mostPopularSnapshot.data());
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       });
     } catch (error) {
       console.log(error);
@@ -63,16 +70,24 @@ const Feed = ({ user }) => {
     <>
       <Header />
       <div className="Feed screen-width">
-        <BattleCard
-          name={mostPopular.title}
-          battleId={mostPopular.id}
-          mostPopular={true}
-        />
-        {battles
-          .filter((battle) => battle.id != mostPopular.id)
-          .map((battle) => (
-            <BattleCard name={battle.title} battleId={battle.id} />
-          ))}
+        {loading ? (
+          <div className="feed-loader-container">
+            <img src={logo} className="loader" />
+          </div>
+        ) : (
+          <>
+            <BattleCard
+              name={mostPopular.title}
+              battleId={mostPopular.id}
+              mostPopular={true}
+            />
+            {battles
+              .filter((battle) => battle.id != mostPopular.id)
+              .map((battle) => (
+                <BattleCard name={battle.title} battleId={battle.id} />
+              ))}
+          </>
+        )}
       </div>
     </>
   );

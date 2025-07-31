@@ -6,3 +6,25 @@
   min-height: 100svh;
   padding-top: 100px;
 }
+
+.feed-loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100svh;
+}
+
+.loader {
+  width: 50px;
+  animation: spin 3s infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
