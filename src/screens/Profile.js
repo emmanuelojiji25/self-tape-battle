@@ -150,6 +150,13 @@ const Profile = () => {
             text="Share Card"
             onClick={() => handleCopyProfile()}
           ></Button>
+          {userId === loggedInUser?.uid && (
+            <Button
+              outline
+              text="Edit Profile"
+              onClick={() => handleCopyProfile()}
+            ></Button>
+          )}
         </div>
       </div>
 
