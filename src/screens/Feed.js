@@ -13,6 +13,7 @@ import { db } from "../firebaseConfig";
 import "./Feed.scss";
 import Header from "../components/Header";
 import logo from "../media/logo-icon.svg";
+import NavBar from "../components/NavBar";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
@@ -88,6 +89,7 @@ const Feed = ({ user }) => {
               ))}
           </>
         )}
+        <NavBar/>
       </div>
     </>
   );

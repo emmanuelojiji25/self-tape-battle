@@ -28,6 +28,8 @@ const NavBar = () => {
     <div className="NavBar">
       <div className="nav-bar-inner">
         <Link to={`/`}>Arena</Link>
+        <Link to={`/`}>Discover</Link>
+        <Link to={`/`}>Directory</Link>
         {username && <Link to={`/profile/${username}`}>Profile</Link>}
       </div>
     </div>

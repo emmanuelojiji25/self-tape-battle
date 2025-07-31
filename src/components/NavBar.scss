@@ -1,21 +1,23 @@
 .NavBar {
   width: 100%;
   position: fixed;
-  bottom: 30px;
+  bottom: 0;
   left: 0;
   gap: 30px;
   justify-content: center;
   align-items: center;
-  border-radius: 50px;
   display: flex;
-display: none;
+
+  a{
+  color: white !important;
+  }
+
 }
 
 .nav-bar-inner {
-  width: 300px;
-  background: rgb(255, 102, 6);
+  width: 100%;
+background: black;
   height: 70px;
-  border-radius: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
