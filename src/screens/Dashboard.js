@@ -1,8 +1,16 @@
-import { addDoc, collection, getDocs, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "../firebaseConfig";
+import { db, storage } from "../firebaseConfig";
 import "./Dashboard.scss";
 import Button from "../components/Button";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Dashboard = () => {
   const [view, setView] = useState("battles");
@@ -12,7 +20,7 @@ const Dashboard = () => {
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("");
   const [prize, setPrize] = useState("");
-
+  const [file, setFile] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getBattles = async () => {
@@ -30,12 +38,13 @@ const Dashboard = () => {
     }
   };
 
-  const handleCreateBattle = async () => {
-    const collectionRef = collection(db, "battles");
+  const id = title.replace(" ", "-").trim().toLowerCase();
 
-    const id = title.replace(" ", "-").trim().toLowerCase();
+  const handleCreateBattle = async () => {
+    const collectionRef = doc(db, "battles", id);
+
     try {
-      await addDoc(collectionRef, {
+      await setDoc(collectionRef, {
         title: title,
         prize: prize,
         id: id,
@@ -43,6 +52,26 @@ const Dashboard = () => {
         voters: [],
         active: true,
         genre: "",
+        file: "",
+      });
+
+      uploadFile();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uploadFile = async () => {
+    try {
+      const fileRef = ref(storage, `battle-file/${id}`);
+      await uploadBytes(fileRef, file).then(() => {
+        getDownloadURL(fileRef).then(async (url) => {
+          const docRef = doc(db, "battles", id);
+
+          await updateDoc(docRef, {
+            file: url,
+          });
+        });
       });
     } catch (error) {
       console.log(error);
@@ -79,6 +108,13 @@ const Dashboard = () => {
               text="Create Battle"
               onClick={() => handleCreateBattle()}
             />
+            <input
+              type="file"
+              onChange={(e) => {
+                setFile(e.target.files[0]);
+                console.log(file);
+              }}
+            ></input>
             <Button
               outline
               text="Cancel"
