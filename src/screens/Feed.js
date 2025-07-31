@@ -68,9 +68,11 @@ const Feed = ({ user }) => {
           battleId={mostPopular.id}
           mostPopular={true}
         />
-        {battles.map((battle) => (
-          <BattleCard name={battle.title} battleId={battle.id} />
-        ))}
+        {battles
+          .filter((battle) => battle.id != mostPopular.id)
+          .map((battle) => (
+            <BattleCard name={battle.title} battleId={battle.id} />
+          ))}
       </div>
     </>
   );

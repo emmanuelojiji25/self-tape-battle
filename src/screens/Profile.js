@@ -142,7 +142,9 @@ const Profile = () => {
         <div className="profile-info">
           <h1>{name}</h1>
           <span>{bio}</span>
-          <span className="web-link">{link}</span>
+          <a href={link} target="_" className="web-link">
+            {link}
+          </a>
           <Button
             filled
             text="Share Card"
