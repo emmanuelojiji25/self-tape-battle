@@ -1,0 +1,26 @@
+.Dashboard {
+  background: white !important;
+  height: 100svh;
+  color: black;
+}
+
+.create-battle-modal-container {
+  min-height: 100svh;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.744);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.create-battle-modal {
+  padding: 50px;
+  width: 100%;
+  max-width: 500px;
+  background: grey;
+  display: flex;
+  flex-direction: column;
+}

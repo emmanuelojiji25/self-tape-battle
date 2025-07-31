@@ -11,6 +11,7 @@ import { AuthContext } from "./contexts/AuthContext";
 import Battle from "./screens/Battle";
 import Header from "./components/Header";
 import Onboarding from "./screens/Onboarding";
+import Dashboard from "./screens/Dashboard";
 
 function App() {
   const { loggedInUser } = useContext(AuthContext);
@@ -25,6 +26,8 @@ function App() {
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/arena/:battleId" element={<Battle />} />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+
       </Routes>
 
       <NavBar />
