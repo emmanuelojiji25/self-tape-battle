@@ -39,7 +39,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
   useEffect(() => {
     getName();
     getVotes();
-    console.log(loggedInUser);
+  
   });
 
   useEffect(() => {}, loggedInUser);
@@ -54,7 +54,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
 
       setUserHasVoted(votesCheck.includes(loggedInUser.uid));
 
-      console.log(userhasVoted);
+   
     } catch (error) {
       console.log(error);
     }

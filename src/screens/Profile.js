@@ -34,6 +34,8 @@ const Profile = () => {
   const [link, setLink] = useState("");
   const [headshot, setHeadshot] = useState("");
 
+  const [battlesWon, setBattlesWon] = useState(0);
+
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
@@ -60,8 +62,6 @@ const Profile = () => {
       const q = query(battlesCollection, where("uid", "==", userId));
       const docs = await getDocs(q);
 
-      console.log(docs.empty);
-
       let data = [];
 
       docs.forEach((doc) => {
@@ -73,12 +73,26 @@ const Profile = () => {
     }
   };
 
+  const getBattlesWon = async () => {
+    try {
+      const collectionRef = collection(db, "battles");
+      const q = query(collectionRef, where("winner", "==", userId));
+      console.log("user Id" + userId);
+      const docs = await getDocs(q);
+
+      setBattlesWon(docs.size);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getUser();
   }, [params.username]);
 
   useEffect(() => {
     getUserBattles();
+    getBattlesWon();
   }, [userId]);
 
   const handleCopyProfile = async () => {
@@ -116,7 +130,7 @@ const Profile = () => {
           <h4>Battles Entered</h4>
         </div>
         <div className="stat-card">
-          <h2>20</h2>
+          <h2>{battlesWon}</h2>
           <h4>Battles Won</h4>
         </div>
         <div className="stat-card">
