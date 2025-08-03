@@ -19,11 +19,14 @@ import { db } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
 import EntryCard from "../components/EntryCard";
 import Button from "../components/Button";
+import Input from "../components/Input";
 
 const Profile = () => {
   const params = useParams();
 
   const { loggedInUser } = useContext(AuthContext);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
@@ -48,6 +51,8 @@ const Profile = () => {
         setUsername(data.username);
         setUserId(data.uid);
         setName(`${data.firstName + " " + data.lastName}`);
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
         setBio(data.bio);
         setLink(data.webLink);
         setHeadshot(data.headshot);
@@ -133,6 +138,64 @@ const Profile = () => {
     }
   };
 
+  const [usernameInput, setUsernameInput] = useState("");
+  const [bioInput, setBioInput] = useState("");
+
+  useEffect(() => {
+    setUsernameInput(username);
+  }, [username]);
+
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
+
+  useEffect(() => {
+    handleUsernameCheck();
+  }, [username]);
+
+  const handleUsernameCheck = async () => {
+    try {
+      const collectionRef = collection(db, "users");
+      const q = query(
+        collectionRef,
+        where("username", "==", username.toLowerCase())
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      console.log(querySnapshot.docs);
+
+      if (querySnapshot.docs.length === 0) {
+        console.log("Available!");
+        setIsUsernameAvailable(true);
+      }
+
+      if (querySnapshot.docs.length === 1) {
+        console.log("Unavailable!");
+        setIsUsernameAvailable(false);
+      }
+
+      console.log(isUsernameAvailable);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [isEditPrfofileVisible, setIsEditProfileVisible] = useState(false);
+
+  const handleUpdateUser = async () => {
+    try {
+      const docRef = doc(db, "users", userId);
+
+      await updateDoc(docRef, {
+        username: username.trim().toLowerCase(),
+        bio: bio.trim().toLowerCase(),
+        webLink: link.trim().toLowerCase(),
+      });
+
+      setIsEditProfileVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="Profile screen-width">
       <div className="profile-header">
@@ -154,7 +217,7 @@ const Profile = () => {
             <Button
               outline
               text="Edit Profile"
-              onClick={() => handleCopyProfile()}
+              onClick={() => setIsEditProfileVisible(true)}
             ></Button>
           )}
         </div>
@@ -188,6 +251,38 @@ const Profile = () => {
           </>
         ))}
       </div>
+
+      {isEditPrfofileVisible && (
+        <div className="edit-profile">
+          <h2>Edit Profile</h2>
+          <Input type="text" value={firstName} />
+          <Input type="text" value={lastName} />
+          <Input
+            type="text"
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          />
+          {!isUsernameAvailable && (
+            <span style={{ color: "white" }}>Username not available</span>
+          )}
+          <Input
+            type="text"
+            onChange={(e) => setBio(e.target.value)}
+            value={bio}
+          />
+          <Input
+            type="text"
+            onChange={(e) => setLink(e.target.value)}
+            value={link}
+          />
+          <Button filled text="Save" onClick={() => handleUpdateUser()} />
+          <Button
+            outline
+            text="Cancel"
+            onClick={() => setIsEditProfileVisible(false)}
+          />
+        </div>
+      )}
     </div>
   );
 };

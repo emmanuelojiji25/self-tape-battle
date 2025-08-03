@@ -58,3 +58,15 @@
   justify-content: center;
   width: 100%;
 }
+ 
+.edit-profile {
+  width: 100%;
+  min-height: 100svh;
+  position: fixed;
+  background: rgba(0, 0, 0);
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+
