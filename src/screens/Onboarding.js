@@ -71,6 +71,7 @@ const Onboarding = () => {
         lastName: lastName,
         webLink: webLink,
         onboarding_complete: true,
+        coins: 100,
       });
 
       handleNextView(webLink, 5, 5);

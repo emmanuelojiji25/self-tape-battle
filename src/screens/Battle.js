@@ -6,7 +6,12 @@ import {
   getDocs,
   setDoc,
 } from "firebase/firestore";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytes,
+  uploadString,
+} from "firebase/storage";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button";
@@ -15,6 +20,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import icon_download from "../media/download.svg";
 import { db, storage } from "../firebaseConfig";
 import "./Battle.scss";
+import NavBar from "../components/NavBar";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -23,8 +29,6 @@ const Battle = () => {
   const { loggedInUser } = useContext(AuthContext);
 
   const userHasJoined = entries.some((entry) => entry.uid === loggedInUser.uid);
-
-  //const userHasJoined = false;
 
   const { battleId } = useParams();
 
@@ -58,8 +62,12 @@ const Battle = () => {
     getBattle();
   }, []);
 
+  const [uploadStatus, setUploadStatus] = useState("");
+
   const handleUploadBattle = async () => {
     const storageRef = ref(storage, `battles/${battleId}/${loggedInUser.uid}`);
+
+    setUploadStatus("uploading");
 
     try {
       await uploadBytes(storageRef, file).then(() => {
@@ -81,6 +89,7 @@ const Battle = () => {
           console.log("complete!");
         });
       });
+      setUploadStatus("complete");
     } catch (error) {
       console.log(error);
     }
@@ -102,7 +111,7 @@ const Battle = () => {
           download
         >
           <div className="download">
-            <img src={icon_download}/>
+            <img src={icon_download} />
           </div>
         </a>
       </div>
@@ -117,11 +126,22 @@ const Battle = () => {
       )}
       {file && (
         <div className="file-container">
-          <p className="file-name">{file.name}</p>
-          <div className="button-container">
-            <Button onClick={() => handleUploadBattle()} text="Post" filled />
-            <Button onClick={() => setFile(null)} text="Cancel" outline />
-          </div>
+          {uploadStatus === "uploading" && (
+            <span className="uploading">Uploading..</span>
+          )}
+          {uploadStatus === "" && (
+            <>
+              <p className="file-name">{file.name}</p>
+              <div className="button-container">
+                <Button
+                  onClick={() => handleUploadBattle()}
+                  text="Post"
+                  filled
+                />
+                <Button onClick={() => setFile(null)} text="Cancel" outline />
+              </div>
+            </>
+          )}
         </div>
       )}
       <input
@@ -146,6 +166,7 @@ const Battle = () => {
           );
         })}
       </div>
+      <NavBar/>
     </div>
   );
 };
