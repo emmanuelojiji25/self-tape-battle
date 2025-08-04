@@ -31,7 +31,7 @@ const NavBar = () => {
         <Link to={`/`}>Discover</Link>
         <Link to="/directory">Directory</Link>
 
-        {username && <Link to={`/profile/${username}`}>Profile</Link>}
+        <Link to={`/profile/${username}`}>Profile</Link>
       </div>
     </div>
   );

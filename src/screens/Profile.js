@@ -13,16 +13,19 @@ import {
   where,
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BattleCard from "../components/BattleCard";
-import { db } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
 import EntryCard from "../components/EntryCard";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import NavBar from "../components/NavBar";
 
 const Profile = () => {
   const params = useParams();
+
+  const navigate = useNavigate();
 
   const { loggedInUser } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
@@ -221,6 +224,16 @@ const Profile = () => {
               onClick={() => setIsEditProfileVisible(true)}
             ></Button>
           )}
+          {userId === loggedInUser?.uid && (
+            <Button
+              outline
+              text="Sign Out"
+              onClick={() => {
+                auth.signOut();
+                navigate("/userAuth");
+              }}
+            ></Button>
+          )}
         </div>
       </div>
 
@@ -290,6 +303,7 @@ const Profile = () => {
           />
         </div>
       )}
+      <NavBar />
     </div>
   );
 };

@@ -13,26 +13,59 @@ import Header from "./components/Header";
 import Onboarding from "./screens/Onboarding";
 import Dashboard from "./screens/Dashboard";
 import Directory from "./screens/Directory";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const { loggedInUser } = useContext(AuthContext);
 
-  const loggedInUserr = true;
-
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={loggedInUserr ? <Feed /> : <UserAuth />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Feed />
+            </PrivateRoute>
+          }
+        />
+
         <Route path="/userAuth" element={<UserAuth />} />
+
         <Route path="/profile/:username" element={<Profile />} />
-        <Route path="/arena/:battleId" element={<Battle />} />
-        <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/directory" element={<Directory />} />
-
+        <Route
+          path="/arena/:battleId"
+          element={
+            <PrivateRoute>
+              <Battle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/onboarding"
+          element={
+            <PrivateRoute>
+              <Onboarding />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/directory"
+          element={
+            <PrivateRoute>
+              <Directory />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-
-      <NavBar />
     </div>
   );
 }

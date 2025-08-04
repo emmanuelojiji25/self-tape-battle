@@ -15,9 +15,13 @@ import {
   where,
 } from "firebase/firestore";
 import Button from "../components/Button";
+import { redirect, useNavigate } from "react-router-dom";
 
 const UserAuth = ({ setSignedIn }) => {
-  const [view, setView] = useState("sign-up");
+
+  const navigate = useNavigate();
+
+  const [view, setView] = useState("sign-in");
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -109,9 +113,9 @@ const UserAuth = ({ setSignedIn }) => {
         role: "actor",
       });
 
-      window.location.replace("/onboarding");
+     
 
-      setSignedIn(true);
+ 
     } catch (error) {
       console.log("Sorry, could not create user");
     }
@@ -121,7 +125,8 @@ const UserAuth = ({ setSignedIn }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("logged in!");
-      setSignedIn(true);
+      
+      navigate("/")
     } catch (error) {
       console.log(error);
     }

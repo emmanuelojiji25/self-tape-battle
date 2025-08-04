@@ -1,6 +1,7 @@
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import ActorCard from "../components/ActorCard";
+import NavBar from "../components/NavBar";
 import { db } from "../firebaseConfig";
 import "./Directory.scss";
 
@@ -72,6 +73,7 @@ const Directory = () => {
           ))}
         </div>
       )}
+      <NavBar/>
     </div>
   );
 };
