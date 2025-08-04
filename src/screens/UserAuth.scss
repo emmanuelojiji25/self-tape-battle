@@ -3,6 +3,7 @@
   flex-direction: column;
   min-height: 100svh;
   padding-top: 20px;
+  color: white;
 
   h1 {
     color: white;
@@ -13,11 +14,38 @@
 .sign-up {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }
 
+.actor-sign-up {
+  display: flex;
+  flex-direction: column;
+}
 
+.sign-up-choice-container {
+  display: flex;
+  gap: 30px;
+}
+
+.sign-up-choice {
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+}
 
 .auth-switch {
   color: white;
   margin-top: 20px;
+}
+
+.casting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
 }

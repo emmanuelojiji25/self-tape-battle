@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./UserAuth.scss";
 import { auth, db } from "../firebaseConfig";
+import Input from "../components/Input";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -8,7 +9,6 @@ import {
 import {
   collection,
   doc,
-  getDoc,
   getDocs,
   query,
   setDoc,
@@ -106,7 +106,7 @@ const UserAuth = ({ setSignedIn }) => {
         isOnboardingComplete: false,
         headshot: "",
         uid: auth.currentUser.uid,
-        role: "actor"
+        role: "actor",
       });
 
       window.location.replace("/onboarding");
@@ -131,8 +131,24 @@ const UserAuth = ({ setSignedIn }) => {
     <div className="UserAuth screen-width">
       {view === "sign-up" && (
         <div className="sign-up">
-          <h1>Sign Up</h1>
-          <input
+          <h2>I am a..</h2>
+
+          <div className="sign-up-choice-container">
+            <div className="sign-up-choice" onClick={() => setView("actor")}>
+              Actor
+            </div>
+
+            <div className="sign-up-choice" onClick={() => setView("casting")}>
+              Casting Director
+            </div>
+          </div>
+        </div>
+      )}
+
+      {view === "actor" && (
+        <div className="actor-sign-up">
+          <h2>Hey actor!</h2>
+          <Input
             type="text"
             placeholder="username"
             onChange={(e) => {
@@ -147,7 +163,7 @@ const UserAuth = ({ setSignedIn }) => {
             </span>
           )}
 
-          <input
+          <Input
             type="email"
             placeholder="email"
             onChange={(e) => {
@@ -163,7 +179,7 @@ const UserAuth = ({ setSignedIn }) => {
             </span>
           )}
 
-          <input
+          <Input
             type="password"
             placeholder="password"
             onChange={(e) => {
@@ -172,24 +188,47 @@ const UserAuth = ({ setSignedIn }) => {
             }}
           />
           <Button onClick={() => handleSignUp()} text="Sign Up" filled>
-            sign up
+            Sign up
           </Button>
 
           <span onClick={() => setView("sign-in")} className="auth-switch">
             Sign In instead
           </span>
+          <span onClick={() => setView("casting")} className="auth-switch">
+            I'm a casting director
+          </span>
+        </div>
+      )}
+
+      {view === "casting" && (
+        <div className="casting">
+          <h2>Hey CD!</h2>
+          <p>
+            For safety and verification purposes. Please email
+            accounts@selftapebattle.com with your company name, website if
+            applicable, or any social media. Emails must come from your company
+            email. <br />
+            <br />
+            Your account will be set up manually within 24-48 hours.
+          </p>
+          <span onClick={() => setView("sign-in")} className="auth-switch">
+            Sign In instead
+          </span>
+          <span onClick={() => setView("actor")} className="auth-switch">
+            I'm an actor
+          </span>
         </div>
       )}
 
       {view === "sign-in" && (
-        <div className="sign-up">
-          <h1>Sign In</h1>
-          <input
+        <div className="sign-in">
+          <h2>Sign In</h2>
+          <Input
             type="email"
             placeholder="email"
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
+          <Input
             type="password"
             placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
