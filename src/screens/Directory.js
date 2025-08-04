@@ -39,10 +39,16 @@ const Directory = () => {
     <div className="Directory screen-width">
       <h1>Directory</h1>
 
-      <span className="tab" onClick={() => setView("actors")}>
+      <span
+        className={`tab ${view === "actors" && "active"}`}
+        onClick={() => setView("actors")}
+      >
         Actors
       </span>
-      <span className="tab" onClick={() => setView("casting")}>
+      <span
+        className={`tab ${view === "casting" && "active"}`}
+        onClick={() => setView("casting")}
+      >
         Casting
       </span>
 
