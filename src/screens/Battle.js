@@ -4,6 +4,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
+  query,
   setDoc,
 } from "firebase/firestore";
 import {
@@ -26,11 +28,15 @@ const Battle = () => {
   const [title, setTitle] = useState("");
   const [entries, setEntries] = useState([]);
 
+  const [winner, setWinner] = useState();
+
   const { loggedInUser } = useContext(AuthContext);
 
   const userHasJoined = entries.some((entry) => entry.uid === loggedInUser.uid);
 
   const { battleId } = useParams();
+
+  const battleStatus = "closed";
 
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
@@ -49,18 +55,45 @@ const Battle = () => {
     });
 
     setEntries(entries);
-    console.log(entries);
 
     try {
     } catch (error) {}
   };
 
-  const inputRef = useRef(null);
-  const [file, setFile] = useState(null);
-
   useEffect(() => {
     getBattle();
+    getWinner();
   }, []);
+
+  const getWinner = async () => {
+    try {
+      const collectionRef = collection(db, "battles", battleId, "entries");
+
+      const snapshot = await getDocs(collectionRef);
+
+      const data = [];
+      snapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+
+      const sorted = data.sort(
+        (a, b) => (b.votes?.length || 0) - (a.votes?.length || 0)
+      );
+
+      const winner = sorted[0].uid;
+
+      const userSnapshot = await getDoc(doc(db, "users", winner));
+
+      setWinner(userSnapshot.data());
+
+      console.log(userSnapshot);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const inputRef = useRef(null);
+  const [file, setFile] = useState(null);
 
   const [uploadStatus, setUploadStatus] = useState("");
 
@@ -154,6 +187,10 @@ const Battle = () => {
         }}
       ></input>
 
+      {winner && battleStatus === "closed" && (
+        <div className="winner">{winner.firstName + " " + winner.lastName}</div>
+      )}
+
       <div className="entries-container">
         {entries.map((entry) => {
           return (
@@ -166,7 +203,7 @@ const Battle = () => {
           );
         })}
       </div>
-      <NavBar/>
+      <NavBar />
     </div>
   );
 };
