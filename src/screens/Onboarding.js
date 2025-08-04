@@ -8,8 +8,12 @@ import { db, storage } from "../firebaseConfig";
 import ConfettiExplosion from "react-confetti-explosion";
 
 import "./Onboarding.scss";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Onboarding = () => {
+
+  const navigate = useNavigate("/")
+  
   const [view, setView] = useState(0);
 
   const [file, setFile] = useState(null);
@@ -186,7 +190,7 @@ const Onboarding = () => {
             <div>
               <Button
                 text="Enter Arena"
-                onClick={() => handleNextView(4)}
+                onClick={() => navigate("/")}
                 filled
               />
             </div>

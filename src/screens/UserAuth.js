@@ -113,7 +113,7 @@ const UserAuth = ({ setSignedIn }) => {
         role: "actor",
       });
 
-     
+     navigate("/onboarding")
 
  
     } catch (error) {
