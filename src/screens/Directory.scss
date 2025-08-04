@@ -1,8 +1,19 @@
 .Directory {
   min-height: 100svh;
   color: white;
+  padding-top: 25px;
+
+  a {
+    color: white;
+  }
 }
 
 .tab {
   margin-right: 10px;
+  display: inline-block;
+  margin-bottom: 25px;
+}
+
+.active {
+  color: #4b7cff;
 }

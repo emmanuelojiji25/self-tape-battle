@@ -1,5 +1,6 @@
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import ActorCard from "../components/ActorCard";
 import { db } from "../firebaseConfig";
 import "./Directory.scss";
 
@@ -35,16 +36,25 @@ const Directory = () => {
   });
 
   return (
-    <div className="Directory">
+    <div className="Directory screen-width">
       <h1>Directory</h1>
 
-      <span className="tab">Actors</span>
-      <span className="tab">Casting</span>
+      <span className="tab" onClick={() => setView("actors")}>
+        Actors
+      </span>
+      <span className="tab" onClick={() => setView("casting")}>
+        Casting
+      </span>
 
       {view === "actors" && (
         <div className="actors">
           {actors.map((actor) => (
-            <h1>actor</h1>
+            <ActorCard
+              name={actor.firstName + " " + actor.lastName}
+              username={actor.username}
+              bio={actor.bio}
+              headshot={actor.headshot}
+            />
           ))}
         </div>
       )}

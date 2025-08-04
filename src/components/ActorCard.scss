@@ -1,0 +1,14 @@
+.ActorCard{
+    display: flex;
+    margin-bottom: 30px;
+}
+
+
+.actor-card-headshot{
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    margin-right: 10px;
+}

@@ -180,7 +180,7 @@ const Profile = () => {
     }
   };
 
-  const [isEditPrfofileVisible, setIsEditProfileVisible] = useState(true);
+  const [isEditPrfofileVisible, setIsEditProfileVisible] = useState(false);
 
   const handleUpdateUser = async () => {
     try {
@@ -262,11 +262,11 @@ const Profile = () => {
             type="text"
             onChange={(e) => {
               setUsername(e.target.value);
-              setShowUsernameMessage(true)
+              setShowUsernameMessage(true);
             }}
             value={username}
           />
-           {showUsernameMessage && (
+          {showUsernameMessage && (
             <span style={{ color: "white" }}>
               {isUsernameAvailable ? "Available" : "Not available"}
             </span>
