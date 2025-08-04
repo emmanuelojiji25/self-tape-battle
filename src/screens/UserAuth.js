@@ -102,9 +102,14 @@ const UserAuth = ({ setSignedIn }) => {
         lastName: "",
         bio: "",
         coins: 0,
-        link: "",
+        webLink: "",
         isOnboardingComplete: false,
+        headshot: "",
+        uid: auth.currentUser.uid,
+        role: "actor"
       });
+
+      window.location.replace("/onboarding");
 
       setSignedIn(true);
     } catch (error) {

@@ -145,7 +145,8 @@ const Profile = () => {
     setUsernameInput(username);
   }, [username]);
 
-  const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
+  const [showUsernameMessage, setShowUsernameMessage] = useState(false);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
 
   useEffect(() => {
     handleUsernameCheck();
@@ -179,7 +180,7 @@ const Profile = () => {
     }
   };
 
-  const [isEditPrfofileVisible, setIsEditProfileVisible] = useState(false);
+  const [isEditPrfofileVisible, setIsEditProfileVisible] = useState(true);
 
   const handleUpdateUser = async () => {
     try {
@@ -259,12 +260,18 @@ const Profile = () => {
           <Input type="text" value={lastName} />
           <Input
             type="text"
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setShowUsernameMessage(true)
+            }}
             value={username}
           />
-          {!isUsernameAvailable && (
-            <span style={{ color: "white" }}>Username not available</span>
+           {showUsernameMessage && (
+            <span style={{ color: "white" }}>
+              {isUsernameAvailable ? "Available" : "Not available"}
+            </span>
           )}
+
           <Input
             type="text"
             onChange={(e) => setBio(e.target.value)}
