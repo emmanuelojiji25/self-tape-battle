@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Sora", sans-serif;
+  outline: none;
 }
 
 .screen-width {
