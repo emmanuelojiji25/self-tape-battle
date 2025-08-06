@@ -7,6 +7,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import {
   getDownloadURL,
@@ -105,7 +106,7 @@ const Battle = () => {
     const storageRef = ref(storage, `battles/${battleId}/${loggedInUser.uid}`);
 
     setUploadStatus("uploading");
-    
+
     try {
       await uploadBytes(storageRef, file).then(() => {
         getDownloadURL(
@@ -122,6 +123,12 @@ const Battle = () => {
             uid: `${loggedInUser.uid}`,
             url: `${url}`,
             votes: [],
+          });
+
+          const userRef = doc(db, "users", loggedInUser.uid);
+          const snapshot = await getDoc(userRef);
+          await updateDoc(userRef, {
+            coins: snapshot.data().coins + 1,
           });
           console.log("complete!");
         });

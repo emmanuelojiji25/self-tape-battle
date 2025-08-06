@@ -22,7 +22,6 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   const [username, setUsername] = useState("");
   const [entryUid, setEntryUid] = useState("");
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -102,7 +101,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
         <div className="user-actions">
           {loggedInUser && voteButtonVisible && (
             <span
-              onClick={handleVote}
+              onClick={() => handleVote()}
               className={`vote-button ${userhasVoted ? "voted" : ""}`}
             >
               {!userhasVoted ? "Vote" : "You voted!"}
