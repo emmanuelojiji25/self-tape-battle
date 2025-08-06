@@ -10,7 +10,12 @@ import { useEffect, useState } from "react";
 import { db, storage } from "../firebaseConfig";
 import "./Dashboard.scss";
 import Button from "../components/Button";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  updateMetadata,
+  uploadBytes,
+} from "firebase/storage";
 
 const Dashboard = () => {
   const [view, setView] = useState("battles");
@@ -70,6 +75,10 @@ const Dashboard = () => {
 
           await updateDoc(docRef, {
             file: url,
+          });
+
+          await updateMetadata(fileRef, {
+            contentDisposition: "attachment",
           });
         });
       });
