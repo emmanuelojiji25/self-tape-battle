@@ -105,7 +105,7 @@ const Battle = () => {
     const storageRef = ref(storage, `battles/${battleId}/${loggedInUser.uid}`);
 
     setUploadStatus("uploading");
-
+    
     try {
       await uploadBytes(storageRef, file).then(() => {
         getDownloadURL(
