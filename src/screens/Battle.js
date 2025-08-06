@@ -29,6 +29,8 @@ const Battle = () => {
   const [title, setTitle] = useState("");
   const [entries, setEntries] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   const [winner, setWinner] = useState();
 
   const { loggedInUser } = useContext(AuthContext);
@@ -60,6 +62,8 @@ const Battle = () => {
     });
 
     setEntries(entries);
+
+    setLoading(false);
 
     try {
     } catch (error) {}
@@ -157,7 +161,7 @@ const Battle = () => {
         </a>
       </div>
 
-      {!userHasJoined && !file && (
+      {!userHasJoined && !file && loading === false && (
         <Button
           onClick={() => inputRef.current.click()}
           text="Upload Tape"
