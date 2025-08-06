@@ -38,7 +38,7 @@ const Battle = () => {
 
   const [battleStatus, setBattleStatus] = useState("");
 
-  const [file, setFile] = useState("");
+  const [battleAttachment, setBattleAttachment] = useState("");
 
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
@@ -50,7 +50,8 @@ const Battle = () => {
     const data = snapshot.data();
     setTitle(data.title);
     setBattleStatus(data.battleStatus);
-    setFile(data.file);
+    setBattleAttachment(data.file);
+
     let entries = [];
 
     entriesDocs.forEach((doc) => {
@@ -96,6 +97,7 @@ const Battle = () => {
   };
 
   const inputRef = useRef(null);
+  const [file, setFile] = useState(null);
 
   const [uploadStatus, setUploadStatus] = useState("");
 
@@ -141,7 +143,7 @@ const Battle = () => {
           <span className="prize-pill">Horror</span>
         </div>
 
-        <a href={`${file}`} download>
+        <a href={`${battleAttachment}`} download>
           <div className="download">
             <img src={icon_download} />
           </div>
