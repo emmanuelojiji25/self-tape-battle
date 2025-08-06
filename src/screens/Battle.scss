@@ -1,6 +1,7 @@
 .Battle {
   padding-top: 30px;
   min-height: 100svh;
+  padding-bottom: 100px;
 }
 
 .back {
@@ -24,7 +25,7 @@
 }
 
 .battle-title {
-  //text-transform: uppercase;
+  text-transform: capitalize;
   font-weight: 800;
   font-size: 28px;
   color: white;
@@ -74,7 +75,21 @@
 }
 
 .winner {
-  height: 50px;
   background: gold;
   border-radius: 50px;
+  display: flex;
+  padding: 5px;
+  align-items: center;
+}
+
+.winner-avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+  margin-right: 10px;
+}
+
+.winner-right {
+  display: flex;
+  flex-direction: column;
 }

@@ -12,7 +12,7 @@ import "./EntryCard.scss";
 import ConfettiExplosion from "react-confetti-explosion";
 import { Link } from "react-router-dom";
 
-const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
+const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   const { loggedInUser } = useContext(AuthContext);
 
   const [name, setName] = useState("");
@@ -21,7 +21,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
   const [isExploding, setIsExploding] = useState(false);
   const [username, setUsername] = useState("");
   const [entryUid, setEntryUid] = useState("");
-  const [battleStatus, setBattleStatus] = useState("open");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,10 +109,9 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible }) => {
             </span>
           )}
           {((loggedInUser && uid === loggedInUser.uid) ||
-            battleStatus === "closed" ||
-            (!loggedInUser && battleStatus === "closed")) && (
+            battleStatus === "closed") && (
             <span className="votes">
-              {votes > 0 ? votes : "No"} Vote{votes === 1 ? "" : "s"}
+              {votes > 0 ? votes : "No"} Vote{votes === 1 && "s"}
             </span>
           )}
         </div>

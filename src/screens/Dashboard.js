@@ -50,7 +50,7 @@ const Dashboard = () => {
         id: id,
         winner: "",
         voters: [],
-        active: true,
+        battleStatus: "open",
         genre: "",
         file: "",
       });
@@ -138,7 +138,7 @@ const Dashboard = () => {
                 <h3>{battle.title}</h3>
                 <p>{battle.id}</p>
                 <p>{battle.prize}</p>
-                <p>{battle.active ? "active" : "closed"}</p>
+                <p>{battle.battleStatus}</p>
                 <Button
                   filled
                   text={battle.active ? "Close Battle" : "Open Battle"}

@@ -36,7 +36,9 @@ const Battle = () => {
 
   const { battleId } = useParams();
 
-  const battleStatus = "closed";
+  const [battleStatus, setBattleStatus] = useState("");
+
+  const [file, setFile] = useState("");
 
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
@@ -47,7 +49,8 @@ const Battle = () => {
 
     const data = snapshot.data();
     setTitle(data.title);
-
+    setBattleStatus(data.battleStatus);
+    setFile(data.file);
     let entries = [];
 
     entriesDocs.forEach((doc) => {
@@ -93,7 +96,6 @@ const Battle = () => {
   };
 
   const inputRef = useRef(null);
-  const [file, setFile] = useState(null);
 
   const [uploadStatus, setUploadStatus] = useState("");
 
@@ -139,10 +141,7 @@ const Battle = () => {
           <span className="prize-pill">Horror</span>
         </div>
 
-        <a
-          href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/960px-Cat_November_2010-1a.jpg"
-          download
-        >
+        <a href={`${file}`} download>
           <div className="download">
             <img src={icon_download} />
           </div>
@@ -188,7 +187,16 @@ const Battle = () => {
       ></input>
 
       {winner && battleStatus === "closed" && (
-        <div className="winner">{winner.firstName + " " + winner.lastName}</div>
+        <div className="winner">
+          <div
+            className="winner-avatar"
+            style={{ backgroundImage: `url(${winner.headshot})` }}
+          ></div>
+          <div className="winner-right">
+            <span>WINNER</span>
+            {winner.firstName + " " + winner.lastName}
+          </div>
+        </div>
       )}
 
       <div className="entries-container">
@@ -199,6 +207,7 @@ const Battle = () => {
               uid={entry.uid}
               battleId={battleId}
               voteButtonVisible={entry.uid != loggedInUser.uid}
+              battleStatus={battleStatus}
             />
           );
         })}

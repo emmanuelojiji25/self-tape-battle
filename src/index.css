@@ -4,6 +4,8 @@
   box-sizing: border-box;
   font-family: "Sora", sans-serif;
   outline: none;
+  background-size: cover;
+  background-position: center;
 }
 
 .screen-width {
