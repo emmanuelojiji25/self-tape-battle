@@ -26,6 +26,7 @@
 .greeting-container {
   h2 {
     color: white;
+    font-weight: 600;
   }
 
   p {
@@ -34,8 +35,8 @@
 }
 
 .coins-container {
-  border: solid 1px #4b7cff;
-  background: #19274e;
+  border: solid 1px #182241;
+  background-color: #101626;
   border-radius: 200px;
   color: #4b7cff;
   display: flex;

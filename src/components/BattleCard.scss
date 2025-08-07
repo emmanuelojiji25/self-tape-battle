@@ -1,11 +1,11 @@
 .PollCard {
-  background-color: #0f121a;
+  background-color: #101626;
+  border: solid 1px #182241;
   padding: 6% 30px;
   border-radius: 25px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-
 
 }
 
@@ -58,7 +58,8 @@
 .title {
   font-size: 22px;
   font-family: "Sora";
-  font-weight: 800;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 .prize {
