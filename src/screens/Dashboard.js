@@ -57,7 +57,7 @@ const Dashboard = () => {
         winner: "",
         voters: [],
         battleStatus: "open",
-        genre: "",
+        genre: genre,
         file: "",
         deadline: deadline,
       });
@@ -118,6 +118,11 @@ const Dashboard = () => {
               type="text"
               placeholder="Deadline"
               onChange={(e) => setDeadline(e.target.value)}
+            ></input>
+            <input
+              type="text"
+              placeholder="Genre"
+              onChange={(e) => setGenre(e.target.value)}
             ></input>
             <Button
               filled

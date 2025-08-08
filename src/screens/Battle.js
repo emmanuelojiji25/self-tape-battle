@@ -30,6 +30,8 @@ const Battle = () => {
   const [title, setTitle] = useState("");
   const [entries, setEntries] = useState([]);
   const [deadline, setDeadline] = useState("");
+  const [prize, setPrize] = useState("");
+  const [genre, setGenre] = useState("")
 
   const [loading, setLoading] = useState(true);
 
@@ -61,6 +63,8 @@ const Battle = () => {
       setBattleAttachment(data.file);
       setDeadline(data.deadline);
       setUserHasVoted(data.voters.includes(loggedInUser.uid));
+      setPrize(data.prize)
+      setGenre(data.genre)
     });
 
     let entries = [];
@@ -158,8 +162,8 @@ const Battle = () => {
       <div className="battle-header">
         <div className="battle-header-left">
           <h3 className="battle-title">{title}</h3>
-          <span className="prize-pill">Spotlight Membership</span>
-          <span className="prize-pill">Horror</span>
+          <span className="prize-pill">{prize}</span>
+          <span className="prize-pill">{genre}</span>
           <span className="deadline">{deadline}</span>
         </div>
 
