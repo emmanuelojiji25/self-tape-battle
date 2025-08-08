@@ -14,7 +14,7 @@ import gift from "../media/gift.svg";
 import fire from "../media/fire.svg";
 import Button from "./Button";
 
-const BattleCard = ({ name, battleId, mostPopular }) => {
+const BattleCard = ({ name, prize, battleId, mostPopular }) => {
   const [voteComplete, setVoteComplete] = useState(false);
   const [collapseCard, setCollapseCard] = useState(false);
   const [removeCard, setRemoveCard] = useState(false);
@@ -42,10 +42,10 @@ const BattleCard = ({ name, battleId, mostPopular }) => {
       <span className="title">{name}</span>
       <span className="prize">
         <img src={gift} />
-        Spotlight Membership
+        {prize}
       </span>
       <Link to={`/arena/${battleId}`}>
-        <Button text="Join" filled/>
+        <Button text="Join" filled />
       </Link>
     </div>
   );

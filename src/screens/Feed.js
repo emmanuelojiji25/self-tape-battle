@@ -79,17 +79,22 @@ const Feed = ({ user }) => {
           <>
             <BattleCard
               name={mostPopular.title}
+              prize={mostPopular.prize}
               battleId={mostPopular.id}
               mostPopular={true}
             />
             {battles
               .filter((battle) => battle.id != mostPopular.id)
               .map((battle) => (
-                <BattleCard name={battle.title} battleId={battle.id} />
+                <BattleCard
+                  name={battle.title}
+                  prize={battle.prize}
+                  battleId={battle.id}
+                />
               ))}
           </>
         )}
-        <NavBar/>
+        <NavBar />
       </div>
     </>
   );
