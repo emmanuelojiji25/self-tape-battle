@@ -207,7 +207,7 @@ const Profile = () => {
   };
   return (
     <div className="Profile screen-width">
-      {!publicProfile ? (
+      {!publicProfile && !loggedInUser ? (
         <LockedProfile firstName={firstName} />
       ) : (
         <>
