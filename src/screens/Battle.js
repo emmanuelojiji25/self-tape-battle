@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 import {
@@ -31,7 +32,7 @@ const Battle = () => {
   const [entries, setEntries] = useState([]);
   const [deadline, setDeadline] = useState("");
   const [prize, setPrize] = useState("");
-  const [genre, setGenre] = useState("")
+  const [genre, setGenre] = useState("");
 
   const [loading, setLoading] = useState(true);
 
@@ -63,8 +64,8 @@ const Battle = () => {
       setBattleAttachment(data.file);
       setDeadline(data.deadline);
       setUserHasVoted(data.voters.includes(loggedInUser.uid));
-      setPrize(data.prize)
-      setGenre(data.genre)
+      setPrize(data.prize);
+      setGenre(data.genre);
     });
 
     let entries = [];
@@ -97,11 +98,15 @@ const Battle = () => {
         data.push(doc.data());
       });
 
-      const sorted = data.sort(
+      const voteLengthSort = data.sort(
         (a, b) => (b.votes?.length || 0) - (a.votes?.length || 0)
       );
 
-      const winner = sorted[0].uid;
+      const entryTimeSort = voteLengthSort.sort(
+        (a, b) => (a.date || 0) - (b.date || 0)
+      );
+
+      const winner = entryTimeSort[0].uid;
 
       const userSnapshot = await getDoc(doc(db, "users", winner));
 
@@ -139,6 +144,7 @@ const Battle = () => {
             uid: `${loggedInUser.uid}`,
             url: `${url}`,
             votes: [],
+            date: Date.now(),
           });
 
           const userRef = doc(db, "users", loggedInUser.uid);
