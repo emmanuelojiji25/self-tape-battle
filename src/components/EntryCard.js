@@ -96,6 +96,9 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
       <Link to={`/profile/${username}`} className="name">
         {name}
       </Link>
+      <Link to={`/arena/${battleId}/${username}`} className="name">
+        Share
+      </Link>
       <div className="video-container">
         <video src={url} controls />
         <div className="user-actions">

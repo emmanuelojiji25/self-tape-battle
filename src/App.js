@@ -14,6 +14,7 @@ import Onboarding from "./screens/Onboarding";
 import Dashboard from "./screens/Dashboard";
 import Directory from "./screens/Directory";
 import PrivateRoute from "./components/PrivateRoute";
+import SharedVideo from "./components/SharedVideo";
 
 function App() {
   const { loggedInUser } = useContext(AuthContext);
@@ -65,6 +66,8 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        <Route path="/arena/:battleId/:username" element={<SharedVideo />} />
       </Routes>
     </div>
   );
