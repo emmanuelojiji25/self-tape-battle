@@ -46,8 +46,8 @@ const SharedVideo = () => {
     getVideo();
   }, [battleId, username]);
   return (
-    <div className="SharedVideo">
-      <h1>Shared</h1>
+    <div className="SharedVideo screen-width">
+     
       <h2>{user?.firstName}</h2>
 
       <EntryCard url={entry.url} />
