@@ -21,6 +21,7 @@ import EntryCard from "../components/EntryCard";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import NavBar from "../components/NavBar";
+import LockedProfile from "../components/LockedProfile";
 
 const Profile = () => {
   const params = useParams();
@@ -33,6 +34,7 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
+  const [publicProfile, setPublicProfile] = useState(false);
 
   const [battles, setBattles] = useState([]);
 
@@ -59,7 +61,9 @@ const Profile = () => {
         setBio(data.bio);
         setLink(data.webLink);
         setHeadshot(data.headshot);
+        setPublicProfile(data.settings.publicProfile);
       });
+      console.log("public?" + publicProfile);
     } catch (error) {
       console.log(error);
     }
@@ -193,6 +197,7 @@ const Profile = () => {
         username: username.trim().toLowerCase(),
         bio: bio.trim().toLowerCase(),
         webLink: link.trim().toLowerCase(),
+        settings: { publicProfile: publicProfile },
       });
 
       setIsEditProfileVisible(false);
@@ -202,108 +207,124 @@ const Profile = () => {
   };
   return (
     <div className="Profile screen-width">
-      <div className="profile-header">
-        <div className="profile-headshot-container">
-          <img className="profile-headshot" src={headshot} />
-        </div>
-        <div className="profile-info">
-          <h1>{name}</h1>
-          <span>{bio}</span>
-          <a href={link} target="_" className="web-link">
-            {link}
-          </a>
-          <Button
-            filled
-            text="Share Card"
-            onClick={() => handleCopyProfile()}
-          ></Button>
-          {userId === loggedInUser?.uid && (
-            <Button
-              outline
-              text="Edit Profile"
-              onClick={() => setIsEditProfileVisible(true)}
-            ></Button>
-          )}
-          {userId === loggedInUser?.uid && (
-            <Button
-              outline
-              text="Sign Out"
-              onClick={() => {
-                auth.signOut();
-                navigate("/userAuth");
-              }}
-            ></Button>
-          )}
-        </div>
-      </div>
+      {!publicProfile ? (
+        <LockedProfile firstName={firstName} />
+      ) : (
+        <>
+          <div className="profile-header">
+            <div className="profile-headshot-container">
+              <img className="profile-headshot" src={headshot} />
+            </div>
+            <div className="profile-info">
+              <h1>{name}</h1>
+              <span>{bio}</span>
+              <a href={link} target="_" className="web-link">
+                {link}
+              </a>
+              <Button
+                filled
+                text="Share Card"
+                onClick={() => handleCopyProfile()}
+              ></Button>
+              {userId === loggedInUser?.uid && (
+                <Button
+                  outline
+                  text="Edit Profile"
+                  onClick={() => setIsEditProfileVisible(true)}
+                ></Button>
+              )}
+              {userId === loggedInUser?.uid && (
+                <Button
+                  outline
+                  text="Sign Out"
+                  onClick={() => {
+                    auth.signOut();
+                    navigate("/userAuth");
+                  }}
+                ></Button>
+              )}
+            </div>
+          </div>
 
-      <div className="stat-card-container">
-        <div className="stat-card">
-          <h2>{battles.length}</h2>
-          <h4>Battles Entered</h4>
-        </div>
-        <div className="stat-card">
-          <h2>{battlesWon}</h2>
-          <h4>Battles Won</h4>
-        </div>
-        <div className="stat-card">
-          <h2>{totalVotes}</h2>
-          <h4>Total votes</h4>
-        </div>
-      </div>
+          <div className="stat-card-container">
+            <div className="stat-card">
+              <h2>{battles.length}</h2>
+              <h4>Battles Entered</h4>
+            </div>
+            <div className="stat-card">
+              <h2>{battlesWon}</h2>
+              <h4>Battles Won</h4>
+            </div>
+            <div className="stat-card">
+              <h2>{totalVotes}</h2>
+              <h4>Total votes</h4>
+            </div>
+          </div>
 
-      <div className="entries-container">
-        {battles.map((battle) => (
-          <>
-            {
-              <EntryCard
-                url={battle.url}
-                uid={battle.uid}
-                battleId={battle.battleId}
+          <div className="entries-container">
+            {battles.map((battle) => (
+              <>
+                {
+                  <EntryCard
+                    url={battle.url}
+                    uid={battle.uid}
+                    battleId={battle.battleId}
+                  />
+                }
+              </>
+            ))}
+          </div>
+
+          {isEditPrfofileVisible && (
+            <div className="edit-profile">
+              <h2>Edit Profile</h2>
+              <Input type="text" value={firstName} />
+              <Input type="text" value={lastName} />
+              <Input
+                type="text"
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setShowUsernameMessage(true);
+                }}
+                value={username}
               />
-            }
-          </>
-        ))}
-      </div>
+              {showUsernameMessage && (
+                <span style={{ color: "white" }}>
+                  {isUsernameAvailable ? "Available" : "Not available"}
+                </span>
+              )}
 
-      {isEditPrfofileVisible && (
-        <div className="edit-profile">
-          <h2>Edit Profile</h2>
-          <Input type="text" value={firstName} />
-          <Input type="text" value={lastName} />
-          <Input
-            type="text"
-            onChange={(e) => {
-              setUsername(e.target.value);
-              setShowUsernameMessage(true);
-            }}
-            value={username}
-          />
-          {showUsernameMessage && (
-            <span style={{ color: "white" }}>
-              {isUsernameAvailable ? "Available" : "Not available"}
-            </span>
+              <Input
+                type="text"
+                onChange={(e) => setBio(e.target.value)}
+                value={bio}
+              />
+              <Input
+                type="text"
+                onChange={(e) => setLink(e.target.value)}
+                value={link}
+              />
+              <input
+                type="checkbox"
+                onChange={(e) =>
+                  e.target.checked
+                    ? setPublicProfile(true)
+                    : setPublicProfile(false)
+                }
+              ></input>
+              <span>Public Profile</span>
+              {publicProfile && <p>Share your profile: </p>}
+              <Button filled text="Save" onClick={() => handleUpdateUser()} />
+              <Button
+                outline
+                text="Cancel"
+                onClick={() => setIsEditProfileVisible(false)}
+              />
+            </div>
           )}
-
-          <Input
-            type="text"
-            onChange={(e) => setBio(e.target.value)}
-            value={bio}
-          />
-          <Input
-            type="text"
-            onChange={(e) => setLink(e.target.value)}
-            value={link}
-          />
-          <Button filled text="Save" onClick={() => handleUpdateUser()} />
-          <Button
-            outline
-            text="Cancel"
-            onClick={() => setIsEditProfileVisible(false)}
-          />
-        </div>
+          <NavBar />
+        </>
       )}
-      <NavBar />
     </div>
   );
 };
