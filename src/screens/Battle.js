@@ -4,6 +4,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
   setDoc,
@@ -43,17 +44,22 @@ const Battle = () => {
 
   const [battleAttachment, setBattleAttachment] = useState("");
 
+  const [userHasVoted, setUserHasVoted] = useState(null);
+
+  const [errorMessage, setErrorMessage] = useState("");
+
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
     const entriesRef = collection(db, "battles", battleId, "entries");
 
-    const snapshot = await getDoc(docRef);
     const entriesDocs = await getDocs(entriesRef);
-
-    const data = snapshot.data();
-    setTitle(data.title);
-    setBattleStatus(data.battleStatus);
-    setBattleAttachment(data.file);
+    onSnapshot(docRef, (snapshot) => {
+      const data = snapshot.data();
+      setTitle(data.title);
+      setBattleStatus(data.battleStatus);
+      setBattleAttachment(data.file);
+      setUserHasVoted(data.voters.includes(loggedInUser.uid));
+    });
 
     let entries = [];
 
@@ -163,7 +169,17 @@ const Battle = () => {
 
       {!userHasJoined && !file && loading === false && (
         <Button
-          onClick={() => inputRef.current.click()}
+          onClick={() => {
+            if (!userHasVoted) {
+              console.log("You must vote first!");
+              setErrorMessage(
+                "You must vote for at least 1 entry before you can join this battle"
+              );
+              return;
+            } else {
+              inputRef.current.click();
+            }
+          }}
           text="Upload Tape"
           className="upload-tape"
           filled
