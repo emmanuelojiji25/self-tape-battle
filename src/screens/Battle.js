@@ -29,6 +29,7 @@ import NavBar from "../components/NavBar";
 const Battle = () => {
   const [title, setTitle] = useState("");
   const [entries, setEntries] = useState([]);
+  const [deadline, setDeadline] = useState("");
 
   const [loading, setLoading] = useState(true);
 
@@ -58,6 +59,7 @@ const Battle = () => {
       setTitle(data.title);
       setBattleStatus(data.battleStatus);
       setBattleAttachment(data.file);
+      setDeadline(data.deadline);
       setUserHasVoted(data.voters.includes(loggedInUser.uid));
     });
 
@@ -158,6 +160,7 @@ const Battle = () => {
           <h3 className="battle-title">{title}</h3>
           <span className="prize-pill">Spotlight Membership</span>
           <span className="prize-pill">Horror</span>
+          <span className="deadline">{deadline}</span>
         </div>
 
         <a href={`${battleAttachment}`} download>

@@ -26,6 +26,7 @@ const Dashboard = () => {
   const [genre, setGenre] = useState("");
   const [prize, setPrize] = useState("");
   const [file, setFile] = useState("");
+  const [deadline, setDeadline] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const getBattles = async () => {
@@ -58,6 +59,7 @@ const Dashboard = () => {
         battleStatus: "open",
         genre: "",
         file: "",
+        deadline: deadline,
       });
 
       uploadFile();
@@ -111,6 +113,11 @@ const Dashboard = () => {
               type="text"
               placeholder="Prize"
               onChange={(e) => setPrize(e.target.value)}
+            ></input>
+            <input
+              type="text"
+              placeholder="Deadline"
+              onChange={(e) => setDeadline(e.target.value)}
             ></input>
             <Button
               filled
