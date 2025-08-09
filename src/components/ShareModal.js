@@ -6,6 +6,10 @@ import "./ShareModal.scss";
 const ShareModal = ({ battleId, uid, username }) => {
   const [shareSetting, setShareSetting] = useState("private");
 
+  const [isCopied, setIsCopied] = useState(false);
+
+  const shareLink = `localhost:3000/arena/${battleId}/${username}`;
+
   useEffect(() => {
     if (!battleId || !uid) return;
 
@@ -31,24 +35,44 @@ const ShareModal = ({ battleId, uid, username }) => {
   return (
     <div className="share-modal-container">
       <div className="share-modal">
-        <h2>Share</h2>
+        <div className="share-modal-header">
+          <h2>Share</h2>
+          <h2>x</h2>
+        </div>
 
+        <div className="message">
+          {shareSetting === "public" && (
+            <p>This entry can be viewed by users that aren't logged in</p>
+          )}
+          {shareSetting === "private" && (
+            <p>This entry cannot be viewed by outsiders</p>
+          )}
+        </div>
         {shareSetting === "public" && (
-          <p>This entry can be viewed by users that aren't logged in</p>
-        )}
-        {shareSetting === "private" && (
-          <p>This entry cannot be viewed by outsiders</p>
-        )}
-        {shareSetting === "public" && (
-          <span className="share-link">{`selftapebattle.com//arena/${battleId}/${username}`}</span>
+          <span
+            className="share-link"
+            onClick={async () => {
+              await navigator.clipboard.writeText(shareLink);
+              setIsCopied(true);
+
+              setTimeout(() => {
+                setIsCopied(false);
+              }, 3000);
+            }}
+          >
+            {!isCopied ? "Copy Link" : "Copied!"}
+          </span>
         )}
 
-        <input
-          type="checkbox"
-          onChange={handleUpdateSetting}
-          checked={shareSetting === "public"}
-        />
-        <span>Make entry public</span>
+        <span>
+          {" "}
+          <input
+            type="checkbox"
+            onChange={handleUpdateSetting}
+            checked={shareSetting === "public"}
+          />
+          Make entry public{" "}
+        </span>
       </div>
     </div>
   );

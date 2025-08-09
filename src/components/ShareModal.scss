@@ -13,10 +13,38 @@
 
 .share-modal {
   background: #0f121a;
+  border: solid 1px #1e2c47;
   padding: 30px;
   border-radius: 10px;
   z-index: 2;
   color: white;
   width: 100%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    margin-bottom: 25px;
+  }
+}
+
+.share-modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message {
+  background: #1f2638;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.share-link {
+  font-size: 14px;
+  color: #4b7cff;
+  font-weight: 600;
+  margin-bottom: 15px;
+  cursor: pointer;
 }
