@@ -96,7 +96,12 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   return (
     <div className="EntryCard">
       {shareModalVisible && (
-        <ShareModal battleId={battleId} uid={uid} username={username} />
+        <ShareModal
+          battleId={battleId}
+          uid={uid}
+          username={username}
+          setShareModalVisible={setShareModalVisible}
+        />
       )}
       {isExploding && <ConfettiExplosion />}
       <Link to={`/profile/${username}`} className="name">

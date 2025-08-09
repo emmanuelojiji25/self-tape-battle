@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebaseConfig";
 import "./ShareModal.scss";
 
-const ShareModal = ({ battleId, uid, username }) => {
+const ShareModal = ({ battleId, uid, username, setShareModalVisible }) => {
   const [shareSetting, setShareSetting] = useState("private");
 
   const [isCopied, setIsCopied] = useState(false);
@@ -37,7 +37,7 @@ const ShareModal = ({ battleId, uid, username }) => {
       <div className="share-modal">
         <div className="share-modal-header">
           <h2>Share</h2>
-          <h2>x</h2>
+          <h2 onClick={() => setShareModalVisible(false)}>X</h2>
         </div>
 
         <div className="message">
