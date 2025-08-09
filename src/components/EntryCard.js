@@ -107,12 +107,14 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
       <Link to={`/profile/${username}`} className="name">
         {name}
       </Link>
-      <span
-        className="share"
-        onClick={() => setShareModalVisible(!shareModalVisible)}
-      >
-        Share
-      </span>
+      {uid && loggedInUser.uid === uid && (
+        <span
+          className="share"
+          onClick={() => setShareModalVisible(!shareModalVisible)}
+        >
+          Share
+        </span>
+      )}
 
       <div className="video-container">
         <video src={url} controls />

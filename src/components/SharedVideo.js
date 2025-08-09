@@ -47,10 +47,15 @@ const SharedVideo = () => {
   }, [battleId, username]);
   return (
     <div className="SharedVideo screen-width">
-     
-      <h2>{user?.firstName}</h2>
+      {entry.shareSetting === "private" ? (
+        <h1>Private</h1>
+      ) : (
+        <>
+          <h2>{user?.firstName}</h2>
 
-      <EntryCard url={entry.url} />
+          <EntryCard url={entry.url} />
+        </>
+      )}
     </div>
   );
 };
