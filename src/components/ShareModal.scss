@@ -1,0 +1,22 @@
+.share-modal-container {
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-modal {
+  background: #0f121a;
+  padding: 30px;
+  border-radius: 10px;
+  z-index: 2;
+  color: white;
+  width: 100%;
+  max-width: 400px;
+}

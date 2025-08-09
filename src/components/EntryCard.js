@@ -11,6 +11,7 @@ import { db } from "../firebaseConfig";
 import "./EntryCard.scss";
 import ConfettiExplosion from "react-confetti-explosion";
 import { Link } from "react-router-dom";
+import ShareModal from "./ShareModal";
 
 const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   const { loggedInUser } = useContext(AuthContext);
@@ -21,6 +22,8 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   const [isExploding, setIsExploding] = useState(false);
   const [username, setUsername] = useState("");
   const [entryUid, setEntryUid] = useState("");
+
+  const [shareModalVisible, setShareModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,13 +95,20 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
 
   return (
     <div className="EntryCard">
+      {shareModalVisible && (
+        <ShareModal battleId={battleId} uid={uid} username={username} />
+      )}
       {isExploding && <ConfettiExplosion />}
       <Link to={`/profile/${username}`} className="name">
         {name}
       </Link>
-      <Link to={`/arena/${battleId}/${username}`} className="name">
+      <span
+        className="share"
+        onClick={() => setShareModalVisible(!shareModalVisible)}
+      >
         Share
-      </Link>
+      </span>
+
       <div className="video-container">
         <video src={url} controls />
         <div className="user-actions">
