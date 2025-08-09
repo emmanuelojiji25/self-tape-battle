@@ -16,10 +16,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #1e2947;
+    background: #1e2947be;
     padding: 50px 30px;
     border-radius: 10px;
     border: solid 1px rgb(54, 54, 143);
+    backdrop-filter: blur(10px);
   }
 }
 
@@ -32,7 +33,7 @@
   h2 {
     color: white;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 20px;
   }
 
   p {

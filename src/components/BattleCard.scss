@@ -2,11 +2,10 @@
   background-color: #101626;
   border: solid 1px #182241;
   padding: 6% 30px;
-  border-radius: 25px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-
 }
 
 .poll-card-header {
@@ -56,7 +55,7 @@
 }
 
 .title {
-  font-size: 22px;
+  font-size: 20px;
   font-family: "Sora";
   font-weight: 600;
   text-transform: capitalize;
