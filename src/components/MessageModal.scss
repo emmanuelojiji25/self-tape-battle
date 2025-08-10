@@ -1,0 +1,44 @@
+.message-modal {
+  height: 100svh;
+  width: 100%;
+  background: #080b13;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  color: white;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: popOut 0.3s forwards;
+
+  img{
+    width: 120px;
+    position: relative;
+    bottom: -10px;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+
+  }
+
+  p{
+    margin-bottom: 20px;
+  }
+}
+
+.popOut {
+  @keyframes popOut {
+    from {
+      transform: scale(0);
+    }
+
+    to {
+      transform: scale(1);
+    }
+  }
+}

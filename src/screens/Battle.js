@@ -26,6 +26,7 @@ import icon_download from "../media/download.svg";
 import { db, storage } from "../firebaseConfig";
 import "./Battle.scss";
 import NavBar from "../components/NavBar";
+import MessageModal from "../components/MessageModal";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -51,6 +52,8 @@ const Battle = () => {
   const [userHasVoted, setUserHasVoted] = useState(null);
 
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [showMessageModal, setShowMessageModal] = useState(false);
 
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
@@ -145,6 +148,7 @@ const Battle = () => {
             url: `${url}`,
             votes: [],
             date: Date.now(),
+            shareSetting: "private",
           });
 
           const userRef = doc(db, "users", loggedInUser.uid);
@@ -156,12 +160,14 @@ const Battle = () => {
         });
       });
       setUploadStatus("complete");
+      setShowMessageModal(true);
     } catch (error) {
       console.log(error);
     }
   };
   return (
     <div className="Battle screen-width">
+      {showMessageModal && <MessageModal onClick={() => setShowMessageModal(false)}/>}
       <Link to="/" className="back">
         Back
       </Link>

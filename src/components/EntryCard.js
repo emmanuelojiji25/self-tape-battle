@@ -1,5 +1,6 @@
 import {
   arrayUnion,
+  deleteDoc,
   doc,
   getDoc,
   onSnapshot,
@@ -93,6 +94,16 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
     }
   };
 
+  const handleDeleteEntry = async () => {
+    try {
+      const docRef = doc(db, "battles", battleId, "entries", uid);
+      await deleteDoc(docRef);
+      console.log("deleted");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="EntryCard">
       {shareModalVisible && (
@@ -108,12 +119,17 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
         {name}
       </Link>
       {uid && loggedInUser.uid === uid && (
-        <span
-          className="share"
-          onClick={() => setShareModalVisible(!shareModalVisible)}
-        >
-          Share
-        </span>
+        <>
+          <span
+            className="share"
+            onClick={() => setShareModalVisible(!shareModalVisible)}
+          >
+            Share
+          </span>
+          <p onClick={() => handleDeleteEntry()} className="delete">
+            Delete
+          </p>
+        </>
       )}
 
       <div className="video-container">
