@@ -37,23 +37,24 @@ const Header = () => {
   }, [loggedInUser]);
 
   return (
-    <div className="Header screen-width">
+    <div className="Header">
       <div className="header-inner">
         <div className="greeting-container">
-          <h2 className="greeting">Welcome, {firstName}</h2>
-          <p>Your next battle awaits you!</p>
+          <div
+            className="avatar"
+            style={{ backgroundImage: `url(${headshot})` }}
+          ></div>
+          <div>
+            <h2 className="greeting">Welcome, {firstName}</h2>
+            <p>Your next battle awaits you!</p>
+          </div>
         </div>
         <div className="header-right">
           <div className="coins-container">
             <img src={coin} />
             {coins}
           </div>
-          <Link to={`/profile/${username}`}>
-            <div
-              className="avatar"
-              style={{ backgroundImage: `url(${headshot})` }}
-            ></div>
-          </Link>
+          <Link to={`/profile/${username}`}></Link>
         </div>
       </div>
     </div>

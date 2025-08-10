@@ -77,6 +77,9 @@ const Feed = ({ user }) => {
           </div>
         ) : (
           <>
+          <div className="banner">
+            
+          </div>
             <BattleCard
               name={mostPopular.title}
               prize={mostPopular.prize}

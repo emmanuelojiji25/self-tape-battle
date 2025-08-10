@@ -5,22 +5,22 @@
   position: sticky;
   width: 100%;
   top: 0;
-  border-radius: 10px;
-  padding-top: 15px;
-  margin-bottom: 25px;
+
+  margin-bottom: 10px;
 
   z-index: 1;
   .header-inner {
     width: 100%;
-    height: 50px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #1e2947be;
-    padding: 50px 30px;
-    border-radius: 10px;
-    border: solid 1px rgb(54, 54, 143);
-    backdrop-filter: blur(10px);
+    background: #141c30;
+    padding: 20px 30px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    // border: solid 1px rgb(54, 54, 143);
+   // backdrop-filter: blur(10px);
   }
 }
 
@@ -30,31 +30,28 @@
 }
 
 .greeting-container {
+  display: flex;
   h2 {
     color: white;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 20px;
   }
 
   p {
     color: #4b7cff;
+    font-size: 14px;
   }
 }
 
 .coins-container {
-  border: solid 1px #182241;
-  background-color: #101626;
   border-radius: 200px;
   color: #4b7cff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 10px;
-  padding-left: 7px;
 
   img {
-    margin-right: 5px;
-    width: 20px;
+    width: 25px;
     animation: coin-flip 3s infinite;
   }
 }
@@ -70,8 +67,8 @@
 }
 
 .avatar {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   background: grey;
   border-radius: 5px;
   background-position: center;
