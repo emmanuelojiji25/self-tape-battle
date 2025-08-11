@@ -22,6 +22,7 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import NavBar from "../components/NavBar";
 import LockedProfile from "../components/LockedProfile";
+import Wallet from "../components/Wallet";
 
 const Profile = () => {
   const params = useParams();
@@ -207,6 +208,7 @@ const Profile = () => {
   };
   return (
     <div className="Profile screen-width">
+      <Wallet/>
       {!publicProfile && !loggedInUser ? (
         <LockedProfile firstName={firstName} />
       ) : (

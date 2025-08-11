@@ -5,6 +5,7 @@ import { db } from "../firebaseConfig";
 import "./Header.scss";
 import coin from "../media/coin.svg";
 import { Link } from "react-router-dom";
+import { Resend } from "resend";
 
 const Header = () => {
   const { loggedInUser } = useContext(AuthContext);
@@ -12,6 +13,10 @@ const Header = () => {
   const [firstName, setFirstName] = useState("");
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
+
+  const resend = new Resend("re_EGaikK5s_6yh96LXJbUmT8GddZa9YQqzG");
+
+  
 
   useEffect(() => {
     if (!loggedInUser) return;
@@ -38,6 +43,7 @@ const Header = () => {
 
   return (
     <div className="Header">
+
       <div className="header-inner">
         <div className="greeting-container">
           <div

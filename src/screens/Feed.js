@@ -14,6 +14,7 @@ import "./Feed.scss";
 import Header from "../components/Header";
 import logo from "../media/logo-icon.svg";
 import NavBar from "../components/NavBar";
+import Wallet from "../components/Wallet";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
@@ -69,6 +70,7 @@ const Feed = ({ user }) => {
 
   return (
     <>
+  
       <Header />
       <div className="Feed screen-width">
         {loading ? (
