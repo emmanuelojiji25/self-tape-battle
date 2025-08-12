@@ -9,13 +9,11 @@ import { Resend } from "resend";
 import Wallet from "./Wallet";
 
 const Header = () => {
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, authRole } = useContext(AuthContext);
   const [coins, setCoins] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
-
-  const [role, setRole] = useState("casting");
 
   const [walletVisible, setWalletVisible] = useState(false);
 
@@ -43,7 +41,7 @@ const Header = () => {
   }, [loggedInUser]);
 
   return (
-    <div className="Header">
+    <div className="Header screen-width">
       {walletVisible && <Wallet />}
       <div className="header-inner">
         <div className="greeting-container">
@@ -53,11 +51,11 @@ const Header = () => {
           ></div>
           <div>
             <h2 className="greeting">Welcome, {firstName}</h2>
-            {role === "actor" && <p>Your next battle awaits you!</p>}
+            {authRole === "actor" && <p>Your next battle awaits you!</p>}
           </div>
         </div>
         <div className="header-right">
-          {role === "actor" && (
+          {authRole === "actor" && (
             <div
               className="coins-container"
               onClick={() => setWalletVisible(true)}

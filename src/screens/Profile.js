@@ -29,7 +29,7 @@ const Profile = () => {
 
   const navigate = useNavigate();
 
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, authRole } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [name, setName] = useState("");

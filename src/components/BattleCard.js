@@ -6,13 +6,14 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import "./BattleCard.scss";
 import gift from "../media/gift.svg";
 import fire from "../media/fire.svg";
 import Button from "./Button";
+import { AuthContext } from "../contexts/AuthContext";
 
 const BattleCard = ({ name, prize, battleId, mostPopular }) => {
   const [voteComplete, setVoteComplete] = useState(false);
@@ -26,7 +27,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
 
   const [username, setUsername] = useState();
 
-  const [role, setRole] = useState("casting");
+  const { authRole } = useContext(AuthContext);
 
   return (
     <div className={`PollCard ${mostPopular && "most-popular"}`}>
@@ -47,7 +48,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         {prize}
       </span>
       <Link to={`/arena/${battleId}`}>
-        <Button text={role === "actor" ? "Join" : "View"} filled />
+        <Button text={authRole === "actor" ? "Join" : "View"} filled />
       </Link>
     </div>
   );
