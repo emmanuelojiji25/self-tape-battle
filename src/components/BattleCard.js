@@ -26,6 +26,8 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
 
   const [username, setUsername] = useState();
 
+  const [role, setRole] = useState("casting");
+
   return (
     <div className={`PollCard ${mostPopular && "most-popular"}`}>
       {mostPopular && (
@@ -45,7 +47,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         {prize}
       </span>
       <Link to={`/arena/${battleId}`}>
-        <Button text="Join" filled />
+        <Button text={role === "actor" ? "Join" : "View"} filled />
       </Link>
     </div>
   );

@@ -8,7 +8,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import MessageModal from "./MessageModal";
 import "./Wallet.scss";
 
-const Wallet = () => {
+const Wallet = ({visibleClass}) => {
   const { loggedInUser } = useContext(AuthContext);
 
   const [coins, setCoins] = useState();
@@ -70,7 +70,7 @@ const Wallet = () => {
   });
 
   return (
-    <div className="Wallet">
+    <div className={`Wallet ${visibleClass}`}>
       {confirmationModalVisible && (
         <ConfirmationModal
           text="Would you like to withdraw money"

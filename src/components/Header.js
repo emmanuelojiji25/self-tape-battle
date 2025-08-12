@@ -15,6 +15,8 @@ const Header = () => {
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
 
+  const [role, setRole] = useState("casting");
+
   const [walletVisible, setWalletVisible] = useState(false);
 
   useEffect(() => {
@@ -51,17 +53,19 @@ const Header = () => {
           ></div>
           <div>
             <h2 className="greeting">Welcome, {firstName}</h2>
-            <p>Your next battle awaits you!</p>
+            {role === "actor" && <p>Your next battle awaits you!</p>}
           </div>
         </div>
         <div className="header-right">
-          <div
-            className="coins-container"
-            onClick={() => setWalletVisible(true)}
-          >
-            <img src={coin} />
-            {coins}
-          </div>
+          {role === "actor" && (
+            <div
+              className="coins-container"
+              onClick={() => setWalletVisible(true)}
+            >
+              <img src={coin} />
+              {coins}
+            </div>
+          )}
           <Link to={`/profile/${username}`}></Link>
         </div>
       </div>

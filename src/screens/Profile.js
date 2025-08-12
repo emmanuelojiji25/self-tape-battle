@@ -36,6 +36,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
   const [publicProfile, setPublicProfile] = useState(false);
+  const [role, setRole] = useState("");
 
   const [battles, setBattles] = useState([]);
 
@@ -65,6 +66,7 @@ const Profile = () => {
         setLink(data.webLink);
         setHeadshot(data.headshot);
         setPublicProfile(data.settings.publicProfile);
+        setRole(data.role);
       });
       console.log("public?" + publicProfile);
     } catch (error) {
@@ -225,11 +227,13 @@ const Profile = () => {
               <a href={link} target="_" className="web-link">
                 {link}
               </a>
-              <Button
-                filled
-                text="Share Card"
-                onClick={() => handleCopyProfile()}
-              ></Button>
+              {role === "actor" && (
+                <Button
+                  filled
+                  text="Share Card"
+                  onClick={() => handleCopyProfile()}
+                ></Button>
+              )}
               {userId === loggedInUser?.uid && (
                 <Button
                   outline
@@ -250,34 +254,38 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="stat-card-container">
-            <div className="stat-card">
-              <h2>{battles.length}</h2>
-              <h4>Battles Entered</h4>
+          {role === "actor" && (
+            <div className="stat-card-container">
+              <div className="stat-card">
+                <h2>{battles.length}</h2>
+                <h4>Battles Entered</h4>
+              </div>
+              <div className="stat-card">
+                <h2>{battlesWon}</h2>
+                <h4>Battles Won</h4>
+              </div>
+              <div className="stat-card">
+                <h2>{totalVotes}</h2>
+                <h4>Total votes</h4>
+              </div>
             </div>
-            <div className="stat-card">
-              <h2>{battlesWon}</h2>
-              <h4>Battles Won</h4>
-            </div>
-            <div className="stat-card">
-              <h2>{totalVotes}</h2>
-              <h4>Total votes</h4>
-            </div>
-          </div>
+          )}
 
-          <div className="entries-container">
-            {battles.map((battle) => (
-              <>
-                {
-                  <EntryCard
-                    url={battle.url}
-                    uid={battle.uid}
-                    battleId={battle.battleId}
-                  />
-                }
-              </>
-            ))}
-          </div>
+          {role === "actor" && (
+            <div className="entries-container">
+              {battles.map((battle) => (
+                <>
+                  {
+                    <EntryCard
+                      url={battle.url}
+                      uid={battle.uid}
+                      battleId={battle.battleId}
+                    />
+                  }
+                </>
+              ))}
+            </div>
+          )}
 
           {isEditPrfofileVisible && (
             <div className="edit-profile">
