@@ -72,18 +72,25 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
           setVotes(updatedVotes.length);
         });
 
-        // Corrected: update parent battle doc with voter's UID
         await updateDoc(doc(db, "battles", battleId), {
           voters: arrayUnion(loggedInUser.uid),
         });
 
-        // Update coins
         const userRef = doc(db, "users", loggedInUser.uid);
         const userSnap = await getDoc(userRef);
         const currentCoins = userSnap.data()?.coins || 0;
 
         await updateDoc(userRef, {
           coins: currentCoins + 1,
+        });
+
+        await updateDoc(userRef, {
+          withdrawals: arrayUnion({
+            amount: 1,
+            complete: true,
+            uid: loggedInUser.uid,
+            direction: "inbound",
+          }),
         });
 
         setIsExploding(true);

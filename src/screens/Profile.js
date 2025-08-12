@@ -46,6 +46,8 @@ const Profile = () => {
   const [battlesWon, setBattlesWon] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
 
+  const [walletVisible, setWalletVisible] = useState(false);
+
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
@@ -208,7 +210,7 @@ const Profile = () => {
   };
   return (
     <div className="Profile screen-width">
-      <Wallet/>
+      {walletVisible && <Wallet />}
       {!publicProfile && !loggedInUser ? (
         <LockedProfile firstName={firstName} />
       ) : (

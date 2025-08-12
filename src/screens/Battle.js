@@ -1,5 +1,6 @@
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -157,6 +158,15 @@ const Battle = () => {
             coins: snapshot.data().coins + 1,
           });
           console.log("complete!");
+
+          await updateDoc(userRef, {
+            withdrawals: arrayUnion({
+              amount: 1,
+              complete: true,
+              uid: loggedInUser.uid,
+              direction: "inbound",
+            }),
+          });
         });
       });
       setUploadStatus("complete");
@@ -167,7 +177,9 @@ const Battle = () => {
   };
   return (
     <div className="Battle screen-width">
-      {showMessageModal && <MessageModal onClick={() => setShowMessageModal(false)}/>}
+      {showMessageModal && (
+        <MessageModal onClick={() => setShowMessageModal(false)} />
+      )}
       <Link to="/" className="back">
         Back
       </Link>

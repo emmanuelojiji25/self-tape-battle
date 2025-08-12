@@ -6,6 +6,7 @@ import "./Header.scss";
 import coin from "../media/coin.svg";
 import { Link } from "react-router-dom";
 import { Resend } from "resend";
+import Wallet from "./Wallet";
 
 const Header = () => {
   const { loggedInUser } = useContext(AuthContext);
@@ -14,9 +15,7 @@ const Header = () => {
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
 
-  const resend = new Resend("re_EGaikK5s_6yh96LXJbUmT8GddZa9YQqzG");
-
-  
+  const [walletVisible, setWalletVisible] = useState(false);
 
   useEffect(() => {
     if (!loggedInUser) return;
@@ -43,7 +42,7 @@ const Header = () => {
 
   return (
     <div className="Header">
-
+      {walletVisible && <Wallet />}
       <div className="header-inner">
         <div className="greeting-container">
           <div
@@ -56,7 +55,10 @@ const Header = () => {
           </div>
         </div>
         <div className="header-right">
-          <div className="coins-container">
+          <div
+            className="coins-container"
+            onClick={() => setWalletVisible(true)}
+          >
             <img src={coin} />
             {coins}
           </div>
