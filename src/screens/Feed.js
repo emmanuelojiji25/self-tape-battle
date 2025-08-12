@@ -70,7 +70,6 @@ const Feed = ({ user }) => {
 
   return (
     <>
-  
       <Header />
       <div className="Feed screen-width">
         {loading ? (
@@ -79,9 +78,6 @@ const Feed = ({ user }) => {
           </div>
         ) : (
           <>
-          <div className="banner">
-            
-          </div>
             <BattleCard
               name={mostPopular.title}
               prize={mostPopular.prize}
