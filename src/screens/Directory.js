@@ -61,6 +61,7 @@ const Directory = () => {
               username={actor.username}
               bio={actor.bio}
               headshot={actor.headshot}
+              uid={actor.uid}
             />
           ))}
         </div>
@@ -73,7 +74,7 @@ const Directory = () => {
           ))}
         </div>
       )}
-      <NavBar/>
+      <NavBar />
     </div>
   );
 };

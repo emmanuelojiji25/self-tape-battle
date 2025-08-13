@@ -234,6 +234,11 @@ const Profile = () => {
                   onClick={() => handleCopyProfile()}
                 ></Button>
               )}
+              {authRole === "casting" &&  <Button
+                  filled
+                  text="View bookmarks"
+                  onClick={() => setIsEditProfileVisible(true)}
+                ></Button> }
               {userId === loggedInUser?.uid && (
                 <Button
                   outline
