@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import {
+  addDoc,
   collection,
   doc,
   getDocs,
@@ -18,7 +19,6 @@ import Button from "../components/Button";
 import { redirect, useNavigate } from "react-router-dom";
 
 const UserAuth = ({ setSignedIn }) => {
-
   const navigate = useNavigate();
 
   const [view, setView] = useState("sign-in");
@@ -98,24 +98,24 @@ const UserAuth = ({ setSignedIn }) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       console.log(auth.currentUser.uid);
+      
 
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         username: username,
         email: email,
         firstName: "",
         lastName: "",
-        bio: "",
+        bio: "", 
         coins: 0,
         webLink: "",
         isOnboardingComplete: false,
         headshot: "",
         uid: auth.currentUser.uid,
         role: "actor",
+        withdrawalPending: false,
       });
 
-     navigate("/onboarding")
-
- 
+      navigate("/onboarding");
     } catch (error) {
       console.log("Sorry, could not create user");
     }
@@ -125,8 +125,8 @@ const UserAuth = ({ setSignedIn }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("logged in!");
-      
-      navigate("/")
+
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

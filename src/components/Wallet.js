@@ -1,5 +1,13 @@
 import { async } from "@firebase/util";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
@@ -8,7 +16,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import MessageModal from "./MessageModal";
 import "./Wallet.scss";
 
-const Wallet = ({visibleClass}) => {
+const Wallet = ({ visibleClass }) => {
   const { loggedInUser } = useContext(AuthContext);
 
   const [coins, setCoins] = useState();
@@ -22,17 +30,38 @@ const Wallet = ({visibleClass}) => {
   const [confirmationModalVisible, setConfirmationModalVisible] =
     useState(false);
 
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  let errorMessage = "";
+
+  const [MessageModalVisible, setMessageModalVisible] = useState(false);
+
   const pounds = coins / 100;
 
   const getUser = async () => {
     if (!loggedInUser) return; // prevent early calls
 
     const docRef = doc(db, "users", loggedInUser.uid);
+
+    const collectionRef = collection(
+      db,
+      "users",
+      loggedInUser.uid,
+      "transactions"
+    );
+
     try {
       const docSnapshot = await getDoc(docRef);
+
+      const docs = await getDocs(collectionRef);
+
+      let docsData = [];
+      docs.forEach((doc) => {
+        docsData.push(doc.data());
+      });
+
       setCoins(docSnapshot.data().coins);
-      setTransactions(docSnapshot.data().withdrawals);
-      setIsWithdrawalPending(docSnapshot.data().withdrawlPending);
+      setTransactions(docsData);
+      setIsWithdrawalPending(docSnapshot.data().withdrawalPending);
     } catch (error) {
       console.error(error);
     }
@@ -41,27 +70,30 @@ const Wallet = ({visibleClass}) => {
   const handleWithdrawCoins = async () => {
     if (!loggedInUser) return;
 
-    const docRef = doc(db, "users", loggedInUser.uid);
-    if (coins >= 500 && !isWithdrawalPending) {
-      try {
-        await updateDoc(docRef, {
-          withdrawals: arrayUnion({
-            amount: coins,
-            complete: false,
-            uid: loggedInUser.uid,
-            direction: "outbound",
-          }),
-          withdrawlPending: true,
-        });
+    const collectionRef = collection(
+      db,
+      "users",
+      loggedInUser.uid,
+      "transactions"
+    );
 
-        setConfirmationModalVisible(false);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      console.log("cant withdraw yet!");
+    const userRef = doc(db, "users", loggedInUser.uid);
 
-      //setConfirmationModalVisible(false);
+    try {
+      await addDoc(collectionRef, {
+        amount: coins,
+        complete: false,
+        uid: loggedInUser.uid,
+        direction: "outbound",
+      });
+
+      await updateDoc(userRef, {
+        withdrawalPending: true,
+      });
+
+      setConfirmationModalVisible(false);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -71,6 +103,17 @@ const Wallet = ({visibleClass}) => {
 
   return (
     <div className={`Wallet ${visibleClass}`}>
+      {MessageModalVisible && (
+        <MessageModal
+          title={
+            isWithdrawalPending
+              ? "You already have a pending withdrawal"
+              : "Not enough coins sorry!"
+          }
+          buttonText="Close"
+          onClick={() => setMessageModalVisible(false)}
+        />
+      )}
       {confirmationModalVisible && (
         <ConfirmationModal
           text="Would you like to withdraw money"
@@ -90,8 +133,20 @@ const Wallet = ({visibleClass}) => {
       <Button
         filled
         text="Withdraw coins"
-        onClick={() => setConfirmationModalVisible(true)}
+        onClick={() => {
+          if (isWithdrawalPending) {
+            errorMessage = "Widthdrawal is pending";
+            setMessageModalVisible(true);
+          } else if (coins < 500) {
+            errorMessage = "Not enough coins!";
+            setMessageModalVisible(true);
+          } else {
+            setConfirmationModalVisible(true);
+          }
+        }}
       />
+
+      {errorModalVisible && <h1>Low balance</h1>}
 
       <h3>Transactions</h3>
       {transactions.map((transaction) => (

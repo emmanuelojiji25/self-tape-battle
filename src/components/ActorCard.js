@@ -19,7 +19,6 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
 
   const [userIsBookmarked, setUserIsBookmarked] = useState(false);
 
-  // Subscribe to this actor's bookmark doc and update the star in real time
   useEffect(() => {
     if (!loggedInUser?.uid || !uid) return;
 
@@ -34,7 +33,7 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
       }
     );
 
-    return unsubscribe; // cleanup on unmount or when deps change
+    return unsubscribe;
   }, [loggedInUser?.uid, uid]);
 
   const handleBookmarkActor = async () => {

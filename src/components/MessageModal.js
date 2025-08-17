@@ -1,14 +1,14 @@
 import Button from "./Button";
 import "./MessageModal.scss";
-import gif from "../media/gif.gif"
+import gif from "../media/gif.gif";
 
-const MessageModal = ({onClick}) => {
+const MessageModal = ({ onClick, title, text, buttonText }) => {
   return (
     <div className="message-modal">
       <img src={gif} />
-      <h2>Let's go!</h2>
-      <p>You've entered the battle.</p>
-      <Button filled text="View" onClick={onClick}/>
+      <h2>{title}</h2>
+      <p>{text}</p>
+      <Button filled text={buttonText} onClick={onClick} />
     </div>
   );
 };
