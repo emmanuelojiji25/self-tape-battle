@@ -1,10 +1,14 @@
 import {
   addDoc,
   collection,
+  collectionGroup,
   doc,
+  getDoc,
   getDocs,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db, storage } from "../firebaseConfig";
@@ -18,7 +22,7 @@ import {
 } from "firebase/storage";
 
 const Dashboard = () => {
-  const [view, setView] = useState("battles");
+  const [view, setView] = useState("requests");
 
   const [battles, setBattles] = useState([]);
 
@@ -28,6 +32,8 @@ const Dashboard = () => {
   const [file, setFile] = useState("");
   const [deadline, setDeadline] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [requests, setRequests] = useState([]);
+  const [users, setUsers] = useState({}); // keyed by uid
 
   const getBattles = async () => {
     try {
@@ -44,6 +50,42 @@ const Dashboard = () => {
     }
   };
 
+  const getRequests = async () => {
+    try {
+      const collectionRef = collectionGroup(db, "transactions");
+      const q = query(collectionRef, where("status", "==", "pending"));
+      const docs = await getDocs(q);
+
+      const docsData = [];
+
+      docs.forEach((doc) => {
+        docsData.push(doc.data());
+        console.log();
+      });
+
+      setRequests(docsData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const result = {};
+
+      for (const r of requests) {
+        const snap = await getDoc(doc(db, "users", r.uid));
+        if (snap.exists()) {
+          result[r.uid] = snap.data();
+        }
+      }
+
+      setUsers(result);
+    };
+
+    fetchUsers();
+  }, [requests]);
+
   const id = title.replace(" ", "-").trim().toLowerCase();
 
   const handleCreateBattle = async () => {
@@ -56,7 +98,7 @@ const Dashboard = () => {
         id: id,
         winner: "",
         voters: [],
-        battleStatus: "open",
+        status: "open",
         genre: genre,
         file: "",
         deadline: deadline,
@@ -89,8 +131,21 @@ const Dashboard = () => {
     }
   };
 
+  const handleCompleteTransaction = async (uid, id) => {
+    try {
+      const docRef = doc(db, "users", uid, "transactions", id);
+
+      await updateDoc(docRef, {
+        status: "complete",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getBattles();
+    getRequests();
   }, []);
   return (
     <div className="Dashboard">
@@ -99,6 +154,7 @@ const Dashboard = () => {
       <div className="menu">
         <h3>Battles</h3>
         <h3>Users</h3>
+        <h3>Requests</h3>
       </div>
 
       {isModalVisible && (
@@ -159,7 +215,7 @@ const Dashboard = () => {
                 <h3>{battle.title}</h3>
                 <p>{battle.id}</p>
                 <p>{battle.prize}</p>
-                <p>{battle.battleStatus}</p>
+                <p>{battle.status}</p>
                 <Button
                   filled
                   text={battle.active ? "Close Battle" : "Open Battle"}
@@ -167,6 +223,26 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
+        </>
+      )}
+
+      {view === "requests" && (
+        <>
+          {requests.map((request) => {
+            return (
+              <>
+                <h3>{users[request.uid]?.username ?? "Loading…"}</h3>
+                <h4>{request.amount} coins</h4>
+                <Button
+                  filled
+                  text="Complete"
+                  onClick={() =>
+                    handleCompleteTransaction(request.uid, request.id)
+                  }
+                />
+              </>
+            );
+          })}
         </>
       )}
     </div>

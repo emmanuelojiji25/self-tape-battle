@@ -80,16 +80,30 @@ const Wallet = ({ visibleClass }) => {
     const userRef = doc(db, "users", loggedInUser.uid);
 
     try {
-      await addDoc(collectionRef, {
+      const newDoc = await addDoc(collectionRef, {
         amount: coins,
-        complete: false,
+        status: "pending",
         uid: loggedInUser.uid,
         direction: "outbound",
+      });
+
+      const docRef = doc(
+        db,
+        "users",
+        loggedInUser.uid,
+        "transactions",
+        newDoc.id
+      );
+
+      await updateDoc(docRef, {
+        id: newDoc.id,
       });
 
       await updateDoc(userRef, {
         withdrawalPending: true,
       });
+
+      console.log(newDoc.id);
 
       setConfirmationModalVisible(false);
     } catch (error) {
