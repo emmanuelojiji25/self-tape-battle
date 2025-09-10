@@ -174,8 +174,6 @@ const Profile = () => {
 
       const querySnapshot = await getDocs(q);
 
-      console.log(querySnapshot.docs);
-
       if (querySnapshot.docs.length === 0) {
         console.log("Available!");
         setIsUsernameAvailable(true);
@@ -210,6 +208,7 @@ const Profile = () => {
       console.log(error);
     }
   };
+
   return (
     <div className="Profile screen-width">
       {walletVisible && <Wallet />}

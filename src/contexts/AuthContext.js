@@ -9,20 +9,21 @@ const AuthProvider = ({ children }) => {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authRole, setAuthRole] = useState("");
-  const [isEmailVerified, setIsEmailVerifed] = useState();
+  const [isEmailVerified, setIsEmailVerifed] = useState(null);
 
   useEffect(() => {
     console.log("Setting up");
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setLoggedInUser(user);
 
-      setIsEmailVerifed(user.emailVerified);
+      if (user) {
+        setIsEmailVerifed(user.emailVerified);
+      }
 
       try {
         const docRef = doc(db, "users", user.uid);
         const docSnapshot = await getDoc(docRef);
         setAuthRole(docSnapshot.data().role);
-        setIsEmailVerifed(user.emailVerified);
       } catch (error) {
         console.log(error);
       }
@@ -32,7 +33,9 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ loggedInUser, loading, authRole }}>
+    <AuthContext.Provider
+      value={{ loggedInUser, loading, authRole, isEmailVerified }}
+    >
       {children}
     </AuthContext.Provider>
   );

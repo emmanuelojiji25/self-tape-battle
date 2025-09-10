@@ -1,13 +1,23 @@
-import { Navigate } from "react-router-dom";
 import { useContext } from "react";
+import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 const PrivateRoute = ({ children }) => {
-  const { loggedInUser, loading } = useContext(AuthContext);
+  const { loggedInUser, loading, isEmailVerified } = useContext(AuthContext);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-  return loggedInUser ? children : <Navigate to="/userAuth" replace />;
+  if (!loggedInUser) {
+    return <Navigate to="/userAuth" />;
+  }
+
+  if (!isEmailVerified) {
+    return <Navigate to="/emailverification" />;
+  }
+
+  return children;
 };
 
 export default PrivateRoute;

@@ -4,6 +4,7 @@ import { auth, db } from "../firebaseConfig";
 import Input from "../components/Input";
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import {
@@ -98,14 +99,13 @@ const UserAuth = ({ setSignedIn }) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       console.log(auth.currentUser.uid);
-      
 
       await setDoc(doc(db, "users", auth.currentUser.uid), {
         username: username,
         email: email,
         firstName: "",
         lastName: "",
-        bio: "", 
+        bio: "",
         coins: 0,
         webLink: "",
         isOnboardingComplete: false,
@@ -115,7 +115,9 @@ const UserAuth = ({ setSignedIn }) => {
         withdrawalPending: false,
       });
 
-      navigate("/onboarding");
+      await sendEmailVerification(auth.currentUser);
+
+      navigate("/emailverification");
     } catch (error) {
       console.log("Sorry, could not create user");
     }
@@ -124,7 +126,7 @@ const UserAuth = ({ setSignedIn }) => {
   const handleSignIn = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("logged in!");
+      console.log("Logged in!");
 
       navigate("/");
     } catch (error) {

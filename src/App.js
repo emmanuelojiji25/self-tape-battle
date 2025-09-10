@@ -51,14 +51,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/emailverification"
-          element={
-            <PrivateRoute>
-              <VerifyEmail />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/emailverification" element={<VerifyEmail />} />
         <Route
           path="/dashboard"
           element={
