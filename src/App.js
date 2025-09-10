@@ -15,6 +15,7 @@ import Dashboard from "./screens/Dashboard";
 import Directory from "./screens/Directory";
 import PrivateRoute from "./components/PrivateRoute";
 import SharedVideo from "./components/SharedVideo";
+import { VerifyEmail } from "./screens/VerifyEmail";
 
 function App() {
   const { loggedInUser } = useContext(AuthContext);
@@ -47,6 +48,14 @@ function App() {
           element={
             <PrivateRoute>
               <Onboarding />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/emailverification"
+          element={
+            <PrivateRoute>
+              <VerifyEmail />
             </PrivateRoute>
           }
         />

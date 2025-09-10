@@ -108,7 +108,7 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }; 
 
   const uploadFile = async () => {
     try {

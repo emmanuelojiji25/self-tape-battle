@@ -223,6 +223,7 @@ const Profile = () => {
             </div>
             <div className="profile-info">
               <h1>{name}</h1>
+              <span>{username}</span>
               <span>{bio}</span>
               <a href={link} target="_" className="web-link">
                 {link}
@@ -234,11 +235,13 @@ const Profile = () => {
                   onClick={() => handleCopyProfile()}
                 ></Button>
               )}
-              {authRole === "casting" &&  <Button
+              {authRole === "casting" && (
+                <Button
                   filled
                   text="View bookmarks"
                   onClick={() => setIsEditProfileVisible(true)}
-                ></Button> }
+                ></Button>
+              )}
               {userId === loggedInUser?.uid && (
                 <Button
                   outline

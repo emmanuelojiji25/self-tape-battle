@@ -35,6 +35,7 @@ const Battle = () => {
   const [deadline, setDeadline] = useState("");
   const [prize, setPrize] = useState("");
   const [genre, setGenre] = useState("");
+  const [voters, setVoters] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
@@ -70,6 +71,7 @@ const Battle = () => {
       setUserHasVoted(data.voters.includes(loggedInUser.uid));
       setPrize(data.prize);
       setGenre(data.genre);
+      setVoters(data.voters);
     });
 
     let entries = [];
@@ -150,6 +152,7 @@ const Battle = () => {
             votes: [],
             date: Date.now(),
             shareSetting: "private",
+            battleId: battleId,
           });
 
           const userRef = doc(db, "users", loggedInUser.uid);
@@ -201,7 +204,7 @@ const Battle = () => {
       {!userHasJoined && !file && loading === false && (
         <Button
           onClick={() => {
-            if (!userHasVoted) {
+            if (!userHasVoted && voters.length > 5) {
               console.log("You must vote first!");
               setErrorMessage(
                 "You must vote for at least 1 entry before you can join this battle"

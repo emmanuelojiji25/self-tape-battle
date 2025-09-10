@@ -5,7 +5,7 @@ import { AuthContext } from "../contexts/AuthContext";
 const PrivateRoute = ({ children }) => {
   const { loggedInUser, loading } = useContext(AuthContext);
 
-  if (loading) return <div>Loading...</div>; // ✅ wait until Firebase finishes
+  if (loading) return <div>Loading...</div>;
 
   return loggedInUser ? children : <Navigate to="/userAuth" replace />;
 };
