@@ -3,7 +3,8 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 const PrivateRoute = ({ children }) => {
-  const { loggedInUser, loading, isEmailVerified } = useContext(AuthContext);
+  const { loggedInUser, loading, isEmailVerified, isOnboardingComplete } =
+    useContext(AuthContext);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -16,6 +17,10 @@ const PrivateRoute = ({ children }) => {
   if (!isEmailVerified) {
     return <Navigate to="/emailverification" />;
   }
+
+  /*if (!isOnboardingComplete) {
+    return <Navigate to="/onboarding" />;
+  } Fix this later. onboarding issue*/ 
 
   return children;
 };

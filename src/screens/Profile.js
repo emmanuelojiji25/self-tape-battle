@@ -1,8 +1,6 @@
 import "./Profile.scss";
 
 import {
-  arrayRemove,
-  arrayUnion,
   collection,
   collectionGroup,
   doc,
