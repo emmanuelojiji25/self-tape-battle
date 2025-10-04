@@ -8,12 +8,11 @@ import { db, storage } from "../firebaseConfig";
 import ConfettiExplosion from "react-confetti-explosion";
 
 import "./Onboarding.scss";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Onboarding = () => {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate("/")
-  
   const [view, setView] = useState(0);
 
   const [file, setFile] = useState(null);
@@ -21,7 +20,7 @@ const Onboarding = () => {
 
   const [username, setUsername] = useState("");
 
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, setIsOnboardingComplete } = useContext(AuthContext);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -70,9 +69,11 @@ const Onboarding = () => {
         firstName: firstName,
         lastName: lastName,
         webLink: webLink,
-        onboarding_complete: true,
+        isOnboardingComplete: true,
         coins: 100,
       });
+
+      setIsOnboardingComplete(true);
 
       handleNextView(webLink, 5, 5);
     } catch (error) {
@@ -189,11 +190,7 @@ const Onboarding = () => {
             <p>You've earned 100 coins</p>
             <ConfettiExplosion />
             <div>
-              <Button
-                text="Enter Arena"
-                onClick={() => navigate("/")}
-                filled
-              />
+              <Button text="Enter Arena" onClick={() => navigate("/")} filled />
             </div>
           </div>
         </div>

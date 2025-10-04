@@ -20,7 +20,7 @@ export const VerifyEmail = () => {
         setIsEmailVerified(true);
         navigate("/onboarding");
       }
-    }, 3000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [loggedInUser, navigate, setIsEmailVerified]);

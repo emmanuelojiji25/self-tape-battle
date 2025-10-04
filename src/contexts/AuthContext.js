@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authRole, setAuthRole] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(null);
-  const [onboardingComplete, setOnboardingComplete] = useState(true);
+  const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
 
   useEffect(() => {
     console.log("Setting up");
@@ -23,6 +23,7 @@ const AuthProvider = ({ children }) => {
         const docRef = doc(db, "users", user.uid);
         const docSnapshot = await getDoc(docRef);
         setAuthRole(docSnapshot.data().role);
+        setIsOnboardingComplete(docSnapshot.data().isOnboardingComplete);
       } catch (error) {
         console.log(error);
       }
@@ -42,7 +43,8 @@ const AuthProvider = ({ children }) => {
         loading,
         authRole,
         isEmailVerified,
-        onboardingComplete,
+        isOnboardingComplete,
+        setIsOnboardingComplete,
         setIsEmailVerified,
       }}
     >

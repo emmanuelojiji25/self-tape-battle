@@ -18,9 +18,9 @@ const PrivateRoute = ({ children }) => {
     return <Navigate to="/emailverification" />;
   }
 
-  /*if (!isOnboardingComplete) {
+  if (!isOnboardingComplete) {
     return <Navigate to="/onboarding" />;
-  } Fix this later. onboarding issue*/ 
+  }
 
   return children;
 };

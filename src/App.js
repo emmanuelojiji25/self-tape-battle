@@ -43,14 +43,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/onboarding"
-          element={
-            <PrivateRoute>
-              <Onboarding />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/emailverification" element={<VerifyEmail />} />
         <Route
           path="/dashboard"
