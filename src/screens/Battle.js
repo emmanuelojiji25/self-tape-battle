@@ -65,7 +65,7 @@ const Battle = () => {
     onSnapshot(docRef, (snapshot) => {
       const data = snapshot.data();
       setTitle(data.title);
-      setBattleStatus(data.battleStatus);
+      setBattleStatus(data.status);
       setBattleAttachment(data.file);
       setDeadline(data.deadline);
       setUserHasVoted(data.voters.includes(loggedInUser.uid));
@@ -96,31 +96,59 @@ const Battle = () => {
   const getWinner = async () => {
     try {
       const collectionRef = collection(db, "battles", battleId, "entries");
-
       const snapshot = await getDocs(collectionRef);
 
-      const data = [];
-      snapshot.forEach((doc) => {
-        data.push(doc.data());
+      const entries = snapshot.docs.map((d) => d.data());
+
+      if (!entries.length) {
+        console.warn("No entries found for this battle.");
+        setWinner(null);
+        return;
+      }
+
+      // Helper function to normalize date types
+      const toMillis = (date) => {
+        if (!date) return 0;
+        if (typeof date === "number") return date; // from Date.now()
+        if (date.seconds) return date.seconds * 1000; // from Firestore Timestamp
+        if (typeof date.toMillis === "function") return date.toMillis();
+        return 0;
+      };
+
+      // 🔥 Sort once by votes desc, then date asc (earliest wins tie)
+      entries.sort((a, b) => {
+        const votesA = a.votes?.length || 0;
+        const votesB = b.votes?.length || 0;
+
+        if (votesB !== votesA) return votesB - votesA; // Most votes first
+        return toMillis(a.date) - toMillis(b.date); // Earlier entry wins ties
       });
 
-      const voteLengthSort = data.sort(
-        (a, b) => (b.votes?.length || 0) - (a.votes?.length || 0)
+      const winnerEntry = entries[0];
+      if (!winnerEntry?.uid) {
+        console.warn("No valid winner UID found in entries.");
+        setWinner(null);
+        return;
+      }
+
+      const winnerDoc = await getDoc(doc(db, "users", winnerEntry.uid));
+      if (!winnerDoc.exists()) {
+        console.warn("Winner user document not found:", winnerEntry.uid);
+        setWinner(null);
+        return;
+      }
+
+      const winnerData = winnerDoc.data();
+      setWinner(winnerData);
+
+      console.log(
+        "🏆 Winner:",
+        winnerEntry.uid,
+        "Votes:",
+        winnerEntry.votes?.length || 0
       );
-
-      const entryTimeSort = voteLengthSort.sort(
-        (a, b) => (a.date || 0) - (b.date || 0)
-      );
-
-      const winner = entryTimeSort[0].uid;
-
-      const userSnapshot = await getDoc(doc(db, "users", winner));
-
-      setWinner(userSnapshot.data());
-
-      console.log(userSnapshot);
     } catch (error) {
-      console.log(error);
+      console.error("Error in getWinner:", error);
     }
   };
 
@@ -181,7 +209,11 @@ const Battle = () => {
   return (
     <div className="Battle screen-width">
       {showMessageModal && (
-        <MessageModal onClick={() => setShowMessageModal(false)} />
+        <MessageModal
+          onClick={() => setShowMessageModal(false)}
+          title="Lets go!"
+          text="You've entered the battle!"
+        />
       )}
       <Link to="/" className="back">
         Back

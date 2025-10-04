@@ -142,7 +142,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
       <div className="video-container">
         <video src={url} controls />
         <div className="user-actions">
-          {loggedInUser && voteButtonVisible && (
+          {loggedInUser && voteButtonVisible && battleStatus === "open" && (
             <span
               onClick={() => handleVote()}
               className={`vote-button ${userhasVoted ? "voted" : ""}`}
@@ -153,7 +153,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
           {((loggedInUser && uid === loggedInUser.uid) ||
             battleStatus === "closed") && (
             <span className="votes">
-              {votes > 0 ? votes : "No"} Vote{votes === 1 && "s"}
+              {votes > 0 ? votes : "No"} Vote{votes < 1 && "s"}
             </span>
           )}
         </div>
