@@ -22,7 +22,7 @@ import {
 } from "firebase/storage";
 
 const Dashboard = () => {
-  const [view, setView] = useState("requests");
+  const [view, setView] = useState("battles");
 
   const [battles, setBattles] = useState([]);
 
@@ -105,6 +105,8 @@ const Dashboard = () => {
       });
 
       uploadFile();
+
+      setIsModalVisible(false)
     } catch (error) {
       console.log(error);
     }

@@ -15,7 +15,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
 const ActorCard = ({ name, bio, headshot, username, uid }) => {
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, authRole } = useContext(AuthContext);
 
   const [userIsBookmarked, setUserIsBookmarked] = useState(false);
 
@@ -63,12 +63,14 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
 
   return (
     <div className="ActorCard">
-      <img
-        src={userIsBookmarked ? star_filled : star}
-        className="star"
-        alt="bookmark"
-        onClick={handleBookmarkActor}
-      />
+      {authRole === "professional" && (
+        <img
+          src={userIsBookmarked ? star_filled : star}
+          className="star"
+          alt="bookmark"
+          onClick={handleBookmarkActor}
+        />
+      )}
       <div
         className="actor-card-headshot"
         style={{ backgroundImage: `url(${headshot})` }}

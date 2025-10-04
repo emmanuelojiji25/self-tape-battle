@@ -34,7 +34,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [userId, setUserId] = useState("");
   const [publicProfile, setPublicProfile] = useState(false);
-  const [role, setRole] = useState("actor");
+  const [role, setRole] = useState("");
 
   const [battles, setBattles] = useState([]);
 

@@ -28,6 +28,10 @@ const Feed = ({ user }) => {
     try {
       const querySnapshot = await getDocs(collection(db, "battles"));
 
+      if (querySnapshot.empty) {
+        setLoading(false);
+      }
+
       querySnapshot.forEach((doc) => {
         battles.push(doc.data());
       });
@@ -78,12 +82,17 @@ const Feed = ({ user }) => {
           </div>
         ) : (
           <>
-            <BattleCard
-              name={mostPopular.title}
-              prize={mostPopular.prize}
-              battleId={mostPopular.id}
-              mostPopular={true}
-            />
+            {battles.length === 0 && (
+              <h1 style={{ color: "white" }}>No battles</h1>
+            )}
+            {battles.length > 0 && (
+              <BattleCard
+                name={mostPopular.title}
+                prize={mostPopular.prize}
+                battleId={mostPopular.id}
+                mostPopular={true}
+              />
+            )}
             {battles
               .filter((battle) => battle.id != mostPopular.id)
               .map((battle) => (
