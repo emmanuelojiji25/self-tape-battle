@@ -50,25 +50,31 @@ const Profile = () => {
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
-      const q = query(usersRef, where("username", "==", `${params.username}`));
-      const userDoc = await getDocs(q);
+      const q = query(usersRef, where("username", "==", params.username));
+      const querySnapshot = await getDocs(q);
 
-      userDoc.forEach((doc) => {
-        const data = doc.data();
-        setUsername(data.username);
-        setUserId(data.uid);
-        setName(`${data.firstName + " " + data.lastName}`);
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setBio(data.bio);
-        setLink(data.webLink);
-        setHeadshot(data.headshot);
-        setPublicProfile(data.settings.publicProfile);
-        setRole(data.role);
-      });
-      console.log("public?" + publicProfile);
+      if (querySnapshot.empty) {
+        console.warn("No user found with username:", params.username);
+        return;
+      }
+
+      const docSnap = querySnapshot.docs[0];
+      const data = docSnap.data();
+
+      setUsername(data.username || "");
+      setUserId(data.uid || docSnap.id);
+      setName(`${data.firstName || ""} ${data.lastName || ""}`.trim());
+      setFirstName(data.firstName || "");
+      setLastName(data.lastName || "");
+      setBio(data.bio || "");
+      setLink(data.webLink || "");
+      setHeadshot(data.headshot || "");
+      setPublicProfile(data.settings?.publicProfile || false);
+      setRole(data.role || "");
+
+      console.log("Fetched user role:", data.role);
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching user:", error);
     }
   };
 

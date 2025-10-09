@@ -5,6 +5,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   updateDoc,
@@ -35,21 +36,27 @@ const Dashboard = () => {
   const [requests, setRequests] = useState([]);
   const [users, setUsers] = useState({}); // keyed by uid
 
-  const getBattles = async () => {
+  const [winner, setWinner] = useState("");
+
+  const getBattles = () => {
     try {
       const collectionRef = collection(db, "battles");
 
-      const docs = await getDocs(collectionRef);
-      const data = [];
-      docs.forEach((doc) => {
-        data.push(doc.data());
+      // Listen for real-time updates
+      const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setBattles(data);
       });
-      setBattles(data);
+
+      // Return unsubscribe function so you can stop listening later
+      return unsubscribe;
     } catch (error) {
       console.log(error);
     }
   };
-
   const getRequests = async () => {
     try {
       const collectionRef = collectionGroup(db, "transactions");
@@ -106,11 +113,11 @@ const Dashboard = () => {
 
       uploadFile();
 
-      setIsModalVisible(false)
+      setIsModalVisible(false);
     } catch (error) {
       console.log(error);
     }
-  }; 
+  };
 
   const uploadFile = async () => {
     try {
@@ -149,6 +156,75 @@ const Dashboard = () => {
     getBattles();
     getRequests();
   }, []);
+
+  const closeBattle = async (battleId) => {
+    try {
+      const collectionRef = collection(db, "battles", battleId, "entries");
+      const snapshot = await getDocs(collectionRef);
+
+      const entries = snapshot.docs.map((d) => d.data());
+
+      if (!entries.length) {
+        console.warn("No entries found for this battle.");
+        setWinner(null);
+        return;
+      }
+
+      // Helper function to normalize date types
+      const toMillis = (date) => {
+        if (!date) return 0;
+        if (typeof date === "number") return date; // from Date.now()
+        if (date.seconds) return date.seconds * 1000; // from Firestore Timestamp
+        if (typeof date.toMillis === "function") return date.toMillis();
+        return 0;
+      };
+
+      // 🔥 Sort once by votes desc, then date asc (earliest wins tie)
+      entries.sort((a, b) => {
+        const votesA = a.votes?.length || 0;
+        const votesB = b.votes?.length || 0;
+
+        if (votesB !== votesA) return votesB - votesA; // Most votes first
+        return toMillis(a.date) - toMillis(b.date); // Earlier entry wins ties
+      });
+
+      const winnerEntry = entries[0];
+      if (!winnerEntry?.uid) {
+        console.warn("No valid winner UID found in entries.");
+        setWinner(null);
+        return;
+      }
+
+      const winnerDoc = await getDoc(doc(db, "users", winnerEntry.uid));
+      if (!winnerDoc.exists()) {
+        console.warn("Winner user document not found:", winnerEntry.uid);
+        setWinner(null);
+        return;
+      }
+
+      const winnerData = winnerDoc.data();
+      setWinner(winnerData);
+
+      console.log(
+        "🏆 Winner:",
+        winnerEntry.uid,
+        "Votes:",
+        winnerEntry.votes?.length || 0
+      );
+
+      // Close battle
+
+      const battleRef = doc(db, "battles", battleId);
+
+      await updateDoc(battleRef, {
+        winner: winnerEntry.uid,
+        status: "closed",
+      });
+    } catch (error) {
+      console.error("Error in getWinner:", error);
+    }
+  };
+
   return (
     <div className="Dashboard">
       <h1>Dashboard</h1>
@@ -220,7 +296,19 @@ const Dashboard = () => {
                 <p>{battle.status}</p>
                 <Button
                   filled
-                  text={battle.active ? "Close Battle" : "Open Battle"}
+                  text={
+                    battle.status === "open" ? "Close Battle" : "Open Battle"
+                  }
+                  onClick={async () => {
+                    const docRef = doc(db, "battles", battle.id);
+                    if (battle.status === "open") {
+                      closeBattle(battle.id);
+                    } else {
+                      await updateDoc(docRef, {
+                        status: "open",
+                      });
+                    }
+                  }}
                 />
               </div>
             ))}
