@@ -112,6 +112,7 @@ const UserAuth = ({ setSignedIn }) => {
         headshot: "",
         uid: auth.currentUser.uid,
         role: "actor",
+        transactions: [],
         withdrawalPending: false,
       });
 

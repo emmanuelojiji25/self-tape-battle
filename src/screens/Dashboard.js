@@ -144,6 +144,13 @@ const Dashboard = () => {
     try {
       const docRef = doc(db, "users", uid, "transactions", id);
 
+      const userRef = doc(db, "users", uid);
+
+      await updateDoc(userRef, {
+        coins: 0,
+        withdrawalPending: false,
+      });
+
       await updateDoc(docRef, {
         status: "complete",
       });
@@ -225,14 +232,18 @@ const Dashboard = () => {
     }
   };
 
+  const handleChangeView = (view) => {
+    setView(view);
+  };
+
   return (
     <div className="Dashboard">
       <h1>Dashboard</h1>
 
       <div className="menu">
-        <h3>Battles</h3>
-        <h3>Users</h3>
-        <h3>Requests</h3>
+        <h3 onClick={() => handleChangeView("battles")}>Battles</h3>
+        <h3 onClick={() => handleChangeView("users")}>Users</h3>
+        <h3 onClick={() => handleChangeView("requests")}>Requests</h3>
       </div>
 
       {isModalVisible && (
