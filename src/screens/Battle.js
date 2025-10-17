@@ -191,24 +191,27 @@ const Battle = () => {
         </a>
       </div>
 
-      {!userHasJoined && !file && loading === false && (
-        <Button
-          onClick={() => {
-            if (!userHasVoted && voters.length > 5) {
-              console.log("You must vote first!");
-              setErrorMessage(
-                "You must vote for at least 1 entry before you can join this battle"
-              );
-              return;
-            } else {
-              inputRef.current.click();
-            }
-          }}
-          text="Upload Tape"
-          className="upload-tape"
-          filled
-        />
-      )}
+      {!userHasJoined &&
+        !file &&
+        loading === false &&
+        battleStatus === "open" && (
+          <Button
+            onClick={() => {
+              if (!userHasVoted && voters.length > 5) {
+                console.log("You must vote first!");
+                setErrorMessage(
+                  "You must vote for at least 1 entry before you can join this battle"
+                );
+                return;
+              } else {
+                inputRef.current.click();
+              }
+            }}
+            text="Upload Tape"
+            className="upload-tape"
+            filled
+          />
+        )}
       {file && (
         <div className="file-container">
           {uploadStatus === "uploading" && (
