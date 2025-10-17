@@ -43,10 +43,10 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         </span>
       )}
       <span className="title">{name}</span>
-      <span className="prize">
+      <p className="prize">
         <img src={gift} />
         {prize}
-      </span>
+      </p>
       <Link to={`/arena/${battleId}`}>
         <Button text={authRole === "actor" ? "Join Battle" : "View"} filled />
       </Link>

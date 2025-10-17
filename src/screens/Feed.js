@@ -83,7 +83,7 @@ const Feed = ({ user }) => {
         ) : (
           <>
             {battles.length === 0 && (
-              <h1 style={{ color: "white" }}>No battles</h1>
+              <h1 style={{ color: "white" }}>No battles. Check back soon!</h1>
             )}
             {battles.length > 0 && (
               <BattleCard
