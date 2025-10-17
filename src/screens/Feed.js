@@ -23,6 +23,24 @@ const Feed = ({ user }) => {
 
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const cachedBattles = localStorage.getItem("battles");
+    const cachedMostPopular = localStorage.getItem("mostPopular");
+
+    if (cachedBattles && cachedMostPopular) {
+      try {
+        setBattles(JSON.parse(cachedBattles));
+        setMostPopular(JSON.parse(cachedMostPopular));
+        setLoading(false);
+      } catch (err) {
+        console.warn("Failed to parse cached data, refetching...", err);
+        handleGetBattles();
+      }
+    } else {
+      handleGetBattles();
+    }
+  }, []);
+
   const handleGetBattles = async () => {
     const battles = [];
     try {
@@ -38,6 +56,8 @@ const Feed = ({ user }) => {
 
       setBattles(battles);
 
+      localStorage.setItem("battles", JSON.stringify(battles));
+
       //Get Most popular
       const entriesArray = [];
 
@@ -51,13 +71,16 @@ const Feed = ({ user }) => {
 
         const mostPopular = sorted.query._path.segments[1];
 
-        console.log(mostPopular);
-
         const mostPopularRef = doc(db, "battles", mostPopular);
 
         const mostPopularSnapshot = await getDoc(mostPopularRef);
 
         setMostPopular(mostPopularSnapshot.data());
+
+        localStorage.setItem(
+          "mostPopular",
+          JSON.stringify(mostPopularSnapshot.data())
+        );
 
         setTimeout(() => {
           setLoading(false);
@@ -67,10 +90,6 @@ const Feed = ({ user }) => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    handleGetBattles();
-  }, []);
 
   return (
     <>
