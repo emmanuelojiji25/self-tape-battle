@@ -7,7 +7,6 @@ import {
   query,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import CreatePoll from "../components/CreatePoll";
 import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import "./Feed.scss";

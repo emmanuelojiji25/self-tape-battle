@@ -68,7 +68,7 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
           src={userIsBookmarked ? star_filled : star}
           className="star"
           alt="bookmark"
-          onClick={handleBookmarkActor}
+          onClick={() => handleBookmarkActor}
         />
       )}
       <div
