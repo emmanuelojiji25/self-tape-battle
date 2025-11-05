@@ -77,7 +77,9 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
       />
       <div>
         <Link to={`/profile/${username}`}>{name}</Link>
-        <Button filled text="View Profile" />
+        <Link to={`/profile/${username}`}>
+          <Button filled text="View Profile" />
+        </Link>
       </div>
     </div>
   );
