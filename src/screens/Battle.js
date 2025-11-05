@@ -171,6 +171,7 @@ const Battle = () => {
           onClick={() => setShowMessageModal(false)}
           title="Lets go!"
           text="You've entered the battle!"
+          buttonText="Close"
         />
       )}
       <Link to="/" className="back">
