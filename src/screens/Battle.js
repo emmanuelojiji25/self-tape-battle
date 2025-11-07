@@ -181,7 +181,11 @@ const Battle = () => {
         <div className="battle-header-left">
           <h3 className="battle-title">{title}</h3>
           <div className="battle-info">
-            <span className="prize-pill">{prize}</span>
+            <span className="prize-pill">
+              {" "}
+              {typeof prize === "number" ? <p>coin</p> : <p>chest</p>}
+              {prize}
+            </span>
             <span className="prize-pill">{genre}</span>
           </div>
           <span className="deadline">{deadline}</span>
