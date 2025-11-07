@@ -26,21 +26,23 @@
 
 .battle-title {
   text-transform: capitalize;
-  font-weight: 800;
+
   font-size: 28px;
   color: white;
   margin-bottom: 10px;
 }
 
+.battle-info{
+  display: flex;
+}
+
 .prize-pill {
-  border: solid 1px #ffa930;
-  border-radius: 50px;
-  background: #ffa93061;
   color: white;
   padding: 3px 10px;
   margin-bottom: 10px;
   display: block;
   width: fit-content;
+  display: flex;
 }
 
 .deadline{

@@ -2,10 +2,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Arupala Grotesk Trial", sans-serif;
+  font-family: 'Arupala Grotesk Trial', sans-serif;
   outline: none;
   background-size: cover;
   background-position: center;
+
 }
 
 .screen-width {
@@ -22,12 +23,8 @@ h1,
 h2,
 h3,
 h4 {
-  /*font-family: "Arupala Grotesk Trial", sans-serif;
-  font-family: "Arupala Grotesk Variable Trial", sans-serif;*/
-  font-weight: 700;
+ 
   letter-spacing: -1px;
 }
 
-p {
-  font-weight: 100 !important;
-}
+
