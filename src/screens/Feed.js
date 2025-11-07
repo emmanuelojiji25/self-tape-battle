@@ -57,34 +57,8 @@ const Feed = ({ user }) => {
 
       localStorage.setItem("battles", JSON.stringify(battles));
 
-      //Get Most popular
-      const entriesArray = [];
-
-      querySnapshot.forEach(async (battle) => {
-        const entries = await getDocs(
-          collection(db, "battles", battle.id, "entries")
-        );
-        entriesArray.push(entries);
-
-        const sorted = entriesArray?.sort((a, b) => b.size - a.size)[0];
-
-        const mostPopular = sorted.query._path.segments[1];
-
-        const mostPopularRef = doc(db, "battles", mostPopular);
-
-        const mostPopularSnapshot = await getDoc(mostPopularRef);
-
-        setMostPopular(mostPopularSnapshot.data());
-
-        localStorage.setItem(
-          "mostPopular",
-          JSON.stringify(mostPopularSnapshot.data())
-        );
-
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
-      });
+     
+   
     } catch (error) {
       console.log(error);
     }
@@ -103,23 +77,14 @@ const Feed = ({ user }) => {
             {battles.length === 0 && (
               <h1 style={{ color: "white" }}>No battles. Check back soon!</h1>
             )}
-            {battles.length > 0 && (
+
+            {battles.map((battle) => (
               <BattleCard
-                name={mostPopular.title}
-                prize={mostPopular.prize}
-                battleId={mostPopular.id}
-                mostPopular={true}
+                name={battle.title}
+                prize={battle.prize}
+                battleId={battle.id}
               />
-            )}
-            {battles
-              .filter((battle) => battle.id != mostPopular.id)
-              .map((battle) => (
-                <BattleCard
-                  name={battle.title}
-                  prize={battle.prize}
-                  battleId={battle.id}
-                />
-              ))}
+            ))}
           </>
         )}
         <NavBar />
