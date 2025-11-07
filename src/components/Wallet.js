@@ -15,7 +15,7 @@ import Button from "./Button";
 import ConfirmationModal from "./ConfirmationModal";
 import MessageModal from "./MessageModal";
 import "./Wallet.scss";
-
+import coin from "../media/stb_coin.svg";
 const Wallet = ({ visibleClass }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -111,7 +111,6 @@ const Wallet = ({ visibleClass }) => {
     }
   };
 
-
   useEffect(() => {
     getUser();
   });
@@ -136,40 +135,56 @@ const Wallet = ({ visibleClass }) => {
           cancel={() => setConfirmationModalVisible(false)}
         />
       )}
-      <h2>wallet</h2>
-      <h3>{view === "coins" ? coins : `£${pounds}`}</h3>
-      <span
-        onClick={() => {
-          view === "coins" ? setView("pounds") : setView("coins");
-        }}
-      >
-        View as {view === "coins" ? "pounds" : "coins"}
-      </span>
-      <Button
-        filled
-        text="Withdraw coins"
-        onClick={() => {
-          if (isWithdrawalPending) {
-            errorMessage = "Widthdrawal is pending";
-            setMessageModalVisible(true);
-          } else if (coins < 500) {
-            errorMessage = "Not enough coins!";
-            setMessageModalVisible(true);
-          } else {
-            setConfirmationModalVisible(true);
-          }
-        }}
-      />
+      <h2>Wallet</h2>
+
+      <div className="amount-button-container">
+        <div className="coin-container">
+          {view === "coins" && <img src={coin} />}
+          <h3 className="amount">{view === "coins" ? coins : `£${pounds}`}</h3>
+        </div>
+
+        <div className="button-container">
+          <Button
+            onClick={() => {
+              view === "coins" ? setView("pounds") : setView("coins");
+            }}
+            text={` View as ${view === "coins" ? "pounds" : "coins"}`}
+            outline
+          />
+          <Button
+            filled
+            text="Withdraw coins"
+            onClick={() => {
+              if (isWithdrawalPending) {
+                errorMessage = "Widthdrawal is pending";
+                setMessageModalVisible(true);
+              } else if (coins < 500) {
+                errorMessage = "Not enough coins!";
+                setMessageModalVisible(true);
+              } else {
+                setConfirmationModalVisible(true);
+              }
+            }}
+          />
+        </div>
+      </div>
 
       {errorModalVisible && <h1>Low balance</h1>}
 
-      <h3>Transactions</h3>
+      <h3 className="transaction-title">Transactions</h3>
+      {transactions.length === 0 && <p>No transactions</p>}
       {transactions.map((transaction) => (
         <div className="transaction-row">
-          <h4>
-            {transaction.direction === "inbound" ? "Earnings" : "Withdrawal"}
-          </h4>
-          <span> +{transaction.amount}</span>
+          <div>
+            <h4>
+              {transaction.direction === "inbound" ? "Earnings" : "Withdrawal"}
+            </h4>
+            <p>{transaction.status}</p>
+          </div>
+          <span>
+            {transaction.direction === "inbound" ? "+" : "-"}{" "}
+            {transaction.amount}
+          </span>
         </div>
       ))}
     </div>

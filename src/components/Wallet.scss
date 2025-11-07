@@ -7,10 +7,38 @@
   background: black;
   color: white;
   z-index: 2;
+  padding: 20px 20px;
+}
 
+.amount-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.amount {
+  font-size: 50px;
+}
+
+.button-container {
+  display: flex;
+  gap: 15px;
+}
+
+.coin-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.transaction-title{
+  margin-bottom: 20px;
 }
 
 .transaction-row {
   display: flex;
+  justify-content: space-between;
 }
-
