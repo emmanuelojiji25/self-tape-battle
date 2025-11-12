@@ -6,6 +6,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   updateDoc,
   where,
@@ -82,14 +83,13 @@ const Profile = () => {
     try {
       const battlesCollection = collectionGroup(db, "entries");
       const q = query(battlesCollection, where("uid", "==", userId));
-      const docs = await getDocs(q);
-
-      let data = [];
-
-      docs.forEach((doc) => {
-        data.push(doc.data());
+      onSnapshot(q, (snapshot) => {
+        let data = [];
+        snapshot.forEach((doc) => {
+          data.push(doc.data());
+        });
+        setBattles(data);
       });
-      setBattles(data);
     } catch (error) {
       console.log(error);
     }
