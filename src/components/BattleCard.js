@@ -12,6 +12,7 @@ import { db } from "../firebaseConfig";
 import "./BattleCard.scss";
 import gift from "../media/gift.svg";
 import fire from "../media/fire.svg";
+import coin from "../media/stb_coin.svg";
 import Button from "./Button";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -43,10 +44,14 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         </span>
       )}
       <h3 className="title">{name}</h3>
-      <h5 className="prize">
-        <img src={gift} />
-        {prize}
-      </h5>
+      <div className="prize">
+        {typeof prize === "number" ? (
+          <img src={coin} className="icon-small" />
+        ) : (
+          <p>gift</p>
+        )}
+        <h5>{prize}</h5>
+      </div>
       <Link to={`/arena/${battleId}`}>
         <Button text={authRole === "actor" ? "Join Battle" : "View"} filled />
       </Link>
