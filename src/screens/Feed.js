@@ -18,18 +18,17 @@ import Wallet from "../components/Wallet";
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
 
-  const [mostPopular, setMostPopular] = useState([]);
+
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const cachedBattles = localStorage.getItem("battles");
-    const cachedMostPopular = localStorage.getItem("mostPopular");
 
-    if (cachedBattles && cachedMostPopular) {
+    if (cachedBattles) {
       try {
         setBattles(JSON.parse(cachedBattles));
-        setMostPopular(JSON.parse(cachedMostPopular));
+
         setLoading(false);
       } catch (err) {
         console.warn("Failed to parse cached data, refetching...", err);
