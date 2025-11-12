@@ -166,8 +166,8 @@ const Battle = () => {
       {showMessageModal && (
         <MessageModal
           onClick={() => setShowMessageModal(false)}
-          title="Lets go!"
-          text="You've entered the battle!"
+          title="Nice work!"
+          text="5 coins earned"
           buttonText="Close"
         />
       )}
