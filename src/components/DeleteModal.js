@@ -10,8 +10,9 @@ const DeleteModal = ({ cancel, deleteEntry }) => {
           <h2>Delete entry</h2>
         </div>
         <p>Are you sure you want to delete this entry?</p>
-        <Button filled text="Cancel" onClick={cancel} />
         <Button outline text="Delete" onClick={deleteEntry} />
+        <Button filled text="Cancel" onClick={cancel} />
+
       </div>
     </div>
   );

@@ -158,7 +158,6 @@ const Battle = () => {
           await updateDoc(userRef, {
             coins: snapshot.data().coins + 1,
           });
-          console.log("complete!");
 
           await updateDoc(userRef, {
             withdrawals: arrayUnion({
