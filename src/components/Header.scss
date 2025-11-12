@@ -47,10 +47,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 5px;
 
   img {
     width: 25px;
     animation: coin-flip 3s infinite;
+    
   }
 }
 

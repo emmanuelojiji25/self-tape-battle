@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
 import "./Header.scss";
-import coin from "../media/coin.svg";
+import coin from "../media/stb_coin.svg";
 import { Link } from "react-router-dom";
 import { Resend } from "resend";
 import Wallet from "./Wallet";
