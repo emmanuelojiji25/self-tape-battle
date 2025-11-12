@@ -13,6 +13,7 @@ import "./EntryCard.scss";
 import ConfettiExplosion from "react-confetti-explosion";
 import { Link } from "react-router-dom";
 import ShareModal from "./ShareModal";
+import DeleteModal from "./DeleteModal";
 
 const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   const { loggedInUser } = useContext(AuthContext);
@@ -25,6 +26,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   const [entryUid, setEntryUid] = useState("");
 
   const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,6 +108,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
       const docRef = doc(db, "battles", battleId, "entries", uid);
       await deleteDoc(docRef);
       console.log("deleted");
+      setDeleteModalVisible(false);
     } catch (error) {
       console.log(error);
     }
@@ -121,19 +124,23 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
           setShareModalVisible={setShareModalVisible}
         />
       )}
+
+      {deleteModalVisible && (
+        <DeleteModal
+          cancel={() => setDeleteModalVisible(false)}
+          deleteEntry={() => handleDeleteEntry()}
+        />
+      )}
       {isExploding && <ConfettiExplosion />}
       <Link to={`/profile/${username}`} className="name">
         {name}
       </Link>
       {uid && loggedInUser.uid === uid && (
         <>
-          <span
-            className="share"
-            onClick={() => setShareModalVisible(!shareModalVisible)}
-          >
+          <span className="share" onClick={() => setShareModalVisible(true)}>
             Share
           </span>
-          <p onClick={() => handleDeleteEntry()} className="delete">
+          <p onClick={() => setDeleteModalVisible(true)} className="delete">
             Delete
           </p>
         </>

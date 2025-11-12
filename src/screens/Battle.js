@@ -24,6 +24,7 @@ import { db, storage } from "../firebaseConfig";
 import "./Battle.scss";
 import NavBar from "../components/NavBar";
 import MessageModal from "../components/MessageModal";
+import coin from "../media/stb_coin.svg";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -179,7 +180,7 @@ const Battle = () => {
           <div className="battle-info">
             <span className="prize-pill">
               {" "}
-              {typeof prize === "number" ? <p>coin</p> : <p>chest</p>}
+              {typeof prize === "number" ? <img src={coin} className="icon-small" /> : <p>chest</p>}
               {prize}
             </span>
             <span className="prize-pill">{genre}</span>

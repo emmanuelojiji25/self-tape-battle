@@ -135,7 +135,10 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
           cancel={() => setConfirmationModalVisible(false)}
         />
       )}
-      <p onClick={() => setWalletVisible(false)}>Back</p>
+      <div className="back-container" onClick={() => setWalletVisible(false)}>
+        <i class="fa-solid fa-arrow-left"></i>
+        <p>Back</p>
+      </div>
       <h2>Wallet</h2>
 
       <div className="amount-button-container">
