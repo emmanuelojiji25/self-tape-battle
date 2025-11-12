@@ -258,6 +258,7 @@ const Profile = () => {
                   text="Sign Out"
                   onClick={() => {
                     auth.signOut();
+                    localStorage.clear();
                     navigate("/userAuth");
                   }}
                 ></Button>
