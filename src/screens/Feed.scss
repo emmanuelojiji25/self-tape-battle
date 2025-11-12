@@ -13,8 +13,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100svh;
+  min-height: 100svh;
   width: 100%;
+
 }
 
 .loader {

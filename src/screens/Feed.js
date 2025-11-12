@@ -68,11 +68,7 @@ const Feed = ({ user }) => {
     <>
       <Header />
       <div className="Feed screen-width">
-        {loading ? (
-          <div className="feed-loader-container">
-            <img src={logo} className="loader" />
-          </div>
-        ) : (
+        
           <>
             {battles.length === 0 && (
               <h1 style={{ color: "white" }}>No battles. Check back soon!</h1>
@@ -86,7 +82,7 @@ const Feed = ({ user }) => {
               />
             ))}
           </>
-        )}
+      
         <NavBar />
       </div>
     </>
