@@ -54,6 +54,14 @@ const Battle = () => {
 
   const [showMessageModal, setShowMessageModal] = useState(false);
 
+  const [userEntry, setUserEntry] = useState(null);
+
+  useEffect(() => {
+    getBattle();
+    getWinner();
+    getUserEntry();
+  }, []);
+
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
     const entriesRef = collection(db, "battles", battleId, "entries");
@@ -85,10 +93,17 @@ const Battle = () => {
     } catch (error) {}
   };
 
-  useEffect(() => {
-    getBattle();
-    getWinner();
-  }, []);
+  const getUserEntry = () => {
+    const entryRef = doc(db, "battles", battleId, "entries", loggedInUser.uid);
+
+    if (entryRef) {
+      try {
+        onSnapshot(entryRef, (snapshot) => {
+          setUserEntry(snapshot.data());
+        });
+      } catch (error) {}
+    }
+  };
 
   const getWinner = async () => {
     try {
@@ -180,7 +195,11 @@ const Battle = () => {
           <div className="battle-info">
             <span className="prize-pill">
               {" "}
-              {typeof prize === "number" ? <img src={coin} className="icon-small" /> : <p>chest</p>}
+              {typeof prize === "number" ? (
+                <img src={coin} className="icon-small" />
+              ) : (
+                <p>chest</p>
+              )}
               {prize}
             </span>
             <span className="prize-pill">{genre}</span>
@@ -260,6 +279,16 @@ const Battle = () => {
       )}
 
       <div className="entries-container">
+        {userEntry && (
+          <EntryCard
+            url={userEntry.url}
+            uid={userEntry.uid}
+            battleId={battleId}
+            voteButtonVisible={userEntry.uid != loggedInUser.uid}
+            battleStatus={battleStatus}
+          />
+        )}
+
         {entries.map((entry) => {
           return (
             <EntryCard
