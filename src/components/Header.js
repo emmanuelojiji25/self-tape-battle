@@ -42,7 +42,7 @@ const Header = () => {
 
   return (
     <div className="Header screen-width">
-      {walletVisible && <Wallet />}
+      {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
         <div className="greeting-container">
           <div

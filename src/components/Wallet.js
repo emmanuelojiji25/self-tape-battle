@@ -16,7 +16,7 @@ import ConfirmationModal from "./ConfirmationModal";
 import MessageModal from "./MessageModal";
 import "./Wallet.scss";
 import coin from "../media/stb_coin.svg";
-const Wallet = ({ visibleClass }) => {
+const Wallet = ({ visibleClass, setWalletVisible }) => {
   const { loggedInUser } = useContext(AuthContext);
 
   const [coins, setCoins] = useState();
@@ -135,6 +135,7 @@ const Wallet = ({ visibleClass }) => {
           cancel={() => setConfirmationModalVisible(false)}
         />
       )}
+      <p onClick={() => setWalletVisible(false)}>Back</p>
       <h2>Wallet</h2>
 
       <div className="amount-button-container">
