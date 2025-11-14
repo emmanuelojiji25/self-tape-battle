@@ -45,14 +45,7 @@ const Header = () => {
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
         <div className="greeting-container">
-          <div
-            className="avatar"
-            style={{ backgroundImage: `url(${headshot})` }}
-          ></div>
-          <div>
-            <h2 className="greeting">Welcome, {firstName}</h2>
-            {authRole === "actor" && <p>Your next battle awaits you!</p>}
-          </div>
+          <img src={headshot} className="headshot" />
         </div>
         <div className="header-right">
           {authRole === "actor" && (
