@@ -20,6 +20,12 @@
     // border: solid 1px rgb(54, 54, 143);
     // backdrop-filter: blur(10px);
   }
+
+  .headshot{
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+  }
 }
 
 .header-right {
@@ -40,11 +46,6 @@
     font-size: 14px;
   }
 
-  .headshot{
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-  }
 }
 
 .coins-container {
@@ -54,9 +55,10 @@
   align-items: center;
   justify-content: space-between;
   gap: 5px;
+  margin-right: 20px;
 
   img {
-    width: 25px;
+    width: 30px;
     animation: coin-flip 3s infinite;
     
   }
