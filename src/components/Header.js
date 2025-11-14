@@ -44,9 +44,7 @@ const Header = () => {
     <div className="Header screen-width">
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
-        <div className="greeting-container">
-         
-        </div>
+        <div className="greeting-container"></div>
         <div className="header-right">
           {authRole === "actor" && (
             <div
@@ -57,7 +55,9 @@ const Header = () => {
               {coins}
             </div>
           )}
+          <Link to={`/profile/${username}`}>
             <img src={headshot} className="headshot" />
+          </Link>
         </div>
       </div>
     </div>
