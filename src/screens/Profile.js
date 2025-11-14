@@ -115,7 +115,7 @@ const Profile = () => {
         where("uid", "==", "3sfGK3I6anY1trjMnan8lbGdGag1")
       );
 
-      const docs = await getDocs(q);
+      const docs = await getDocs(q); 
 
       const votes = [];
 
@@ -212,7 +212,7 @@ const Profile = () => {
       console.log(error);
     }
   };
-
+  
   return (
     <div className="Profile screen-width">
       {walletVisible && <Wallet />}
@@ -223,7 +223,7 @@ const Profile = () => {
           <div className="profile-header">
             <div className="profile-headshot-container">
               <img className="profile-headshot" src={headshot} />
-            </div>
+            </div> 
             <div className="profile-info">
               <h1>{name}</h1>
               <span>{username}</span>
