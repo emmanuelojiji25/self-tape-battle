@@ -38,7 +38,7 @@ const Directory = () => {
 
   return (
     <div className="Directory screen-width">
-      <h1>Directory</h1>
+      <h1>Residents</h1>
 
       <span
         className={`tab ${view === "actors" && "active"}`}
