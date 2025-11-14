@@ -21,10 +21,11 @@
     // backdrop-filter: blur(10px);
   }
 
-  .headshot{
+  .headshot {
     width: 40px;
     height: 40px;
     border-radius: 5px;
+    object-fit: cover;
   }
 }
 
@@ -45,12 +46,11 @@
     color: #4b7cff;
     font-size: 14px;
   }
-
 }
 
 .coins-container {
   border-radius: 200px;
-  color: #4b7cff;
+  color: gold;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -60,7 +60,6 @@
   img {
     width: 30px;
     animation: coin-flip 3s infinite;
-    
   }
 }
 
