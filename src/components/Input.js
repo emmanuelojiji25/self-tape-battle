@@ -1,11 +1,11 @@
 import "./Input.scss";
 
-const Input = ({ type, onChange, value, placeholder }) => {
+const Input = ({ type, onChange, value, placeholder, disabled}) => {
   return (
     <input
       type={type}
       onChange={onChange}
-      className="Input"
+      className={`Input ${disabled && "disabled"}`}
       value={value}
       placeholder={placeholder}
     ></input>

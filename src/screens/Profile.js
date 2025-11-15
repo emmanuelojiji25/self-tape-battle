@@ -37,6 +37,9 @@ const Profile = () => {
   const [publicProfile, setPublicProfile] = useState(false);
   const [role, setRole] = useState("");
 
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+
   const [battles, setBattles] = useState([]);
 
   const [bio, setBio] = useState("");
@@ -72,6 +75,8 @@ const Profile = () => {
       setHeadshot(data.headshot || "");
       setPublicProfile(data.settings?.publicProfile || false);
       setRole(data.role || "");
+      setContactNumber(data.contactNumber)
+      setContactEmail(data.contactEmail)
 
       console.log("Fetched user role:", data.role);
     } catch (error) {
@@ -115,7 +120,7 @@ const Profile = () => {
         where("uid", "==", "3sfGK3I6anY1trjMnan8lbGdGag1")
       );
 
-      const docs = await getDocs(q); 
+      const docs = await getDocs(q);
 
       const votes = [];
 
@@ -205,6 +210,8 @@ const Profile = () => {
         bio: bio.trim().toLowerCase(),
         webLink: link.trim().toLowerCase(),
         settings: { publicProfile: publicProfile },
+        contactEmail: contactEmail,
+        contactNumber: contactNumber,
       });
 
       setIsEditProfileVisible(false);
@@ -212,7 +219,7 @@ const Profile = () => {
       console.log(error);
     }
   };
-  
+
   return (
     <div className="Profile screen-width">
       {walletVisible && <Wallet />}
@@ -223,7 +230,7 @@ const Profile = () => {
           <div className="profile-header">
             <div className="profile-headshot-container">
               <img className="profile-headshot" src={headshot} />
-            </div> 
+            </div>
             <div className="profile-info">
               <h1>{name}</h1>
               <span>{username}</span>
@@ -301,43 +308,75 @@ const Profile = () => {
 
           {isEditPrfofileVisible && (
             <div className="edit-profile">
-              <h2>Edit Profile</h2>
-              <Input type="text" value={firstName} />
-              <Input type="text" value={lastName} />
-              <Input
-                type="text"
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setShowUsernameMessage(true);
-                }}
-                value={username}
-              />
-              {showUsernameMessage && (
-                <span style={{ color: "white" }}>
-                  {isUsernameAvailable ? "Available" : "Not available"}
-                </span>
-              )}
+              <div className="edit-profile-section">
+                <h2>Your details</h2>
+                <Input type="text" value={firstName} disabled/>
+                <Input type="text" value={lastName} disabled/>
+                <Input
+                  type="text"
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setShowUsernameMessage(true);
+                  }}
+                  value={username}
+                />
+                {showUsernameMessage && (
+                  <span style={{ color: "white" }}>
+                    {isUsernameAvailable ? "Available" : "Not available"}
+                  </span>
+                )}
 
-              <Input
-                type="text"
-                onChange={(e) => setBio(e.target.value)}
-                value={bio}
-              />
-              <Input
-                type="text"
-                onChange={(e) => setLink(e.target.value)}
-                value={link}
-              />
-              <input
-                type="checkbox"
-                onChange={(e) =>
-                  e.target.checked
-                    ? setPublicProfile(true)
-                    : setPublicProfile(false)
-                }
-              ></input>
-              <span>Public Profile</span>
-              {publicProfile && <p>Share your profile: </p>}
+                <Input
+                  type="text"
+                  onChange={(e) => setBio(e.target.value)}
+                  value={bio}
+                />
+                <Input
+                  type="text"
+                  onChange={(e) => setLink(e.target.value)}
+                  value={link}
+                />
+              </div>
+
+              <div className="edit-profile-section">
+                <h2>Professional contact</h2>
+                <p>
+                  This information will only be visible to casting directors.
+                  You can put your agent's details here too. If you do not
+                  complete this, casting directors may not be able to contact
+                  you.
+                </p>
+                <Input
+                  type="text"
+                  value={contactEmail}
+                  placeholder="Email"
+                  onChange={(e) => {
+                    setContactEmail(e.target.value);
+                  }}
+                />
+                <Input
+                  type="text"
+                  value={contactNumber}
+                  placeholder="Phone number"
+                  onChange={(e) => {
+                    setContactNumber(e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="edit-profile-section">
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    e.target.checked
+                      ? setPublicProfile(true)
+                      : setPublicProfile(false)
+                  }
+                ></input>
+                <span>Public Profile</span>
+                {publicProfile && <p>Share your profile: </p>}
+              </div>
+
               <Button filled text="Save" onClick={() => handleUpdateUser()} />
               <Button
                 outline
