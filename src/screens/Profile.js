@@ -193,7 +193,6 @@ const Profile = () => {
         setIsUsernameAvailable(false);
       }
 
-      console.log(isUsernameAvailable);
     } catch (error) {
       console.log(error);
     }
@@ -330,6 +329,7 @@ const Profile = () => {
                   type="text"
                   onChange={(e) => setBio(e.target.value)}
                   value={bio}
+                  placeholder="Enter bio"
                 />
                 <Input
                   type="text"
