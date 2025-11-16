@@ -16,6 +16,7 @@ import logo from "../media/logo-icon.svg";
 import NavBar from "../components/NavBar";
 import Wallet from "../components/Wallet";
 import Story from "../components/Story";
+
 import { AuthContext } from "../contexts/AuthContext";
 
 const Feed = ({ user }) => {

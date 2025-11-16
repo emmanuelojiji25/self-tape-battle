@@ -1,6 +1,8 @@
 .Story {
   height: 100svh;
-  background: grey;
+  width: 100%;
+  background: #080b13;
+  color: white;
   position: fixed;
   z-index: 2;
   display: flex;
@@ -10,9 +12,9 @@
   text-align: center;
 }
 
-.scroll {
+.scroll{
   color: white;
-  position: absolute;
-  bottom: 140px;
-  right: 50px;
-}
+  position: absolute; 
+  bottom: 140px;  
+  right: 50px;    
+} 
