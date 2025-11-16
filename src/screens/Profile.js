@@ -178,7 +178,7 @@ const Profile = () => {
       const collectionRef = collection(db, "users");
       const q = query(
         collectionRef,
-        where("username", "==", username.toLowerCase())
+        where("username", "==", username.toLowerCase().trim())
       );
 
       const querySnapshot = await getDocs(q);
