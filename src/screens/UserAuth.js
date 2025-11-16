@@ -107,6 +107,7 @@ const UserAuth = ({ setSignedIn }) => {
         lastName: "",
         bio: "",
         coins: 0,
+        totalCoinsEarned: 0,
         webLink: "",
         isOnboardingComplete: false,
         headshot: "",

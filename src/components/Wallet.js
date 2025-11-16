@@ -143,7 +143,7 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
 
       <div className="amount-button-container">
         <div className="coin-container">
-          {view === "coins" && <img src={coin} />}
+          {view === "coins" && <img src={coin} className="coin"/>}
           <h3 className="amount">{view === "coins" ? coins : `£${pounds}`}</h3>
         </div>
 

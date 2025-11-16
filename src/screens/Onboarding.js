@@ -71,6 +71,7 @@ const Onboarding = () => {
         webLink: webLink,
         isOnboardingComplete: true,
         coins: 100,
+        totalCoinsEarned: 100,
       });
 
       setIsOnboardingComplete(true);
