@@ -6,7 +6,7 @@ import "./Story.scss";
 const Story = ({ onClick }) => {
   return (
     <div className="Story">
-      <h2>Welcome fighter</h2>
+      <h2>Welcome to the Arena</h2>
 
       <p>
         <Typewriter
@@ -16,13 +16,13 @@ const Story = ({ onClick }) => {
             ],
             autoStart: true,
             loop: true,
-            delay: 75,
+            delay: 60,
             cursor: "",
             deleteSpeed: Infinity,
           }}
         />
       </p>
-      <Button filled text="Okay" onClick={onClick} />
+      <Button filled text="Let's go!" onClick={onClick} />
     </div>
   );
 };
