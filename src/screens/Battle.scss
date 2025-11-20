@@ -34,15 +34,17 @@
 
 .battle-info{
   display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .prize-pill {
   color: white;
   padding: 3px 10px;
-  margin-bottom: 10px;
   display: block;
   width: fit-content;
   display: flex;
+  gap: 5px;
 }
 
 .deadline{

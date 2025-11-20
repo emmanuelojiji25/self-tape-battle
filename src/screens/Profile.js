@@ -276,15 +276,15 @@ const Profile = () => {
             <div className="stat-card-container">
               <div className="stat-card">
                 <h2>{battles.length}</h2>
-                <h4>Battles Entered</h4>
+                <p>Battles Entered</p>
               </div>
               <div className="stat-card">
                 <h2>{battlesWon}</h2>
-                <h4>Battles Won</h4>
+                <hp>Battles Won</hp>
               </div>
               <div className="stat-card">
                 <h2>{totalVotes}</h2>
-                <h4>Total votes</h4>
+                <p>Total votes</p>
               </div>
             </div>
           )}

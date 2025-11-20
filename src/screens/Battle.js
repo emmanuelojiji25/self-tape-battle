@@ -183,6 +183,7 @@ const Battle = () => {
           title="Nice work!"
           text="5 coins earned"
           buttonText="Close"
+          icon={coin}
         />
       )}
       <Link to="/" className="back">
@@ -202,8 +203,9 @@ const Battle = () => {
               {prize}
             </span>
             <span className="prize-pill">{genre}</span>
+            <span className="deadline">{deadline}</span>
           </div>
-          <span className="deadline">{deadline}</span>
+        
         </div>
 
         <a href={`${battleAttachment}`} download>
