@@ -75,8 +75,8 @@ const Profile = () => {
       setHeadshot(data.headshot || "");
       setPublicProfile(data.settings?.publicProfile || false);
       setRole(data.role || "");
-      setContactNumber(data.contactNumber)
-      setContactEmail(data.contactEmail)
+      setContactNumber(data.contactNumber);
+      setContactEmail(data.contactEmail);
 
       console.log("Fetched user role:", data.role);
     } catch (error) {
@@ -192,7 +192,6 @@ const Profile = () => {
         console.log("Unavailable!");
         setIsUsernameAvailable(false);
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -244,10 +243,10 @@ const Profile = () => {
                   onClick={() => handleCopyProfile()}
                 ></Button>
               )}
-              {authRole === "casting" && (
+              {userId === loggedInUser.uid && authRole === "professional" && (
                 <Button
                   filled
-                  text="View bookmarks"
+                  text="My bookmarks"
                   onClick={() => setIsEditProfileVisible(true)}
                 ></Button>
               )}
@@ -309,8 +308,8 @@ const Profile = () => {
             <div className="edit-profile">
               <div className="edit-profile-section">
                 <h2>Your details</h2>
-                <Input type="text" value={firstName} disabled/>
-                <Input type="text" value={lastName} disabled/>
+                <Input type="text" value={firstName} disabled />
+                <Input type="text" value={lastName} disabled />
                 <Input
                   type="text"
                   onChange={(e) => {
