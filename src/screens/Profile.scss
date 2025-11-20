@@ -75,6 +75,17 @@
   padding: 5%;
 }
 
-.edit-profile-section{
+.edit-profile-section {
   margin-bottom: 50px;
+}
+
+.contact-tooltip {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px 20px;
+  border-radius: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
 }

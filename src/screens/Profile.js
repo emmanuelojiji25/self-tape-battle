@@ -51,6 +51,9 @@ const Profile = () => {
 
   const [walletVisible, setWalletVisible] = useState(false);
 
+  const [contactInfoVisible, setContactInfoVisible] = useState(false);
+  const [isContactInfoCopied, setIsContactInfoCopied] = useState(false);
+
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
@@ -199,6 +202,17 @@ const Profile = () => {
 
   const [isEditPrfofileVisible, setIsEditProfileVisible] = useState(false);
 
+  const handleCopyInfo = async (text) => {
+    clearTimeout();
+
+    await navigator.clipboard.writeText(text);
+    setIsContactInfoCopied(true);
+
+    setTimeout(() => {
+      setIsContactInfoCopied(false);
+    }, 2000);
+  };
+
   const handleUpdateUser = async () => {
     try {
       const docRef = doc(db, "users", userId);
@@ -243,30 +257,62 @@ const Profile = () => {
                   onClick={() => handleCopyProfile()}
                 ></Button>
               )}
-              {userId === loggedInUser.uid && authRole === "professional" && (
+              {userId === loggedInUser.uid && role === "professional" && (
                 <Button
                   filled
                   text="My bookmarks"
                   onClick={() => setIsEditProfileVisible(true)}
                 ></Button>
               )}
-              {userId === loggedInUser?.uid && (
-                <Button
-                  outline
-                  text="Edit Profile"
-                  onClick={() => setIsEditProfileVisible(true)}
-                ></Button>
+
+              {authRole === "professional" && role === "actor" && (
+                <>
+                  <Button
+                    filled
+                    text="Contact"
+                    onClick={() => setContactInfoVisible(!contactInfoVisible)}
+                  ></Button>
+
+                  {contactInfoVisible && (
+                    <div className="contact-info">
+                      <div>
+                        <p>{contactEmail}</p>
+                        <p onClick={() => handleCopyInfo(contactEmail)}>Copy</p>
+                      </div>
+
+                      <div>
+                        <p>{contactNumber}</p>
+                        <p onClick={() => handleCopyInfo(contactNumber)}>
+                          Copy
+                        </p>
+                      </div>
+
+                      {isContactInfoCopied && (
+                        <div className="contact-tooltip">Copied!</div>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
+
               {userId === loggedInUser?.uid && (
-                <Button
-                  outline
-                  text="Sign Out"
-                  onClick={() => {
-                    auth.signOut();
-                    localStorage.clear();
-                    navigate("/userAuth");
-                  }}
-                ></Button>
+                <>
+                  <Button
+                    outline
+                    text="Edit Profile"
+                    onClick={() => setIsEditProfileVisible(true)}
+                  ></Button>
+
+                  <Button
+                    outline
+                    text="Sign Out"
+                    onClick={() => {
+                      auth.signOut();
+                      localStorage.clear();
+                      navigate("/userAuth");
+                    }}
+                  ></Button>
+                </>
               )}
             </div>
           </div>
