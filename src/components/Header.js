@@ -1,4 +1,4 @@
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
@@ -7,6 +7,7 @@ import coin from "../media/stb_coin.svg";
 import { Link } from "react-router-dom";
 import { Resend } from "resend";
 import Wallet from "./Wallet";
+import Story from "./Story";
 
 const Header = () => {
   const { loggedInUser, authRole } = useContext(AuthContext);
@@ -16,6 +17,9 @@ const Header = () => {
   const [headshot, setHeadshot] = useState("");
 
   const [walletVisible, setWalletVisible] = useState(false);
+
+  const [storyVisible, setStoryVisible] = useState(false);
+  const [isStoryComplete, setIsStoryComplete] = useState(true);
 
   useEffect(() => {
     if (!loggedInUser) return;
@@ -36,30 +40,61 @@ const Header = () => {
         console.error("Error fetching user coins:", error);
       }
     );
-
+    handleGetLoginStatus();
     return () => unsubscribe();
   }, [loggedInUser]);
 
+  const userRef = doc(db, "users", loggedInUser.uid);
+
+  const handleGetLoginStatus = async () => {
+    try {
+      const userSnapshot = await getDoc(userRef);
+      setIsStoryComplete(userSnapshot.data().isStoryComplete);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateUserLoginStatus = async () => {
+    await updateDoc(userRef, {
+      isStoryComplete: true,
+    });
+  };
+
   return (
     <div className="Header screen-width">
+      {storyVisible && (
+        <Story
+          onClick={() => {
+            updateUserLoginStatus();
+            setStoryVisible(false);
+          }}
+        />
+      )}
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
         <div className="greeting-container">
-        <Link to={`/profile/${username}`}>
+          <Link to={`/profile/${username}`}>
             <img src={headshot} className="headshot" />
           </Link>
         </div>
         <div className="header-right">
           {authRole === "actor" && (
-            <div
-              className="coins-container"
-              onClick={() => setWalletVisible(true)}
-            >
-              <img src={coin} />
-              {coins}
-            </div>
+            <>
+              {!isStoryComplete && (
+                <div className="scroll" onClick={() => setStoryVisible(true)}>
+                  SCROLL
+                </div>
+              )}
+              <div
+                className="coins-container"
+                onClick={() => setWalletVisible(true)}
+              >
+                <img src={coin} />
+                {coins}
+              </div>
+            </>
           )}
-         
         </div>
       </div>
     </div>

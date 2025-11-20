@@ -24,9 +24,6 @@ const Feed = ({ user }) => {
 
   const [loading, setLoading] = useState(true);
 
-  const [storyVisible, setStoryVisible] = useState(false);
-  const [isStoryComplete, setIsStoryComplete] = useState(true);
-
   const { loggedInUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -44,7 +41,7 @@ const Feed = ({ user }) => {
     } else {
       handleGetBattles();
     }
-    handleGetLoginStatus();
+   
   }, []);
 
   const handleGetBattles = async () => {
@@ -68,33 +65,10 @@ const Feed = ({ user }) => {
     }
   };
 
-  const userRef = doc(db, "users", loggedInUser.uid);
-
-  const handleGetLoginStatus = async () => {
-    try {
-      const userSnapshot = await getDoc(userRef);
-      setIsStoryComplete(userSnapshot.data().isStoryComplete);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const updateUserLoginStatus = async () => {
-    await updateDoc(userRef, {
-      isStoryComplete: true,
-    });
-  };
 
   return (
     <>
-      {storyVisible && (
-        <Story
-          onClick={() => {
-            updateUserLoginStatus();
-            setStoryVisible(false);
-          }}
-        />
-      )}
+      
       <Header />
       <div className="Feed screen-width">
         <>
@@ -111,11 +85,7 @@ const Feed = ({ user }) => {
           ))}
         </>
 
-        {!isStoryComplete && (
-          <div className="scroll" onClick={() => setStoryVisible(true)}>
-            SCROLL
-          </div>
-        )}
+        
         <NavBar />
       </div>
     </>
