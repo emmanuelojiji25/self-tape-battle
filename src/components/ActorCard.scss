@@ -1,20 +1,23 @@
-.ActorCard{
-    display: flex;
-    margin-bottom: 30px;
+.ActorCard {
+  display: flex;
+  margin-bottom: 30px;
 }
 
-
-.actor-card-headshot{
-    width: 100px;
-    height: 100px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 15px;
-    margin-right: 10px;
+.actor-card-headshot {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 15px;
+  margin-right: 10px;
 }
 
-.star{
-    width: 25px;
-    margin-right: 20px;
-    cursor: pointer;
+.star {
+  width: 25px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.actor-card-name {
+  color: white;
 }

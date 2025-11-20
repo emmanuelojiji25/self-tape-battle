@@ -56,13 +56,7 @@ const Directory = () => {
       {view === "actors" && (
         <div className="actors">
           {actors.map((actor) => (
-            <ActorCard
-              name={actor.firstName + " " + actor.lastName}
-              username={actor.username}
-              bio={actor.bio}
-              headshot={actor.headshot}
-              uid={actor.uid}
-            />
+            <ActorCard uid={actor.uid} />
           ))}
         </div>
       )}

@@ -8,16 +8,22 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   onSnapshot,
   setDoc,
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
-const ActorCard = ({ name, bio, headshot, username, uid }) => {
+const ActorCard = ({ uid }) => {
   const { loggedInUser, authRole } = useContext(AuthContext);
 
   const [userIsBookmarked, setUserIsBookmarked] = useState(false);
+
+  const [username, setUsername] = useState("");
+  const [headshot, setHeadshot] = useState("");
+  const [name, setName] = useState("");
+  
 
   useEffect(() => {
     const docRef = doc(db, "users", loggedInUser.uid, "bookmarks", uid);
@@ -31,8 +37,24 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
       }
     );
 
+    getActor();
+
     return unsubscribe;
   }, [loggedInUser?.uid, uid]);
+
+  const getActor = async () => {
+    const docRef = doc(db, "users", uid);
+
+    try {   
+      const docSnapshot = await getDoc(docRef);
+      const data = docSnapshot.data()
+      setName(`${data.firstName + data.lastName}`) 
+      setHeadshot(data.headshot)        
+      setUsername(data.username)                                                                         
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleBookmarkActor = async () => {
     //if (!loggedInUser?.uid || !uid) return;
@@ -74,7 +96,7 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
         style={{ backgroundImage: `url(${headshot})` }}
       />
       <div>
-        <Link to={`/profile/${username}`}>{name}</Link>
+        <Link to={`/profile/${username}`} className="actor-card-name">{name}</Link>
         <Link to={`/profile/${username}`}>
           <Button filled text="View Profile" />
         </Link>
