@@ -22,6 +22,7 @@ import Input from "../components/Input";
 import NavBar from "../components/NavBar";
 import LockedProfile from "../components/LockedProfile";
 import Wallet from "../components/Wallet";
+import ActorCard from "../components/ActorCard";
 
 const Profile = () => {
   const params = useParams();
@@ -53,6 +54,8 @@ const Profile = () => {
 
   const [contactInfoVisible, setContactInfoVisible] = useState(false);
   const [isContactInfoCopied, setIsContactInfoCopied] = useState(false);
+
+  const [bookmarks, setBookmarks] = useState([]);
 
   const getUser = async () => {
     try {
@@ -232,6 +235,27 @@ const Profile = () => {
     }
   };
 
+  const handleGetBookmarks = async () => {
+    const bookmarksRef = collection(db, "users", loggedInUser.uid, "bookmarks");
+
+    try {
+      const docsSnapshot = await getDocs(bookmarksRef);
+      const docs = [];
+
+      docsSnapshot.forEach((doc) => {
+        docs.push(doc.data());
+        setBookmarks(docs);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!loggedInUser) return;
+    handleGetBookmarks();
+  }, [loggedInUser]);
+
   return (
     <div className="Profile screen-width">
       {walletVisible && <Wallet />}
@@ -346,6 +370,15 @@ const Profile = () => {
                     />
                   }
                 </>
+              ))}
+            </div>
+          )}
+
+          {role === "professional" && (
+            <div className="bookmarks">
+              <h2>Bookmarks</h2>
+              {bookmarks.map((actor) => (
+                <ActorCard uid={actor.uid} />
               ))}
             </div>
           )}

@@ -20,8 +20,6 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
   const [userIsBookmarked, setUserIsBookmarked] = useState(false);
 
   useEffect(() => {
-    if (!loggedInUser?.uid || !uid) return;
-
     const docRef = doc(db, "users", loggedInUser.uid, "bookmarks", uid);
     const unsubscribe = onSnapshot(
       docRef,
@@ -37,19 +35,19 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
   }, [loggedInUser?.uid, uid]);
 
   const handleBookmarkActor = async () => {
-    if (!loggedInUser?.uid || !uid) return;
+    //if (!loggedInUser?.uid || !uid) return;
+
+    console.log("clicked");
 
     const docRef = doc(db, "users", loggedInUser.uid, "bookmarks", uid);
 
-    // Optimistic UI: flip immediately; onSnapshot will correct if write fails
+    //Optimistic UI: flip immediately; onSnapshot will correct if write fails
     setUserIsBookmarked((prev) => !prev);
 
     try {
       if (!userIsBookmarked) {
         await setDoc(docRef, {
           uid,
-          type: "actor",
-          // you can add serverTimestamp() or other fields if needed
         });
       } else {
         await deleteDoc(docRef);
@@ -68,7 +66,7 @@ const ActorCard = ({ name, bio, headshot, username, uid }) => {
           src={userIsBookmarked ? star_filled : star}
           className="star"
           alt="bookmark"
-          onClick={() => handleBookmarkActor}
+          onClick={() => handleBookmarkActor()}
         />
       )}
       <div
