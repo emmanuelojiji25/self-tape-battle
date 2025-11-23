@@ -5,7 +5,10 @@
   position: sticky;
   width: 100%;
   top: 0;
-  color: white;
+
+  position: relative; /* create a stacking context */
+  z-index: 10; /* higher than overlay's z-index */
+
 
   margin-bottom: 10px;
 
@@ -83,4 +86,11 @@
   background-position: center;
   background-size: cover;
   display: none;
+}
+
+.scroll{
+  position: relative; /* stays inside header */
+  z-index: 20; /* above other header elements if needed */
+  cursor: pointer;
+  width: 40px;
 }

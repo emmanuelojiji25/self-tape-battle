@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Resend } from "resend";
 import Wallet from "./Wallet";
 import Story from "./Story";
+import scroll from "../media/scroll.png"
 
 const Header = () => {
   const { loggedInUser, authRole } = useContext(AuthContext);
@@ -78,14 +79,16 @@ const Header = () => {
             <img src={headshot} className="headshot" />
           </Link>
         </div>
-        <div className="header-right">
-          {authRole === "actor" && (
-            <>
-              {!isStoryComplete && (
+        {!isStoryComplete && (
                 <div className="scroll" onClick={() => setStoryVisible(true)}>
-                  SCROLL
+                  <img src={scroll} className="scroll"/>
                 </div>
               )}
+        <div className="header-right">
+      
+          {authRole === "actor" && (
+            <>
+
               <div
                 className="coins-container"
                 onClick={() => setWalletVisible(true)}

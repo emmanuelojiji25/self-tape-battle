@@ -41,7 +41,6 @@ const Feed = ({ user }) => {
     } else {
       handleGetBattles();
     }
-   
   }, []);
 
   const handleGetBattles = async () => {
@@ -65,11 +64,11 @@ const Feed = ({ user }) => {
     }
   };
 
-
   return (
     <>
-      
+       <div className="overlay"></div>
       <Header />
+   
       <div className="Feed screen-width">
         <>
           {battles.length === 0 && (
@@ -85,7 +84,6 @@ const Feed = ({ user }) => {
           ))}
         </>
 
-        
         <NavBar />
       </div>
     </>

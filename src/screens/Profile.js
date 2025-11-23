@@ -455,6 +455,13 @@ const Profile = () => {
                 {publicProfile && <p>Share your profile: </p>}
               </div>
 
+              
+
+              <Button filled text="Save" onClick={() => handleUpdateUser()} />
+              <Button filled text="Save" onClick={() => handleUpdateUser()} />
+              <Button filled text="Save" onClick={() => handleUpdateUser()} />
+              <Button filled text="Save" onClick={() => handleUpdateUser()} />
+              <Button filled text="Save" onClick={() => handleUpdateUser()} />
               <Button filled text="Save" onClick={() => handleUpdateUser()} />
               <Button
                 outline
