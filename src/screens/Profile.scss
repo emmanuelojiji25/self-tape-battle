@@ -4,7 +4,6 @@
   min-height: 100svh;
   color: white;
   padding-top: 25px;
-
 }
 
 .profile-header {
@@ -67,14 +66,19 @@
 
 .edit-profile {
   width: 100%;
-  min-height: 100svh;
-  overflow: auto;
   position: fixed;
   background: rgba(0, 0, 0);
+  overflow-y: auto;
   top: 0;
   left: 0;
   z-index: 1;
   padding: 5%;
+  inset: 0;   
+}
+
+
+.edit-profile-inner {
+  overflow: scroll;
 }
 
 .edit-profile-section {
@@ -89,5 +93,4 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
 }

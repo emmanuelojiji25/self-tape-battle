@@ -385,89 +385,85 @@ const Profile = () => {
 
           {isEditPrfofileVisible && (
             <div className="edit-profile">
-              <div className="edit-profile-section">
-                <h2>Your details</h2>
-                <Input type="text" value={firstName} disabled />
-                <Input type="text" value={lastName} disabled />
-                <Input
-                  type="text"
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    setShowUsernameMessage(true);
-                  }}
-                  value={username}
-                />
-                {showUsernameMessage && (
-                  <span style={{ color: "white" }}>
-                    {isUsernameAvailable ? "Available" : "Not available"}
-                  </span>
-                )}
+              <div className="edit-profile-inner">
+                <div className="edit-profile-section">
+                  <h2>Your details</h2>
+                  <Input type="text" value={firstName} disabled />
+                  <Input type="text" value={lastName} disabled />
+                  <Input
+                    type="text"
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      setShowUsernameMessage(true);
+                    }}
+                    value={username}
+                  />
+                  {showUsernameMessage && (
+                    <span style={{ color: "white" }}>
+                      {isUsernameAvailable ? "Available" : "Not available"}
+                    </span>
+                  )}
 
-                <Input
-                  type="text"
-                  onChange={(e) => setBio(e.target.value)}
-                  value={bio}
-                  placeholder="Enter bio"
-                />
-                <Input
-                  type="text"
-                  onChange={(e) => setLink(e.target.value)}
-                  value={link}
+                  <Input
+                    type="text"
+                    onChange={(e) => setBio(e.target.value)}
+                    value={bio}
+                    placeholder="Enter bio"
+                  />
+                  <Input
+                    type="text"
+                    onChange={(e) => setLink(e.target.value)}
+                    value={link}
+                  />
+                </div>
+
+                <div className="edit-profile-section">
+                  <h2>Professional contact</h2>
+                  <p>
+                    This information will only be visible to casting directors.
+                    You can put your agent's details here too. If you do not
+                    complete this, casting directors may not be able to contact
+                    you.
+                  </p>
+                  <Input
+                    type="text"
+                    value={contactEmail}
+                    placeholder="Email"
+                    onChange={(e) => {
+                      setContactEmail(e.target.value);
+                    }}
+                  />
+                  <Input
+                    type="text"
+                    value={contactNumber}
+                    placeholder="Phone number"
+                    onChange={(e) => {
+                      setContactNumber(e.target.value);
+                    }}
+                  />
+                </div>
+
+                <div className="edit-profile-section">
+                  <input
+                    type="checkbox"
+                    onChange={(e) =>
+                      e.target.checked
+                        ? setPublicProfile(true)
+                        : setPublicProfile(false)
+                    }
+                  ></input>
+                  <span>Public Profile</span>
+                  {publicProfile && <p>Share your profile: </p>}
+                </div>
+
+                <Button filled text="Save" onClick={() => handleUpdateUser()} />
+
+                <Button
+                  outline
+                  text="Cancel"
+                  onClick={() => setIsEditProfileVisible(false)}
                 />
               </div>
-
-              <div className="edit-profile-section">
-                <h2>Professional contact</h2>
-                <p>
-                  This information will only be visible to casting directors.
-                  You can put your agent's details here too. If you do not
-                  complete this, casting directors may not be able to contact
-                  you.
-                </p>
-                <Input
-                  type="text"
-                  value={contactEmail}
-                  placeholder="Email"
-                  onChange={(e) => {
-                    setContactEmail(e.target.value);
-                  }}
-                />
-                <Input
-                  type="text"
-                  value={contactNumber}
-                  placeholder="Phone number"
-                  onChange={(e) => {
-                    setContactNumber(e.target.value);
-                  }}
-                />
-              </div>
-
-              <div className="edit-profile-section">
-                <input
-                  type="checkbox"
-                  onChange={(e) =>
-                    e.target.checked
-                      ? setPublicProfile(true)
-                      : setPublicProfile(false)
-                  }
-                ></input>
-                <span>Public Profile</span>
-                {publicProfile && <p>Share your profile: </p>}
-              </div>
-
-              
-
-              <Button filled text="Save" onClick={() => handleUpdateUser()} />
-              <Button filled text="Save" onClick={() => handleUpdateUser()} />
-              <Button filled text="Save" onClick={() => handleUpdateUser()} />
-              <Button filled text="Save" onClick={() => handleUpdateUser()} />
-              <Button filled text="Save" onClick={() => handleUpdateUser()} />
-              <Button filled text="Save" onClick={() => handleUpdateUser()} />
-              <Button
-                outline
-                text="Cancel"
-                onClick={() => setIsEditProfileVisible(false)}
-              />
             </div>
           )}
           <NavBar />
