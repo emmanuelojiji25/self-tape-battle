@@ -84,7 +84,7 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
 
         await updateDoc(userRef, {
           coins: currentCoins + 1,
-          totalCoinsEarned: userSnap.data().totalCoinsEarned + 1
+          totalCoinsEarned: userSnap.data().totalCoinsEarned + 1,
         });
 
         await updateDoc(userRef, {

@@ -85,7 +85,7 @@ const Battle = () => {
       entries.push(doc.data());
     });
 
-    setEntries(entries);
+    setEntries(entries.filter((entry) => entry.uid != loggedInUser.uid));
 
     setLoading(false);
 
@@ -205,7 +205,6 @@ const Battle = () => {
             <span className="prize-pill">{genre}</span>
             <span className="deadline">{deadline}</span>
           </div>
-        
         </div>
 
         <a href={`${battleAttachment}`} download>
