@@ -385,7 +385,7 @@ const Profile = () => {
 
           {isEditPrfofileVisible && (
             <div className="edit-profile">
-              <div className="edit-profile-inner">
+              <div className="edit-profile-inner screen-width">
                 <div className="edit-profile-section">
                   <h2>Your details</h2>
                   <Input type="text" value={firstName} disabled />
