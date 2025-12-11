@@ -17,6 +17,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setLoggedInUser(user);
 
+
       setIsEmailVerified(user?.emailVerified);
 
       try {

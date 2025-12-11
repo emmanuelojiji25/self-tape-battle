@@ -5,8 +5,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
 
-  a{
+  p {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  a {
     color: white;
+  }
+
+  button{
+    margin-bottom: 10px;
   }
 }

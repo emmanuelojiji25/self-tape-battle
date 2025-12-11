@@ -1,17 +1,16 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import logo from "../media/logo-icon.svg";
+import Loader from "./Loader";
 
 const PrivateRoute = ({ children }) => {
   const { loggedInUser, loading, isEmailVerified, isOnboardingComplete } =
     useContext(AuthContext);
+  
 
   if (loading) {
     return (
-      <div className="feed-loader-container">
-        <img src={logo} className="loader" />
-      </div>
+      <Loader/>
     );
   }
 

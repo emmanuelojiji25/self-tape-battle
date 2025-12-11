@@ -4,14 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { sendEmailVerification, signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import Loader from "../components/Loader";
+import Button from "../components/Button";
 
 export const VerifyEmail = () => {
-  const { loggedInUser, isEmailVerified, setIsEmailVerified } =
+  const { loggedInUser, isEmailVerified, setIsEmailVerified, loading } =
     useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!loggedInUser) return;
 
     const interval = setInterval(async () => {
@@ -23,11 +25,10 @@ export const VerifyEmail = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [loggedInUser, navigate, setIsEmailVerified]);
+  }, [loggedInUser, navigate, setIsEmailVerified]);*/
 
-  if (!loggedInUser) {
-    return <Navigate to="/userAuth" replace />;
-  }
+  /*if (!loggedInUser) {
+    return <Navigate to="/userAuth" replace />;*/
 
   const signOut = async () => {
     try {
@@ -39,22 +40,35 @@ export const VerifyEmail = () => {
 
   return (
     <div className="VerifyEmail">
-      <h2>Verify your email</h2>
-      <p>{isEmailVerified ? "Yayy" : "Not verified"}</p>
-      <p>Please verify the email sent to EMAIL</p>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <h2>You're almost in!</h2>
+          <p>Please verify the email sent to {loggedInUser.email}</p>
 
-      <button
-        onClick={async () => {
-          try {
-            await sendEmailVerification(auth.currentUser);
-          } catch (error) {
-            console.log(error);
-          }
-        }}
-      >
-        Resend link
-      </button>
-      <button onClick={() => signOut()}>sign out</button>
+          <Button
+            text="Resend email"
+            onClick={async () => {
+              try {
+                await sendEmailVerification(auth.currentUser);
+              } catch (error) {
+                console.log(error);
+              }
+            }}
+            filled
+          />
+
+          <Button
+            onClick={() => {
+              signOut();
+              navigate("/userAuth");
+            }}
+            text="Sign out"
+            outline
+          />
+        </>
+      )}
     </div>
   );
 };
