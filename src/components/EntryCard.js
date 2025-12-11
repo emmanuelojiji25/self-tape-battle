@@ -28,6 +28,8 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
+  const [menuVisible, setMenuVisible] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -132,20 +134,39 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
           deleteEntry={() => handleDeleteEntry()}
         />
       )}
+
       {isExploding && <ConfettiExplosion />}
-      <Link to={`/profile/${username}`} className="name">
-        {name}
-      </Link>
-      {uid && loggedInUser.uid === uid && (
-        <>
-          <span className="share" onClick={() => setShareModalVisible(true)}>
-            Share
-          </span>
-          <p onClick={() => setDeleteModalVisible(true)} className="delete">
-            Delete
-          </p>
-        </>
-      )}
+      <div className="entry-card-header">
+        <Link to={`/profile/${username}`} className="name">
+          {name}
+        </Link>
+        {uid && loggedInUser.uid === uid && (
+          <div className="card-menu-container">
+            <div
+              className="card-menu-icon"
+              onClick={() => setMenuVisible(!menuVisible)}
+            >...</div>
+            {menuVisible && (
+              <div className="card-menu">
+                <span
+                  className="share"
+                  onClick={() => {
+                    setShareModalVisible(true);
+                  }}
+                >
+                  Share
+                </span>
+                <p
+                  onClick={() => setDeleteModalVisible(true)}
+                  className="delete"
+                >
+                  Delete
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       <div className="video-container">
         <video src={url} controls />

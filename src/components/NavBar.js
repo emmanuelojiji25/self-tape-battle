@@ -30,7 +30,7 @@ const NavBar = () => {
       <div className="nav-bar-inner">
         <Link to={`/`}>
           <div className="nav-icon-container">
-            <img src={arena} className="arena" />
+           
             <span>Arena</span>
           </div>
         </Link>
