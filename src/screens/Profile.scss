@@ -93,3 +93,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.profile-button-container{
+  display: flex;
+  gap: 10px;
+
+  button{
+    width: 100%;
+  }
+}

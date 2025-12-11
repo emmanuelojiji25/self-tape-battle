@@ -274,70 +274,75 @@ const Profile = () => {
               <a href={link} target="_" className="web-link">
                 {link}
               </a>
-              {role === "actor" && (
-                <Button
-                  filled
-                  text="Share Card"
-                  onClick={() => handleCopyProfile()}
-                ></Button>
-              )}
-              {userId === loggedInUser.uid && role === "professional" && (
-                <Button
-                  filled
-                  text="My bookmarks"
-                  onClick={() => setIsEditProfileVisible(true)}
-                ></Button>
-              )}
 
-              {authRole === "professional" && role === "actor" && (
-                <>
+              <div class="profile-button-container">
+                {role === "actor" && (
                   <Button
                     filled
-                    text="Contact"
-                    onClick={() => setContactInfoVisible(!contactInfoVisible)}
+                    text="Share Card"
+                    onClick={() => handleCopyProfile()}
                   ></Button>
-
-                  {contactInfoVisible && (
-                    <div className="contact-info">
-                      <div>
-                        <p>{contactEmail}</p>
-                        <p onClick={() => handleCopyInfo(contactEmail)}>Copy</p>
-                      </div>
-
-                      <div>
-                        <p>{contactNumber}</p>
-                        <p onClick={() => handleCopyInfo(contactNumber)}>
-                          Copy
-                        </p>
-                      </div>
-
-                      {isContactInfoCopied && (
-                        <div className="contact-tooltip">Copied!</div>
-                      )}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {userId === loggedInUser?.uid && (
-                <>
+                )}
+                {userId === loggedInUser.uid && role === "professional" && (
                   <Button
-                    outline
-                    text="Edit Profile"
+                    filled
+                    text="My bookmarks"
                     onClick={() => setIsEditProfileVisible(true)}
                   ></Button>
+                )}
 
-                  <Button
-                    outline
-                    text="Sign Out"
-                    onClick={() => {
-                      auth.signOut();
-                      localStorage.clear();
-                      navigate("/userAuth");
-                    }}
-                  ></Button>
-                </>
-              )}
+                {authRole === "professional" && role === "actor" && (
+                  <>
+                    <Button
+                      filled
+                      text="Contact"
+                      onClick={() => setContactInfoVisible(!contactInfoVisible)}
+                    ></Button>
+
+                    {contactInfoVisible && (
+                      <div className="contact-info">
+                        <div>
+                          <p>{contactEmail}</p>
+                          <p onClick={() => handleCopyInfo(contactEmail)}>
+                            Copy
+                          </p>
+                        </div>
+
+                        <div>
+                          <p>{contactNumber}</p>
+                          <p onClick={() => handleCopyInfo(contactNumber)}>
+                            Copy
+                          </p>
+                        </div>
+
+                        {isContactInfoCopied && (
+                          <div className="contact-tooltip">Copied!</div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {userId === loggedInUser?.uid && (
+                  <>
+                    <Button
+                      outline
+                      text="Edit Profile"
+                      onClick={() => setIsEditProfileVisible(true)}
+                    ></Button>
+
+                    <Button
+                      outline
+                      text="Sign Out"
+                      onClick={() => {
+                        auth.signOut();
+                        localStorage.clear();
+                        navigate("/userAuth");
+                      }}
+                    ></Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
