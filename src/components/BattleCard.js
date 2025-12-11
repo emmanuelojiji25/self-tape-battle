@@ -10,7 +10,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import "./BattleCard.scss";
-import gift from "../media/gift.svg";
+import chest from "../media/chest.svg";
 import fire from "../media/fire.svg";
 import coin from "../media/stb_coin.svg";
 import Button from "./Button";
@@ -48,7 +48,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         {typeof prize === "number" ? (
           <img src={coin} className="icon-small" />
         ) : (
-          <p>gift</p>
+          <img src={chest} className="chest" />
         )}
         <h5>{prize}</h5>
       </div>
