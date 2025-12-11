@@ -8,11 +8,15 @@ button {
   font-size: 12px;
 
   &.filled {
-    background: #4B7CFF;
+    background: #141823;
   }
 
   &.outline {
     background: none;
     border: solid 1px #4b7cff;
+  }
+
+  &.filled_color {
+    background: #4b7cff;
   }
 }

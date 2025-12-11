@@ -53,7 +53,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         <h5>{prize}</h5>
       </div>
       <Link to={`/arena/${battleId}`}>
-        <Button text={authRole === "actor" ? "Join Battle" : "View"} filled />
+        <Button text={authRole === "actor" ? "Join Battle" : "View"} filled_color />
       </Link>
     </div>
   );
