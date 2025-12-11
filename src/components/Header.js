@@ -63,7 +63,7 @@ const Header = () => {
   };
 
   return (
-    <div className="Header screen-width">
+    <div className="Header">
       {storyVisible && (
         <Story
           onClick={() => {
