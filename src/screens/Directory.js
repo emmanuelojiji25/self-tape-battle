@@ -33,7 +33,7 @@ const Directory = () => {
 
   useEffect(() => {
     getUsers("actor", setActors);
-    getUsers("casting", setCasting);
+    getUsers("professional", setCasting);
   });
 
   return (
@@ -64,7 +64,7 @@ const Directory = () => {
       {view === "casting" && (
         <div className="actors">
           {casting.map((casting) => (
-            <h1>actor</h1>
+            <ActorCard uid={casting.uid} />
           ))}
         </div>
       )}
