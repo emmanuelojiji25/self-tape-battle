@@ -34,6 +34,7 @@ const Dashboard = () => {
   const [deadline, setDeadline] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [requests, setRequests] = useState([]);
+  const [reports, setReports] = useState([]);
   const [users, setUsers] = useState({}); // keyed by uid
 
   const [winner, setWinner] = useState("");
@@ -74,6 +75,21 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getReports = async () => {
+    const collectionRef = collection(db, "reports");
+
+    try {
+      const snapshot = await getDocs(collectionRef);
+
+      const data = [];
+
+      snapshot.forEach((doc) => {
+        data.push(doc.data());
+        setReports(data);
+      });
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -162,6 +178,7 @@ const Dashboard = () => {
   useEffect(() => {
     getBattles();
     getRequests();
+    getReports();
   }, []);
 
   const closeBattle = async (battleId) => {
@@ -244,6 +261,7 @@ const Dashboard = () => {
         <h3 onClick={() => handleChangeView("battles")}>Battles</h3>
         <h3 onClick={() => handleChangeView("users")}>Users</h3>
         <h3 onClick={() => handleChangeView("requests")}>Requests</h3>
+        <h3 onClick={() => handleChangeView("reports")}>Reports</h3>
       </div>
 
       {isModalVisible && (
@@ -344,6 +362,18 @@ const Dashboard = () => {
               </>
             );
           })}
+        </>
+      )}
+
+      {view === "reports" && (
+        <>
+          {reports.map((report) => (
+            <>
+              <h4>{report.uid}</h4>
+              <p>{report.reason}</p>
+              <video src={report.url} controls />
+            </>
+          ))}
         </>
       )}
     </div>

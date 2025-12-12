@@ -14,6 +14,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 import { Link } from "react-router-dom";
 import ShareModal from "./ShareModal";
 import DeleteModal from "./DeleteModal";
+import ReportModal from "./ReportModal";
 
 const EntryCard = ({
   url,
@@ -34,6 +35,7 @@ const EntryCard = ({
 
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [isReportModalVisible, setIsReportModalVisible] = useState(false);
 
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -142,6 +144,15 @@ const EntryCard = ({
         />
       )}
 
+      {isReportModalVisible && (
+        <ReportModal
+          uid={uid}
+          battleId={battleId}
+          setIsReportModalVisible={setIsReportModalVisible}
+          url={url}
+        />
+      )}
+
       {isExploding && <ConfettiExplosion />}
       <div className="entry-card-header">
         <div className="entry-card-header-left">
@@ -152,34 +163,31 @@ const EntryCard = ({
             <div className="pill">Your entry!</div>
           )}
         </div>
-        {uid && loggedInUser.uid === uid && (
-          <div className="card-menu-container">
-            <div
-              className="card-menu-icon"
-              onClick={() => setMenuVisible(!menuVisible)}
-            >
-              ...
-            </div>
-            {menuVisible && (
-              <div className="card-menu">
-                <span
-                  className="share"
-                  onClick={() => {
-                    setShareModalVisible(true);
-                  }}
-                >
-                  Share
-                </span>
-                <p
-                  onClick={() => setDeleteModalVisible(true)}
-                  className="delete"
-                >
-                  Delete
-                </p>
-              </div>
-            )}
+
+        <div className="card-menu-container">
+          <div
+            className="card-menu-icon"
+            onClick={() => setMenuVisible(!menuVisible)}
+          >
+            ...
           </div>
-        )}
+          {menuVisible && (
+            <div className="card-menu">
+              <span
+                className="share"
+                onClick={() => {
+                  setShareModalVisible(true);
+                }}
+              >
+                Share
+              </span>
+              <p onClick={() => setDeleteModalVisible(true)} className="delete">
+                Delete
+              </p>
+              <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="video-container">
