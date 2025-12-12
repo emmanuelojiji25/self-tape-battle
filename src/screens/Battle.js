@@ -286,6 +286,7 @@ const Battle = () => {
             battleId={battleId}
             voteButtonVisible={userEntry.uid != loggedInUser.uid}
             battleStatus={battleStatus}
+            isPillVisible={true}
           />
         )}
 

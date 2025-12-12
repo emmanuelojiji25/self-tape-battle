@@ -15,7 +15,14 @@ import { Link } from "react-router-dom";
 import ShareModal from "./ShareModal";
 import DeleteModal from "./DeleteModal";
 
-const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
+const EntryCard = ({
+  url,
+  uid,
+  battleId,
+  voteButtonVisible,
+  battleStatus,
+  isPillVisible,
+}) => {
   const { loggedInUser } = useContext(AuthContext);
 
   const [name, setName] = useState("");
@@ -137,15 +144,22 @@ const EntryCard = ({ url, uid, battleId, voteButtonVisible, battleStatus }) => {
 
       {isExploding && <ConfettiExplosion />}
       <div className="entry-card-header">
-        <Link to={`/profile/${username}`} className="name">
-          {name}
-        </Link>
+        <div className="entry-card-header-left">
+          <Link to={`/profile/${username}`} className="name">
+            {name}
+          </Link>
+          {uid === loggedInUser.uid && isPillVisible && (
+            <div className="pill">Your entry!</div>
+          )}
+        </div>
         {uid && loggedInUser.uid === uid && (
           <div className="card-menu-container">
             <div
               className="card-menu-icon"
               onClick={() => setMenuVisible(!menuVisible)}
-            >...</div>
+            >
+              ...
+            </div>
             {menuVisible && (
               <div className="card-menu">
                 <span

@@ -35,6 +35,20 @@
   margin-bottom: 15px;
 }
 
+.entry-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pill {
+  background: gold;
+  color: black;
+  border-radius: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .card-menu-container {
   display: flex;
   flex-direction: column;
