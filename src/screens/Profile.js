@@ -269,7 +269,7 @@ const Profile = () => {
             </div>
             <div className="profile-info">
               <h1>{name}</h1>
-              <span>{username}</span>
+              <span className="username">{username}</span>
               <span>{bio}</span>
               <a href={link} target="_" className="web-link">
                 {link}
@@ -349,16 +349,16 @@ const Profile = () => {
           {role === "actor" && (
             <div className="stat-card-container">
               <div className="stat-card">
-                <h2>{battles.length}</h2>
-                <p>Battles Entered</p>
+                <h2 className="number">{battles.length}</h2>
+                <p className="label">Battles Entered</p>
               </div>
               <div className="stat-card">
                 <h2>{battlesWon}</h2>
-                <hp>Battles Won</hp>
+                <p className="label">Battles Won</p>
               </div>
               <div className="stat-card">
                 <h2>{totalVotes}</h2>
-                <p>Total votes</p>
+                <p className="label">Total votes</p>
               </div>
             </div>
           )}
