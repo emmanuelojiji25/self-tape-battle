@@ -6,7 +6,7 @@ import {
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
 import "./EntryCard.scss";
@@ -39,6 +39,28 @@ const EntryCard = ({
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
 
   const [menuVisible, setMenuVisible] = useState(false);
+
+  const menuRef = useRef(null);
+  const menuButtonRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target) &&
+        menuButtonRef.current &&
+        !menuButtonRef.current.contains(e.target)
+      ) {
+        setMenuVisible(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -170,11 +192,12 @@ const EntryCard = ({
           <div
             className="card-menu-icon"
             onClick={() => setMenuVisible(!menuVisible)}
+            ref={menuButtonRef}
           >
             ...
           </div>
           {menuVisible && (
-            <div className="card-menu">
+            <div className="card-menu" ref={menuRef}>
               {uid === loggedInUser.uid && (
                 <>
                   <span
