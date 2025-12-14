@@ -22,7 +22,7 @@ const Story = ({ onClick }) => {
           }}
         />
       </p>
-      <Button filled text="Let's go!" onClick={onClick} />
+      <Button filled_color text="Let's go!" onClick={onClick} />
     </div>
   );
 };

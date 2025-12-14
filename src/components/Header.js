@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { Resend } from "resend";
 import Wallet from "./Wallet";
 import Story from "./Story";
-import scroll from "../media/scroll.png"
+import scroll from "../media/scroll.png";
 
 const Header = () => {
   const { loggedInUser, authRole } = useContext(AuthContext);
@@ -36,25 +36,17 @@ const Header = () => {
         setFirstName(data.firstName);
         setUsername(data.username);
         setHeadshot(data.headshot);
+        setIsStoryComplete(data.isStoryComplete);
       },
       (error) => {
         console.error("Error fetching user coins:", error);
       }
     );
-    handleGetLoginStatus();
+
     return () => unsubscribe();
   }, [loggedInUser]);
 
   const userRef = doc(db, "users", loggedInUser.uid);
-
-  const handleGetLoginStatus = async () => {
-    try {
-      const userSnapshot = await getDoc(userRef);
-      setIsStoryComplete(userSnapshot.data().isStoryComplete);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const updateUserLoginStatus = async () => {
     await updateDoc(userRef, {
@@ -75,22 +67,23 @@ const Header = () => {
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
         <div className="greeting-container">
-          <Link to={`/profile/${username}`} className="greeting-container-inner">
+          <Link
+            to={`/profile/${username}`}
+            className="greeting-container-inner"
+          >
             <img src={headshot} className="headshot" />
             <p>Emmanuel</p>
           </Link>
-          
         </div>
-        {!isStoryComplete && (
-                <div className="scroll" onClick={() => setStoryVisible(true)}>
-                  <img src={scroll} className="scroll"/>
-                </div>
-              )}
+
         <div className="header-right">
-      
+          {!isStoryComplete && (
+            <div className="scroll" onClick={() => setStoryVisible(true)}>
+              <img src={scroll} className="scroll" />
+            </div>
+          )}
           {authRole === "actor" && (
             <>
-
               <div
                 className="coins-container"
                 onClick={() => setWalletVisible(true)}

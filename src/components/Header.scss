@@ -50,8 +50,6 @@
   }
   h2 {
     color: white;
-
-    font-size: 20px;
   }
 
   p {
@@ -72,7 +70,7 @@
 
   img {
     width: 30px;
-    animation: coin-flip 3s infinite;
+    //animation: coin-flip 3s infinite;
   }
 }
 
@@ -97,8 +95,21 @@
 }
 
 .scroll {
-  position: relative; /* stays inside header */
-  z-index: 20; /* above other header elements if needed */
   cursor: pointer;
   width: 40px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50%{
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
