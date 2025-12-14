@@ -369,9 +369,10 @@ const Dashboard = () => {
         <>
           {reports.map((report) => (
             <>
-              <h4>{report.uid}</h4>
-              <p>{report.reason}</p>
-              <video src={report.url} controls />
+              <h4>Battle ID: {report.battleId}</h4>
+              <h4>UID: {report.uid}</h4>
+              <p>Reason: {report.reason}</p>
+              <video src={report.url} controls className="dashboard-video-report" />
             </>
           ))}
         </>

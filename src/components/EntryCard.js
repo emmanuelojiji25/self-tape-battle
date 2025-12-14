@@ -173,17 +173,25 @@ const EntryCard = ({
           </div>
           {menuVisible && (
             <div className="card-menu">
-              <span
-                className="share"
-                onClick={() => {
-                  setShareModalVisible(true);
-                }}
-              >
-                Share
-              </span>
-              <p onClick={() => setDeleteModalVisible(true)} className="delete">
-                Delete
-              </p>
+              {uid === loggedInUser.uid && (
+                <>
+                  <span
+                    className="share"
+                    onClick={() => {
+                      setShareModalVisible(true);
+                    }}
+                  >
+                    Share
+                  </span>
+
+                  <p
+                    onClick={() => setDeleteModalVisible(true)}
+                    className="delete"
+                  >
+                    Delete
+                  </p>
+                </>
+              )}
               <p onClick={() => setIsReportModalVisible(true)}>Report</p>
             </div>
           )}
