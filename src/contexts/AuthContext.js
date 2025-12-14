@@ -10,12 +10,13 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authRole, setAuthRole] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(null);
-  const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
-
+  const [isOnboardingComplete, setIsOnboardingComplete] = useState(null);
   const [coins, setCoins] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
+
+  const [userDocLoaded, setUserDocLoaded] = useState(false)
 
   useEffect(() => {
     console.log("Setting up");
@@ -37,15 +38,18 @@ const AuthProvider = ({ children }) => {
             setFirstName(snapshot.data().firstName);
             setUsername(snapshot.data().username);
             setHeadshot(snapshot.data().headshot);
+
+            setLoading(false);
           },
           (error) => {
             console.error("Error fetching user coins:", error);
           }
         );
+        console.log("onboarding complete:" + isOnboardingComplete);
       } catch (error) {
         console.log(error);
       }
-      setLoading(false);
+     
     });
     return () => unsubscribe();
   }, []);
@@ -54,6 +58,7 @@ const AuthProvider = ({ children }) => {
     setIsEmailVerified(auth.currentUser?.emailVerified);
   }, [auth.currentUser?.emailVerified]);
 
+ 
   return (
     <AuthContext.Provider
       value={{
@@ -68,6 +73,7 @@ const AuthProvider = ({ children }) => {
         firstName,
         username,
         headshot,
+        userDocLoaded
       }}
     >
       {children}
