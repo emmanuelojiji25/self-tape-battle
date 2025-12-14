@@ -263,6 +263,7 @@ const Battle = () => {
           const file = e.target.files;
           setFile(file[0]);
         }}
+        accept=".mov, .mp4"
       ></input>
 
       {winner && battleStatus === "closed" && (

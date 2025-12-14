@@ -69,6 +69,7 @@ const Feed = ({ user }) => {
    
       <div className="Feed screen-width">
         <>
+        <h1>Battles</h1>
           {battles.map((battle) => (
             <BattleCard
               name={battle.title}

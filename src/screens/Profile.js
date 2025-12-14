@@ -331,7 +331,7 @@ const Profile = () => {
                       onClick={() => setIsEditProfileVisible(true)}
                     ></Button>
 
-                    {/* <Button
+                    <Button
                       outline
                       text="Sign Out"
                       onClick={() => {
@@ -339,7 +339,7 @@ const Profile = () => {
                         localStorage.clear();
                         navigate("/userAuth");
                       }}
-                    ></Button>*/}
+                    ></Button>
                   </>
                 )}
               </div>
