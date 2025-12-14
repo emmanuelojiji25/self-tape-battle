@@ -75,9 +75,11 @@ const Header = () => {
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
         <div className="greeting-container">
-          <Link to={`/profile/${username}`}>
+          <Link to={`/profile/${username}`} className="greeting-container-inner">
             <img src={headshot} className="headshot" />
+            <p>Emmanuel</p>
           </Link>
+          
         </div>
         {!isStoryComplete && (
                 <div className="scroll" onClick={() => setStoryVisible(true)}>

@@ -9,7 +9,6 @@
   position: relative; /* create a stacking context */
   z-index: 10; /* higher than overlay's z-index */
 
-
   margin-bottom: 10px;
 
   z-index: 1;
@@ -42,6 +41,13 @@
 
 .greeting-container {
   display: flex;
+  align-items: center;
+
+  .greeting-container-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
   h2 {
     color: white;
 
@@ -49,8 +55,9 @@
   }
 
   p {
-    color: #4b7cff;
-    font-size: 14px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
   }
 }
 
@@ -89,7 +96,7 @@
   display: none;
 }
 
-.scroll{
+.scroll {
   position: relative; /* stays inside header */
   z-index: 20; /* above other header elements if needed */
   cursor: pointer;
