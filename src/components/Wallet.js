@@ -188,7 +188,9 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
                   ? "Earnings"
                   : "Withdrawal"}
               </h4>
-              <p className="transaction-status">{transaction.status}</p>
+              <p className={`transaction-status ${transaction.status}`}>
+                {transaction.status}
+              </p>
             </div>
             <span>
               {transaction.direction === "inbound" ? "+" : "-"}{" "}
