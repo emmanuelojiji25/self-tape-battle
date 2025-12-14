@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import { AuthContext } from "../contexts/AuthContext";
 import { db, storage } from "../firebaseConfig";
-import ConfettiExplosion from "react-confetti-explosion";
+import Confetti from "react-confetti-boom";
 
 import "./Onboarding.scss";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +28,8 @@ const Onboarding = () => {
   const [headshot, setHeadshot] = useState("headshot");
 
   const [errorView, setErrorView] = useState("");
+
+  const [isConfettiExploding, setIsConfettiExploding] = useState(false);
 
   const inputRef = useRef(null);
 
@@ -88,6 +90,7 @@ const Onboarding = () => {
 
   return (
     <div className="Onboarding screen-width">
+      {view === 5 && <Confetti />}
       <div className="carousel">
         <div
           className="carousel-inner"
@@ -106,6 +109,7 @@ const Onboarding = () => {
 
           <div className="carousel-item">
             <h2>What's your first name?</h2>
+
             <Input type="text" onChange={(e) => setFirstName(e.target.value)} />
             {errorView === 1 && <p>Please fill out first name</p>}
             <div>
@@ -189,7 +193,7 @@ const Onboarding = () => {
           <div className="carousel-item centered">
             <h1>You're in, {firstName}!</h1>
             <p>You've earned 100 coins</p>
-            <ConfettiExplosion />
+
             <div>
               <Button text="Enter Arena" onClick={() => navigate("/")} filled />
             </div>
