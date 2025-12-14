@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import ShareModal from "./ShareModal";
 import DeleteModal from "./DeleteModal";
 import ReportModal from "./ReportModal";
+import Confetti from "react-confetti-boom";
 
 const EntryCard = ({
   url,
@@ -154,6 +155,7 @@ const EntryCard = ({
       )}
 
       {isExploding && <ConfettiExplosion />}
+
       <div className="entry-card-header">
         <div className="entry-card-header-left">
           <Link to={`/profile/${username}`} className="name">
