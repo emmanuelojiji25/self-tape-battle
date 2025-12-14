@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { createContext, useEffect, useState } from "react";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { createContext, useEffect, useRef, useState } from "react";
 import { auth, db } from "../firebaseConfig";
 
 export const AuthContext = createContext();
@@ -12,19 +12,36 @@ const AuthProvider = ({ children }) => {
   const [isEmailVerified, setIsEmailVerified] = useState(null);
   const [isOnboardingComplete, setIsOnboardingComplete] = useState(false);
 
+  const [coins, setCoins] = useState(0);
+  const [firstName, setFirstName] = useState("");
+  const [username, setUsername] = useState("");
+  const [headshot, setHeadshot] = useState("");
+
   useEffect(() => {
     console.log("Setting up");
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setLoggedInUser(user);
 
-
       setIsEmailVerified(user?.emailVerified);
 
       try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnapshot = await getDoc(docRef);
-        setAuthRole(docSnapshot.data().role);
-        setIsOnboardingComplete(docSnapshot.data().isOnboardingComplete);
+        const userRef = doc(db, "users", user.uid);
+
+        const unsubscribe = onSnapshot(
+          userRef,
+          (snapshot) => {
+            const data = snapshot.data();
+            setAuthRole(snapshot.data().role);
+            setIsOnboardingComplete(snapshot.data().isOnboardingComplete);
+            setCoins(snapshot.data()?.coins ?? 0); // defensive: if coins is undefined, fallback to 0
+            setFirstName(snapshot.data().firstName);
+            setUsername(snapshot.data().username);
+            setHeadshot(snapshot.data().headshot);
+          },
+          (error) => {
+            console.error("Error fetching user coins:", error);
+          }
+        );
       } catch (error) {
         console.log(error);
       }
@@ -47,6 +64,10 @@ const AuthProvider = ({ children }) => {
         isOnboardingComplete,
         setIsOnboardingComplete,
         setIsEmailVerified,
+        coins,
+        firstName,
+        username,
+        headshot,
       }}
     >
       {children}

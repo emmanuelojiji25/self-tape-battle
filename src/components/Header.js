@@ -11,11 +11,8 @@ import Story from "./Story";
 import scroll from "../media/scroll.png";
 
 const Header = () => {
-  const { loggedInUser, authRole } = useContext(AuthContext);
-  const [coins, setCoins] = useState(0);
-  const [firstName, setFirstName] = useState("");
-  const [username, setUsername] = useState("");
-  const [headshot, setHeadshot] = useState("");
+  const { loggedInUser, authRole, firstName, username, headshot, coins } =
+    useContext(AuthContext);
 
   const [walletVisible, setWalletVisible] = useState(false);
 
@@ -32,10 +29,6 @@ const Header = () => {
       userRef,
       (snapshot) => {
         const data = snapshot.data();
-        setCoins(data?.coins ?? 0); // defensive: if coins is undefined, fallback to 0
-        setFirstName(data.firstName);
-        setUsername(data.username);
-        setHeadshot(data.headshot);
         setIsStoryComplete(data.isStoryComplete);
       },
       (error) => {
@@ -72,7 +65,7 @@ const Header = () => {
             className="greeting-container-inner"
           >
             <img src={headshot} className="headshot" />
-            <p>Emmanuel</p>
+            <p>{firstName}</p>
           </Link>
         </div>
 
