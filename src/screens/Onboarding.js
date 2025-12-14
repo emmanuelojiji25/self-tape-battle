@@ -195,7 +195,7 @@ const Onboarding = () => {
             <p>You've earned 100 coins</p>
 
             <div>
-              <Button text="Enter Arena" onClick={() => navigate("/")} filled />
+              <Button text="Enter Arena" onClick={() => navigate("/")} filled_color />
             </div>
           </div>
         </div>
