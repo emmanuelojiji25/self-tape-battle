@@ -4,7 +4,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background: black;
+  background: #080b13;
   color: white;
   z-index: 2;
   padding: 20px 20px;
@@ -41,6 +41,17 @@
 .transaction-row {
   display: flex;
   justify-content: space-between;
+  background: #0f1422;
+  padding: 15px;
+  border-radius: 10px;
+  align-items: center;
+  font-size: 16px;
+}
+
+.transaction-status{
+  text-transform: capitalize;
+  font-size: 14px;
+  color: rgb(63, 214, 63);
 }
 
 .back-container{
