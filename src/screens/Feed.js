@@ -24,8 +24,6 @@ const Feed = ({ user }) => {
 
   const [loading, setLoading] = useState(true);
 
-  const { loggedInUser } = useContext(AuthContext);
-
   useEffect(() => {
     const cachedBattles = localStorage.getItem("battles");
 
@@ -71,10 +69,6 @@ const Feed = ({ user }) => {
    
       <div className="Feed screen-width">
         <>
-          {battles.length === 0 && (
-            <h1 style={{ color: "white" }}>No battles. Check back soon!</h1>
-          )}
-
           {battles.map((battle) => (
             <BattleCard
               name={battle.title}
