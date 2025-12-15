@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
 
-  const [userDocLoaded, setUserDocLoaded] = useState(false)
+  const [userDocLoaded, setUserDocLoaded] = useState(false);
 
   useEffect(() => {
     console.log("Setting up");
@@ -49,7 +49,6 @@ const AuthProvider = ({ children }) => {
       } catch (error) {
         console.log(error);
       }
-     
     });
     return () => unsubscribe();
   }, []);
@@ -58,7 +57,6 @@ const AuthProvider = ({ children }) => {
     setIsEmailVerified(auth.currentUser?.emailVerified);
   }, [auth.currentUser?.emailVerified]);
 
- 
   return (
     <AuthContext.Provider
       value={{
@@ -73,7 +71,7 @@ const AuthProvider = ({ children }) => {
         firstName,
         username,
         headshot,
-        userDocLoaded
+        userDocLoaded,
       }}
     >
       {children}

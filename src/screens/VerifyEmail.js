@@ -13,7 +13,7 @@ export const VerifyEmail = () => {
 
   const navigate = useNavigate();
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (!loggedInUser) return;
 
     const interval = setInterval(async () => {
@@ -25,10 +25,11 @@ export const VerifyEmail = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [loggedInUser, navigate, setIsEmailVerified]);*/
+  }, [loggedInUser, navigate, setIsEmailVerified]);
 
-  /*if (!loggedInUser) {
-    return <Navigate to="/userAuth" replace />;*/
+  if (!loggedInUser) {
+    return <Navigate to="/userAuth" replace />;
+  }
 
   const signOut = async () => {
     try {
