@@ -6,6 +6,7 @@ import Input from "../components/Input";
 import { AuthContext } from "../contexts/AuthContext";
 import { db, storage } from "../firebaseConfig";
 import Confetti from "react-confetti-boom";
+import emailjs from "@emailjs/browser";
 
 import "./Onboarding.scss";
 import { useNavigate } from "react-router-dom";
@@ -79,6 +80,17 @@ const Onboarding = () => {
       setIsOnboardingComplete(true);
 
       handleNextView(webLink, 5, 5);
+
+      const userInfo = {
+        name: firstName,
+        email: loggedInUser.email,
+      };
+
+      emailjs.init({
+        publicKey: "vDAbvtQ-t4ao0CqWi",
+      });
+
+      emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);
     } catch (error) {
       console.log(error);
     }
@@ -195,7 +207,11 @@ const Onboarding = () => {
             <p>You've earned 100 coins</p>
 
             <div>
-              <Button text="Enter Arena" onClick={() => navigate("/")} filled_color />
+              <Button
+                text="Enter Arena"
+                onClick={() => navigate("/")}
+                filled_color
+              />
             </div>
           </div>
         </div>
