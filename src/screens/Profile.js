@@ -53,7 +53,7 @@ const Profile = () => {
   const [walletVisible, setWalletVisible] = useState(false);
 
   const [contactInfoVisible, setContactInfoVisible] = useState(false);
-  const [isContactInfoCopied, setIsContactInfoCopied] = useState(false);
+  const [isInfoCopied, setIsInfoCopied] = useState(false);
 
   const [bookmarks, setBookmarks] = useState([]);
 
@@ -154,16 +154,17 @@ const Profile = () => {
     getTotalVotes();
   }, [userId]);
 
-  const handleCopyProfile = async () => {
+  /*const handleCopyProfile = async () => {
     try {
       await navigator.clipboard.writeText(
         `http://localhost:3000/profile/${params.username}`
       );
+      setIsContactInfoCopied(true);
       console.log(navigator.clipboard.readText());
     } catch (error) {
       console.log(error);
     }
-  };
+  };*/
 
   const [usernameInput, setUsernameInput] = useState("");
   const [bioInput, setBioInput] = useState("");
@@ -209,10 +210,10 @@ const Profile = () => {
     clearTimeout();
 
     await navigator.clipboard.writeText(text);
-    setIsContactInfoCopied(true);
+    setIsInfoCopied(true);
 
     setTimeout(() => {
-      setIsContactInfoCopied(false);
+      setIsInfoCopied(false);
     }, 2000);
   };
 
@@ -258,6 +259,7 @@ const Profile = () => {
 
   return (
     <div className="Profile screen-width">
+      {isInfoCopied && <div className="contact-tooltip">Copied!</div>}
       {walletVisible && <Wallet />}
       {!publicProfile && !loggedInUser ? (
         <LockedProfile firstName={firstName} />
@@ -280,7 +282,11 @@ const Profile = () => {
                   <Button
                     filled
                     text="Share Card"
-                    onClick={() => handleCopyProfile()}
+                    onClick={() =>
+                      handleCopyInfo(
+                        `http://localhost:3000/profile/${params.username}`
+                      )
+                    }
                   ></Button>
                 )}
                 {userId === loggedInUser.uid && role === "professional" && (
@@ -314,10 +320,6 @@ const Profile = () => {
                             Copy
                           </p>
                         </div>
-
-                        {isContactInfoCopied && (
-                          <div className="contact-tooltip">Copied!</div>
-                        )}
                       </div>
                     )}
                   </>
