@@ -25,6 +25,7 @@ import "./Battle.scss";
 import NavBar from "../components/NavBar";
 import MessageModal from "../components/MessageModal";
 import coin from "../media/stb_coin.svg";
+import Skeleton from "../components/Skeleton";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -85,7 +86,9 @@ const Battle = () => {
 
     setEntries(entries.filter((entry) => entry.uid != loggedInUser.uid));
 
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
 
     try {
     } catch (error) {}
@@ -189,20 +192,28 @@ const Battle = () => {
       </Link>
       <div className="battle-header">
         <div className="battle-header-left">
-          <h3 className="battle-title">{title}</h3>
-          <div className="battle-info">
-            <span className="prize-pill">
-              {" "}
-              {typeof prize === "number" ? (
-                <img src={coin} className="icon-small" />
-              ) : (
-                <p>chest</p>
-              )}
-              {prize}
-            </span>
-            <span className="prize-pill">{genre}</span>
-            <span className="deadline">{deadline}</span>
-          </div>
+          {loading ? (
+            <Skeleton height={35} />
+          ) : (
+            <h3 className="battle-title">{title}</h3>
+          )}
+          {loading ? (
+            <Skeleton height={100} />
+          ) : (
+            <div className="battle-info">
+              <span className="prize-pill">
+                {" "}
+                {typeof prize === "number" ? (
+                  <img src={coin} className="icon-small" />
+                ) : (
+                  <p>chest</p>
+                )}
+                {prize}
+              </span>
+              <span className="prize-pill">{genre}</span>
+              <span className="deadline">{deadline}</span>
+            </div>
+          )}
         </div>
 
         <a href={`${battleAttachment}`} download>

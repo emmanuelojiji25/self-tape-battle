@@ -66,7 +66,6 @@ const Onboarding = () => {
           }
         );
       });
-
       const docRef = doc(db, "users", loggedInUser.uid);
       await updateDoc(docRef, {
         firstName: firstName,
