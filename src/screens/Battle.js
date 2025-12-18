@@ -26,6 +26,7 @@ import NavBar from "../components/NavBar";
 import MessageModal from "../components/MessageModal";
 import coin from "../media/stb_coin.svg";
 import Skeleton from "../components/Skeleton";
+import chest from "../media/chest.svg";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -202,12 +203,10 @@ const Battle = () => {
           ) : (
             <div className="battle-info">
               <span className="prize-pill">
-                {" "}
-                {typeof prize === "number" ? (
-                  <img src={coin} className="icon-small" />
-                ) : (
-                  <p>chest</p>
-                )}
+                <img
+                  src={typeof prize === "string" ? chest : coin}
+                  className="icon-small"
+                />
                 {prize}
               </span>
               <span className="prize-pill">{genre}</span>
@@ -216,11 +215,11 @@ const Battle = () => {
           )}
         </div>
 
-        <a href={`${battleAttachment}`} download>
+        {/*<a href={`${battleAttachment}`} download>
           <div className="download">
             <img src={icon_download} />
           </div>
-        </a>
+          </a>*/}
       </div>
 
       {!userEntry && !file && loading === false && battleStatus === "open" && (

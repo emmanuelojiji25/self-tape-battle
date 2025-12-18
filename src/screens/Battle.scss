@@ -39,6 +39,10 @@
   display: flex;
   align-items: center;
   margin-bottom: 15px;
+  min-width: 100%;
+  width: 100%;
+  flex-wrap: wrap;
+
 }
 
 .prize-pill {
@@ -48,6 +52,12 @@
   width: fit-content;
   display: flex;
   gap: 5px;
+  align-items: center;
+
+
+  img{
+    width: 40px;
+  }
 }
 
 .deadline {
