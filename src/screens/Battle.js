@@ -237,7 +237,7 @@ const Battle = () => {
           }}
           text="Upload Tape"
           className="upload-tape"
-          filled
+          filled_color
         />
       )}
       {file && (
