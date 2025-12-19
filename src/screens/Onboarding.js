@@ -32,6 +32,8 @@ const Onboarding = () => {
 
   const [isConfettiExploding, setIsConfettiExploding] = useState(false);
 
+  const [progress, setProgress] = useState(5);
+
   const inputRef = useRef(null);
 
   const handleNextView = (state, nextView, errorView) => {
@@ -99,8 +101,23 @@ const Onboarding = () => {
     getUsername();
   }, [loggedInUser]);
 
+  useEffect(() => {
+      setProgress(20 * view);
+      console.log("progress:" + progress, "view:" + view);
+  }, [view]);
+
   return (
     <div className="Onboarding screen-width">
+      <div className="progress-bar-container">
+        <div className="progress-bar-outer">
+          <div
+            className="progress-bar-inner"
+            style={{ width: `${progress}%`, backgroundColor: view === 5 && "gold" }}
+          >
+            <div className="circle"></div>
+          </div>
+        </div>
+      </div>
       {view === 5 && <Confetti />}
       <div className="carousel">
         <div
