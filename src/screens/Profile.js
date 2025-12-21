@@ -237,7 +237,7 @@ const Profile = () => {
   };
 
   const handleGetBookmarks = async () => {
-    const bookmarksRef = collection(db, "users", loggedInUser.uid, "bookmarks");
+    const bookmarksRef = collection(db, "users", loggedInUser?.uid, "bookmarks");
 
     try {
       const docsSnapshot = await getDocs(bookmarksRef);
@@ -265,6 +265,7 @@ const Profile = () => {
         <LockedProfile firstName={firstName} />
       ) : (
         <>
+          {!userId && <h1>User doesn't exist</h1>}
           <div className="profile-header">
             <div className="profile-headshot-container">
               <img className="profile-headshot" src={headshot} />
@@ -289,7 +290,7 @@ const Profile = () => {
                     }
                   ></Button>
                 )}
-                {userId === loggedInUser.uid && role === "professional" && (
+                {userId === loggedInUser?.uid && role === "professional" && (
                   <Button
                     filled
                     text="My bookmarks"

@@ -183,7 +183,7 @@ const EntryCard = ({
           <Link to={`/profile/${username}`} className="name">
             {name}
           </Link>
-          {uid === loggedInUser.uid && isPillVisible && (
+          {uid === loggedInUser?.uid && isPillVisible && (
             <div className="pill">Your entry!</div>
           )}
         </div>
@@ -198,7 +198,7 @@ const EntryCard = ({
           </div>
           {menuVisible && (
             <div className="card-menu" ref={menuRef}>
-              {uid === loggedInUser.uid && (
+              {uid === loggedInUser?.uid && (
                 <>
                   <span
                     className="share"

@@ -21,33 +21,36 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     console.log("Setting up");
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setLoggedInUser(user);
+      if (user) {
+        setLoggedInUser(user);
 
-      setIsEmailVerified(user?.emailVerified);
+        setIsEmailVerified(user?.emailVerified);
 
-      try {
-        const userRef = doc(db, "users", user.uid);
+        try {
+          const userRef = doc(db, "users", user.uid);
 
-        const unsubscribe = onSnapshot(
-          userRef,
-          (snapshot) => {
-            const data = snapshot.data();
-            setAuthRole(snapshot.data().role);
-            setIsOnboardingComplete(snapshot.data().isOnboardingComplete);
-            setCoins(snapshot.data()?.coins ?? 0); // defensive: if coins is undefined, fallback to 0
-            setFirstName(snapshot.data().firstName);
-            setUsername(snapshot.data().username);
-            setHeadshot(snapshot.data().headshot);
+          const unsubscribe = onSnapshot(
+            userRef,
+            (snapshot) => {
+              const data = snapshot.data();
+              setAuthRole(snapshot.data().role);
+              setIsOnboardingComplete(snapshot.data().isOnboardingComplete);
+              setCoins(snapshot.data()?.coins ?? 0); // defensive: if coins is undefined, fallback to 0
+              setFirstName(snapshot.data().firstName);
+              setUsername(snapshot.data().username);
+              setHeadshot(snapshot.data().headshot);
 
-            setLoading(false);
-          },
-          (error) => {
-            console.error("Error fetching user coins:", error);
-          }
-        );
-        console.log("onboarding complete:" + isOnboardingComplete);
-      } catch (error) {
-        console.log(error);
+              setLoading(false);
+            },
+            (error) => {
+              console.error("Error fetching user coins:", error);
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setLoading(false);
       }
     });
     return () => unsubscribe();
