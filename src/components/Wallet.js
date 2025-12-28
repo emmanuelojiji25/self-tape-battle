@@ -120,6 +120,7 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
       <div className="screen-width">
         {MessageModalVisible && (
           <MessageModal
+            confetti={false}
             title={
               isWithdrawalPending
                 ? "You already have a pending withdrawal"

@@ -181,6 +181,7 @@ const Battle = () => {
     <div className="Battle screen-width">
       {showMessageModal && (
         <MessageModal
+          confetti
           onClick={() => setShowMessageModal(false)}
           title="Nice work!"
           text="5 coins earned"

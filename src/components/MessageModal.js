@@ -6,7 +6,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 import Confetti from "react-confetti-boom";
 import { useEffect, useState } from "react";
 
-const MessageModal = ({ onClick, title, text, buttonText, icon }) => {
+const MessageModal = ({ onClick, title, text, buttonText, icon, confetti }) => {
   const [isConfettiExploding, setIsConfettiExploding] = useState(false);
 
   useEffect(() => {
@@ -22,9 +22,7 @@ const MessageModal = ({ onClick, title, text, buttonText, icon }) => {
       <p>{text}</p>
       <Button filled text={buttonText} onClick={onClick} />
 
-      <div className="confetti-container">
-        <Confetti />
-      </div>
+      <div className="confetti-container">{confetti && <Confetti />}</div>
     </div>
   );
 };

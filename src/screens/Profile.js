@@ -249,7 +249,6 @@ const Profile = () => {
   
     const unsubscribe = onSnapshot(bookmarksRef, (snapshot) => {
       const docs = snapshot.docs.map(doc => ({
-        id: doc.id,
         ...doc.data(),
       }));
   
