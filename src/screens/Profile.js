@@ -382,7 +382,7 @@ const Profile = () => {
             </div>
           )}
 
-          {role === "professional" && (
+          {authRole === "professional" && (
             <div className="bookmarks">
               <h2>Bookmarks</h2>
               {bookmarks.map((actor) => (
