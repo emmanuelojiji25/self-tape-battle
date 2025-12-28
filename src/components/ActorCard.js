@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import "./ActorCard.scss";
-import star from "../media/star.svg";
-import star_filled from "../media/star-filled.svg";
+import star from "../media/star_outline.svg";
+import star_filled from "../media/star.svg";
 import { db } from "../firebaseConfig";
 import {
   collection,

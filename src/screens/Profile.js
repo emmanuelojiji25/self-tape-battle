@@ -236,26 +236,29 @@ const Profile = () => {
     }
   };
 
-  const handleGetBookmarks = async () => {
-    const bookmarksRef = collection(db, "users", loggedInUser?.uid, "bookmarks");
-
-    try {
-      const docsSnapshot = await getDocs(bookmarksRef);
-      const docs = [];
-
-      docsSnapshot.forEach((doc) => {
-        docs.push(doc.data());
-        setBookmarks(docs);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
-    if (!loggedInUser) return;
-    handleGetBookmarks();
-  }, [loggedInUser]);
+    if (!loggedInUser?.uid) return;
+  
+    const bookmarksRef = collection(
+      db,
+      "users",
+      loggedInUser.uid,
+      "bookmarks"
+    );
+  
+    const unsubscribe = onSnapshot(bookmarksRef, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+  
+      setBookmarks(docs);
+    });
+  
+    return () => unsubscribe();
+  }, [loggedInUser?.uid]);
+
 
   return (
     <div className="Profile screen-width">
