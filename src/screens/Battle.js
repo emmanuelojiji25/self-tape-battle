@@ -74,7 +74,7 @@ const Battle = () => {
       setBattleAttachment(data.file);
       setDeadline(data.deadline);
       setUserHasVoted(data.voters.includes(loggedInUser.uid));
-      setPrize(data.prize);
+      setPrize(data.prize.value);
       setGenre(data.genre);
       setVoters(data.voters);
     });

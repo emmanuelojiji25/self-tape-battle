@@ -73,7 +73,7 @@ const Feed = ({ user }) => {
           {battles.map((battle) => (
             <BattleCard
               name={battle.title}
-              prize={battle.prize}
+              prize={battle.prize.value}
               battleId={battle.id}
             />
           ))}

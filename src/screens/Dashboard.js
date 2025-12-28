@@ -29,13 +29,15 @@ const Dashboard = () => {
 
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("");
-  const [prize, setPrize] = useState("");
+  const [prize, setPrize] = useState(null);
   const [file, setFile] = useState("");
   const [deadline, setDeadline] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [requests, setRequests] = useState([]);
   const [reports, setReports] = useState([]);
   const [users, setUsers] = useState({}); // keyed by uid
+
+  const [type, setType] = useState("");
 
   const [winner, setWinner] = useState("");
 
@@ -117,7 +119,10 @@ const Dashboard = () => {
     try {
       await setDoc(collectionRef, {
         title: title,
-        prize: prize,
+        prize: {
+          type: type,
+          value: type === "coins" ? Number(prize) : prize,
+        },
         id: id,
         winner: "",
         voters: [],
@@ -182,6 +187,7 @@ const Dashboard = () => {
   }, []);
 
   const closeBattle = async (battleId) => {
+    const battleRef = doc(db, "battles", battleId);
     try {
       const collectionRef = collection(db, "battles", battleId, "entries");
       const snapshot = await getDocs(collectionRef);
@@ -220,6 +226,7 @@ const Dashboard = () => {
       }
 
       const winnerDoc = await getDoc(doc(db, "users", winnerEntry.uid));
+
       if (!winnerDoc.exists()) {
         console.warn("Winner user document not found:", winnerEntry.uid);
         setWinner(null);
@@ -229,6 +236,19 @@ const Dashboard = () => {
       const winnerData = winnerDoc.data();
       setWinner(winnerData);
 
+      const winnerRef = doc(db, "users", winnerEntry.uid);
+
+      const battleSnapshot = await getDoc(battleRef);
+
+      const prizeObject = battleSnapshot.data().prize;
+
+      if (prizeObject.type === "coins") {
+        await updateDoc(winnerRef, {
+          coins: winnerData.coins + prizeObject.value,
+          totalCoins: winnerData.coins + prizeObject.value,
+        });
+      }
+
       console.log(
         "🏆 Winner:",
         winnerEntry.uid,
@@ -237,8 +257,6 @@ const Dashboard = () => {
       );
 
       // Close battle
-
-      const battleRef = doc(db, "battles", battleId);
 
       await updateDoc(battleRef, {
         winner: winnerEntry.uid,
@@ -272,11 +290,25 @@ const Dashboard = () => {
               placeholder="Title"
               onChange={(e) => setTitle(e.target.value)}
             ></input>
+            <label>Coins</label>
+            <input
+              type="radio"
+              name="type"
+              value="coins"
+              onChange={(e) => setType("coins")}
+            />
+            <label>Custom</label>
+            <input
+              type="radio"
+              name="type"
+              value="custom"
+              onChange={(e) => setType("custom")}
+            ></input>
             <input
               type="text"
-              placeholder="Prize"
+              placeholder="prize"
               onChange={(e) => setPrize(e.target.value)}
-            ></input>
+            />
             <input
               type="text"
               placeholder="Deadline"
@@ -321,7 +353,9 @@ const Dashboard = () => {
               <div className="admin-battle-card">
                 <h3>{battle.title}</h3>
                 <p>{battle.id}</p>
-                <p>{battle.prize}</p>
+                <p>{battle.prize.type}</p>
+                <p>{battle.prize.value}</p>
+
                 <p>{battle.status}</p>
                 <Button
                   filled
@@ -372,7 +406,11 @@ const Dashboard = () => {
               <h4>Battle ID: {report.battleId}</h4>
               <h4>UID: {report.uid}</h4>
               <p>Reason: {report.reason}</p>
-              <video src={report.url} controls className="dashboard-video-report" />
+              <video
+                src={report.url}
+                controls
+                className="dashboard-video-report"
+              />
             </>
           ))}
         </>
