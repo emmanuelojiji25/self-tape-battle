@@ -9,6 +9,7 @@ import { Resend } from "resend";
 import Wallet from "./Wallet";
 import Story from "./Story";
 import scroll from "../media/scroll.png";
+import SideMenu from "./SideMenu";
 
 const Header = () => {
   const { loggedInUser, authRole, firstName, username, headshot, coins } =
@@ -18,6 +19,14 @@ const Header = () => {
 
   const [storyVisible, setStoryVisible] = useState(false);
   const [isStoryComplete, setIsStoryComplete] = useState(true);
+
+  const [sideMenuVisible, setSideMenuVisible] = useState(false);
+
+  const toggleMenu = () => {
+    if (sideMenuVisible === false) {
+      setSideMenuVisible(true);
+    }
+  };
 
   useEffect(() => {
     if (!loggedInUser) return;
@@ -49,6 +58,10 @@ const Header = () => {
 
   return (
     <div className="Header">
+      <SideMenu
+        sideMenuVisible={sideMenuVisible}
+        setSideMenuVisible={setSideMenuVisible}
+      />
       {storyVisible && (
         <Story
           onClick={() => {
@@ -60,6 +73,7 @@ const Header = () => {
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
         <div className="greeting-container">
+          <p onClick={() => toggleMenu()}>Menu</p>
           <Link
             to={`/profile/${username}`}
             className="greeting-container-inner"

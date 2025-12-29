@@ -82,7 +82,7 @@ const Profile = () => {
       setName(`${data.firstName || ""} ${data.lastName || ""}`.trim());
       setFirstName(data.firstName || "");
       setLastName(data.lastName || "");
-      setBio(data.bio || ""); 
+      setBio(data.bio || "");
       setLink(data.webLink || "");
       setHeadshot(data.headshot || "");
       setPublicProfile(data.settings.publicProfile || false);
@@ -132,7 +132,6 @@ const Profile = () => {
       const collectionRef = collection(db, "battles");
       const q = query(collectionRef, where("winner", "==", userId));
       const docs = await getDocs(q);
-
       setBattlesWon(docs.size);
     } catch (error) {
       console.log(error);
