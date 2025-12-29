@@ -1,5 +1,9 @@
 .SharedVideo{
     height: 100svh;
-    color: white;
+    color: white !important;
     padding-top: 25px;
+
+    header{
+        margin-bottom: 50px;
+    }
 }

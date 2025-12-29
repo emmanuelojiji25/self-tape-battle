@@ -24,6 +24,7 @@ const EntryCard = ({
   voteButtonVisible,
   battleStatus,
   isPillVisible,
+  menu
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -188,39 +189,41 @@ const EntryCard = ({
           )}
         </div>
 
-        <div className="card-menu-container">
-          <div
-            className="card-menu-icon"
-            onClick={() => setMenuVisible(!menuVisible)}
-            ref={menuButtonRef}
-          >
-            ...
-          </div>
-          {menuVisible && (
-            <div className="card-menu" ref={menuRef}>
-              {uid === loggedInUser?.uid && (
-                <>
-                  <span
-                    className="share"
-                    onClick={() => {
-                      setShareModalVisible(true);
-                    }}
-                  >
-                    Share
-                  </span>
-
-                  <p
-                    onClick={() => setDeleteModalVisible(true)}
-                    className="delete"
-                  >
-                    Delete
-                  </p>
-                </>
-              )}
-              <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+        {menu && (
+          <div className="card-menu-container">
+            <div
+              className="card-menu-icon"
+              onClick={() => setMenuVisible(!menuVisible)}
+              ref={menuButtonRef}
+            >
+              ...
             </div>
-          )}
-        </div>
+            {menuVisible && (
+              <div className="card-menu" ref={menuRef}>
+                {uid === loggedInUser?.uid && (
+                  <>
+                    <span
+                      className="share"
+                      onClick={() => {
+                        setShareModalVisible(true);
+                      }}
+                    >
+                      Share
+                    </span>
+
+                    <p
+                      onClick={() => setDeleteModalVisible(true)}
+                      className="delete"
+                    >
+                      Delete
+                    </p>
+                  </>
+                )}
+                <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="video-container">
