@@ -31,6 +31,9 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const { loggedInUser, authRole } = useContext(AuthContext);
+
+  const [originalUser, setOriginalUser] = useState({});
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [name, setName] = useState("");
@@ -79,13 +82,24 @@ const Profile = () => {
       setName(`${data.firstName || ""} ${data.lastName || ""}`.trim());
       setFirstName(data.firstName || "");
       setLastName(data.lastName || "");
-      setBio(data.bio || "");
+      setBio(data.bio || ""); 
       setLink(data.webLink || "");
       setHeadshot(data.headshot || "");
       setPublicProfile(data.settings.publicProfile || false);
       setRole(data.role || "");
       setContactNumber(data.contactNumber);
       setContactEmail(data.contactEmail);
+
+      setOriginalUser({
+        username: data.username,
+        lastName: data.firstName,
+        bio: data.bio,
+        link: data.link,
+        headhsot: data.headshot,
+        publicProfile: data.settings.publicProfile,
+        contactNumber: data.contactNumber,
+        contactEmail: data.contactEmail,
+      });
 
       setTimeout(() => {
         setLoading(false);
@@ -213,21 +227,47 @@ const Profile = () => {
   };
 
   const handleUpdateUser = async () => {
+    const updates = {};
     try {
       const docRef = doc(db, "users", userId);
 
-      await updateDoc(docRef, {
-        username: username.trim().toLowerCase(),
-        bio: bio.trim().toLowerCase(),
-        webLink: link.trim().toLowerCase(),
-        settings: { publicProfile: publicProfile },
-        contactEmail: contactEmail,
-        contactNumber: contactNumber,
-      });
+      if (username.trim().toLowerCase() !== originalUser.username) {
+        updates.username = username.trim().toLowerCase();
+      }
 
-      setIsEditProfileVisible(false);
+      if (bio.trim() !== originalUser.bio) {
+        updates.bio = bio.trim();
+      }
 
-      console.log("complete!")
+      if (link.trim() !== originalUser.link) {
+        updates.link = link.trim();
+      }
+
+      if (publicProfile !== originalUser.PublicProfile) {
+        updates.settings = { publicProfile: publicProfile };
+      }
+
+      if (contactEmail != originalUser.contactEmail) {
+        updates.contactEmail = contactEmail.trim();
+      }
+
+      if (contactNumber != originalUser.contactNumber) {
+        updates.contactNumber = contactNumber.trim();
+      }
+
+      if (updates.length === 0) {
+        console.log("no changes");
+        setIsEditProfileVisible(false);
+      } else {
+        try {
+          await updateDoc(docRef, updates);
+          setIsEditProfileVisible(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      console.log("complete!");
     } catch (error) {
       console.log(error);
     }
