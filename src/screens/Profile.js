@@ -518,7 +518,7 @@ const Profile = () => {
                   </div>
                 </div>
               )}
-              <NavBar />
+              {loggedInUser && <NavBar />}
             </>
           )}
         </>
