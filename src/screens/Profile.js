@@ -82,7 +82,7 @@ const Profile = () => {
       setBio(data.bio || "");
       setLink(data.webLink || "");
       setHeadshot(data.headshot || "");
-      setPublicProfile(data.settings?.publicProfile || false);
+      setPublicProfile(data.settings.publicProfile || false);
       setRole(data.role || "");
       setContactNumber(data.contactNumber);
       setContactEmail(data.contactEmail);
@@ -226,6 +226,8 @@ const Profile = () => {
       });
 
       setIsEditProfileVisible(false);
+
+      console.log("complete!")
     } catch (error) {
       console.log(error);
     }
@@ -457,6 +459,7 @@ const Profile = () => {
                             ? setPublicProfile(true)
                             : setPublicProfile(false)
                         }
+                        checked={publicProfile}
                       ></input>
                       <span>Public Profile</span>
                       {publicProfile && <p>Share your profile: </p>}

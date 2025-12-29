@@ -2,3 +2,7 @@
   background: #080b13;
   min-height: 100svh;
 }
+
+.bold{
+  font-weight: bold;
+}

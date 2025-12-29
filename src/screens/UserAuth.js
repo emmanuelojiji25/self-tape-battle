@@ -115,6 +115,9 @@ const UserAuth = ({ setSignedIn }) => {
         role: "actor",
         transactions: [],
         withdrawalPending: false,
+        settings: { publicProfile: true },
+        contactEmail: "",
+        contactNumber: "",
       });
 
       await sendEmailVerification(auth.currentUser);
