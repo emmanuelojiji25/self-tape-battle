@@ -23,6 +23,7 @@ import NavBar from "../components/NavBar";
 import LockedProfile from "../components/LockedProfile";
 import Wallet from "../components/Wallet";
 import ActorCard from "../components/ActorCard";
+import Loader from "../components/Loader";
 
 const Profile = () => {
   const params = useParams();
@@ -57,6 +58,8 @@ const Profile = () => {
 
   const [bookmarks, setBookmarks] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
@@ -83,6 +86,10 @@ const Profile = () => {
       setRole(data.role || "");
       setContactNumber(data.contactNumber);
       setContactEmail(data.contactEmail);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
 
       console.log("Fetched user role:", data.role);
     } catch (error) {
@@ -154,18 +161,6 @@ const Profile = () => {
     getTotalVotes();
   }, [userId]);
 
-  /*const handleCopyProfile = async () => {
-    try {
-      await navigator.clipboard.writeText(
-        `http://localhost:3000/profile/${params.username}`
-      );
-      setIsContactInfoCopied(true);
-      console.log(navigator.clipboard.readText());
-    } catch (error) {
-      console.log(error);
-    }
-  };*/
-
   const [usernameInput, setUsernameInput] = useState("");
   const [bioInput, setBioInput] = useState("");
 
@@ -236,247 +231,254 @@ const Profile = () => {
     }
   };
 
-
   useEffect(() => {
     if (!loggedInUser?.uid) return;
-  
-    const bookmarksRef = collection(
-      db,
-      "users",
-      loggedInUser.uid,
-      "bookmarks"
-    );
-  
+
+    const bookmarksRef = collection(db, "users", loggedInUser.uid, "bookmarks");
+
     const unsubscribe = onSnapshot(bookmarksRef, (snapshot) => {
-      const docs = snapshot.docs.map(doc => ({
+      const docs = snapshot.docs.map((doc) => ({
         ...doc.data(),
       }));
-  
+
       setBookmarks(docs);
     });
-  
+
     return () => unsubscribe();
   }, [loggedInUser?.uid]);
-
 
   return (
     <div className="Profile screen-width">
       {isInfoCopied && <div className="contact-tooltip">Copied!</div>}
       {walletVisible && <Wallet />}
-      {!publicProfile && !loggedInUser ? (
-        <LockedProfile firstName={firstName} />
+
+      {loading ? (
+        <Loader />
       ) : (
         <>
-          {!userId && <h1>User doesn't exist</h1>}
-          <div className="profile-header">
-            <div className="profile-headshot-container">
-              <img className="profile-headshot" src={headshot} />
-            </div>
-            <div className="profile-info">
-              <h1>{name}</h1>
-              <span className="username">{username}</span>
-              <span>{bio}</span>
-              <a href={link} target="_" className="web-link">
-                {link}
-              </a>
+          {!publicProfile && !loggedInUser ? (
+            <LockedProfile firstName={firstName} />
+          ) : (
+            <>
+              {!userId && <h1>User doesn't exist</h1>}
+              <div className="profile-header">
+                <div className="profile-headshot-container">
+                  <img className="profile-headshot" src={headshot} />
+                </div>
+                <div className="profile-info">
+                  <h1>{name}</h1>
+                  <span className="username">{username}</span>
+                  <span>{bio}</span>
+                  <a href={link} target="_" className="web-link">
+                    {link}
+                  </a>
 
-              <div class="profile-button-container">
-                {role === "actor" && (
-                  <Button
-                    filled
-                    text="Share Card"
-                    onClick={() =>
-                      handleCopyInfo(
-                        `http://localhost:3000/profile/${params.username}`
-                      )
-                    }
-                  ></Button>
-                )}
-                {userId === loggedInUser?.uid && role === "professional" && (
-                  <Button
-                    filled
-                    text="My bookmarks"
-                    onClick={() => setIsEditProfileVisible(true)}
-                  ></Button>
-                )}
+                  <div class="profile-button-container">
+                    {role === "actor" && (
+                      <Button
+                        filled
+                        text="Share Card"
+                        onClick={() =>
+                          handleCopyInfo(
+                            `http://localhost:3000/profile/${params.username}`
+                          )
+                        }
+                      ></Button>
+                    )}
+                    {userId === loggedInUser?.uid &&
+                      role === "professional" && (
+                        <Button
+                          filled
+                          text="My bookmarks"
+                          onClick={() => setIsEditProfileVisible(true)}
+                        ></Button>
+                      )}
 
-                {authRole === "professional" && role === "actor" && (
-                  <>
+                    {authRole === "professional" && role === "actor" && (
+                      <>
+                        <Button
+                          filled
+                          text="Contact"
+                          onClick={() =>
+                            setContactInfoVisible(!contactInfoVisible)
+                          }
+                        ></Button>
+
+                        {contactInfoVisible && (
+                          <div className="contact-info">
+                            <div>
+                              <p>{contactEmail}</p>
+                              <p onClick={() => handleCopyInfo(contactEmail)}>
+                                Copy
+                              </p>
+                            </div>
+
+                            <div>
+                              <p>{contactNumber}</p>
+                              <p onClick={() => handleCopyInfo(contactNumber)}>
+                                Copy
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    {userId === loggedInUser?.uid && (
+                      <>
+                        <Button
+                          outline
+                          text="Edit Profile"
+                          onClick={() => setIsEditProfileVisible(true)}
+                        ></Button>
+
+                        <Button
+                          outline
+                          text="Sign Out"
+                          onClick={() => {
+                            auth.signOut();
+                            localStorage.clear();
+                            navigate("/userAuth");
+                          }}
+                        ></Button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {role === "actor" && (
+                <div className="stat-card-container">
+                  <div className="stat-card">
+                    <h2 className="number">{battles.length}</h2>
+                    <p className="label">Battles Entered</p>
+                  </div>
+                  <div className="stat-card">
+                    <h2>{battlesWon}</h2>
+                    <p className="label">Battles Won</p>
+                  </div>
+                  <div className="stat-card">
+                    <h2>{totalVotes}</h2>
+                    <p className="label">Total votes</p>
+                  </div>
+                </div>
+              )}
+
+              {role === "actor" && (
+                <div className="entries-container">
+                  {battles.map((battle) => (
+                    <>
+                      {
+                        <EntryCard
+                          url={battle.url}
+                          uid={battle.uid}
+                          battleId={battle.battleId}
+                        />
+                      }
+                    </>
+                  ))}
+                </div>
+              )}
+
+              {authRole === "professional" && (
+                <div className="bookmarks">
+                  <h2>Bookmarks</h2>
+                  {bookmarks.map((actor) => (
+                    <ActorCard uid={actor.uid} />
+                  ))}
+                </div>
+              )}
+
+              {isEditPrfofileVisible && (
+                <div className="edit-profile">
+                  <div className="edit-profile-inner screen-width">
+                    <div className="edit-profile-section">
+                      <h2>Your details</h2>
+                      <Input type="text" value={firstName} disabled />
+                      <Input type="text" value={lastName} disabled />
+                      <Input
+                        type="text"
+                        onChange={(e) => {
+                          setUsername(e.target.value);
+                          setShowUsernameMessage(true);
+                        }}
+                        value={username}
+                      />
+                      {showUsernameMessage && (
+                        <span style={{ color: "white" }}>
+                          {isUsernameAvailable ? "Available" : "Not available"}
+                        </span>
+                      )}
+
+                      <Input
+                        type="text"
+                        onChange={(e) => setBio(e.target.value)}
+                        value={bio}
+                        placeholder="Enter bio"
+                      />
+                      <Input
+                        type="text"
+                        onChange={(e) => setLink(e.target.value)}
+                        value={link}
+                      />
+                    </div>
+
+                    <div className="edit-profile-section">
+                      <h2>Professional contact</h2>
+                      <p>
+                        This information will only be visible to casting
+                        directors. You can put your agent's details here too. If
+                        you do not complete this, casting directors may not be
+                        able to contact you.
+                      </p>
+                      <Input
+                        type="text"
+                        value={contactEmail}
+                        placeholder="Email"
+                        onChange={(e) => {
+                          setContactEmail(e.target.value);
+                        }}
+                      />
+                      <Input
+                        type="text"
+                        value={contactNumber}
+                        placeholder="Phone number"
+                        onChange={(e) => {
+                          setContactNumber(e.target.value);
+                        }}
+                      />
+                    </div>
+
+                    <div className="edit-profile-section">
+                      <input
+                        type="checkbox"
+                        onChange={(e) =>
+                          e.target.checked
+                            ? setPublicProfile(true)
+                            : setPublicProfile(false)
+                        }
+                      ></input>
+                      <span>Public Profile</span>
+                      {publicProfile && <p>Share your profile: </p>}
+                    </div>
+
                     <Button
                       filled
-                      text="Contact"
-                      onClick={() => setContactInfoVisible(!contactInfoVisible)}
-                    ></Button>
-
-                    {contactInfoVisible && (
-                      <div className="contact-info">
-                        <div>
-                          <p>{contactEmail}</p>
-                          <p onClick={() => handleCopyInfo(contactEmail)}>
-                            Copy
-                          </p>
-                        </div>
-
-                        <div>
-                          <p>{contactNumber}</p>
-                          <p onClick={() => handleCopyInfo(contactNumber)}>
-                            Copy
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                {userId === loggedInUser?.uid && (
-                  <>
-                    <Button
-                      outline
-                      text="Edit Profile"
-                      onClick={() => setIsEditProfileVisible(true)}
-                    ></Button>
-
-                    <Button
-                      outline
-                      text="Sign Out"
-                      onClick={() => {
-                        auth.signOut();
-                        localStorage.clear();
-                        navigate("/userAuth");
-                      }}
-                    ></Button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {role === "actor" && (
-            <div className="stat-card-container">
-              <div className="stat-card">
-                <h2 className="number">{battles.length}</h2>
-                <p className="label">Battles Entered</p>
-              </div>
-              <div className="stat-card">
-                <h2>{battlesWon}</h2>
-                <p className="label">Battles Won</p>
-              </div>
-              <div className="stat-card">
-                <h2>{totalVotes}</h2>
-                <p className="label">Total votes</p>
-              </div>
-            </div>
-          )}
-
-          {role === "actor" && (
-            <div className="entries-container">
-              {battles.map((battle) => (
-                <>
-                  {
-                    <EntryCard
-                      url={battle.url}
-                      uid={battle.uid}
-                      battleId={battle.battleId}
+                      text="Save"
+                      onClick={() => handleUpdateUser()}
                     />
-                  }
-                </>
-              ))}
-            </div>
-          )}
 
-          {authRole === "professional" && (
-            <div className="bookmarks">
-              <h2>Bookmarks</h2>
-              {bookmarks.map((actor) => (
-                <ActorCard uid={actor.uid} />
-              ))}
-            </div>
-          )}
-
-          {isEditPrfofileVisible && (
-            <div className="edit-profile">
-              <div className="edit-profile-inner screen-width">
-                <div className="edit-profile-section">
-                  <h2>Your details</h2>
-                  <Input type="text" value={firstName} disabled />
-                  <Input type="text" value={lastName} disabled />
-                  <Input
-                    type="text"
-                    onChange={(e) => {
-                      setUsername(e.target.value);
-                      setShowUsernameMessage(true);
-                    }}
-                    value={username}
-                  />
-                  {showUsernameMessage && (
-                    <span style={{ color: "white" }}>
-                      {isUsernameAvailable ? "Available" : "Not available"}
-                    </span>
-                  )}
-
-                  <Input
-                    type="text"
-                    onChange={(e) => setBio(e.target.value)}
-                    value={bio}
-                    placeholder="Enter bio"
-                  />
-                  <Input
-                    type="text"
-                    onChange={(e) => setLink(e.target.value)}
-                    value={link}
-                  />
+                    <Button
+                      outline
+                      text="Cancel"
+                      onClick={() => setIsEditProfileVisible(false)}
+                    />
+                  </div>
                 </div>
-
-                <div className="edit-profile-section">
-                  <h2>Professional contact</h2>
-                  <p>
-                    This information will only be visible to casting directors.
-                    You can put your agent's details here too. If you do not
-                    complete this, casting directors may not be able to contact
-                    you.
-                  </p>
-                  <Input
-                    type="text"
-                    value={contactEmail}
-                    placeholder="Email"
-                    onChange={(e) => {
-                      setContactEmail(e.target.value);
-                    }}
-                  />
-                  <Input
-                    type="text"
-                    value={contactNumber}
-                    placeholder="Phone number"
-                    onChange={(e) => {
-                      setContactNumber(e.target.value);
-                    }}
-                  />
-                </div>
-
-                <div className="edit-profile-section">
-                  <input
-                    type="checkbox"
-                    onChange={(e) =>
-                      e.target.checked
-                        ? setPublicProfile(true)
-                        : setPublicProfile(false)
-                    }
-                  ></input>
-                  <span>Public Profile</span>
-                  {publicProfile && <p>Share your profile: </p>}
-                </div>
-
-                <Button filled text="Save" onClick={() => handleUpdateUser()} />
-
-                <Button
-                  outline
-                  text="Cancel"
-                  onClick={() => setIsEditProfileVisible(false)}
-                />
-              </div>
-            </div>
+              )}
+              <NavBar />
+            </>
           )}
-          <NavBar />
         </>
       )}
     </div>
