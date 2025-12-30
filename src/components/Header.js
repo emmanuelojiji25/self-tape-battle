@@ -22,9 +22,21 @@ const Header = () => {
 
   const [sideMenuVisible, setSideMenuVisible] = useState(false);
 
+  const [slideIn, setSlideIn] = useState(false);
+
   const toggleMenu = () => {
     if (sideMenuVisible === false) {
       setSideMenuVisible(true);
+
+      setTimeout(() => {
+        setSlideIn(true);
+      }, 50);
+    } else {
+      setSlideIn(false);
+
+      setTimeout(() => {
+        setSideMenuVisible(false);
+      }, 300);
     }
   };
 
@@ -58,10 +70,9 @@ const Header = () => {
 
   return (
     <div className="Header">
-      <SideMenu
-        sideMenuVisible={sideMenuVisible}
-        setSideMenuVisible={setSideMenuVisible}
-      />
+      {sideMenuVisible && (
+        <SideMenu slideIn={slideIn} toggleMenu={() => toggleMenu()} />
+      )}
       {storyVisible && (
         <Story
           onClick={() => {
