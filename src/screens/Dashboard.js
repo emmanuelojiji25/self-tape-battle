@@ -5,6 +5,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  increment,
   onSnapshot,
   query,
   setDoc,
@@ -21,6 +22,7 @@ import {
   updateMetadata,
   uploadBytes,
 } from "firebase/storage";
+import emailjs from "@emailjs/browser";
 
 const Dashboard = () => {
   const [view, setView] = useState("battles");
@@ -247,16 +249,33 @@ const Dashboard = () => {
           coins: winnerData.coins + prizeObject.value,
           totalCoins: winnerData.coins + prizeObject.value,
         });
+
+        const voters = battleSnapshot.data().voters;
+
+        await Promise.all(
+          voters.map(async (voterId) => {
+            const voterRef = doc(db, "users", voterId);
+
+            updateDoc(voterRef, {
+              coins: increment(1),
+            });
+
+            const userSnapshot = await getDoc(voterRef);
+
+            const { firstName, email } = userSnapshot.data();
+
+            const userInfo = {
+              name: firstName,
+              email: "ojijimanuel@hotmail.com",
+            };
+
+            emailjs.init({
+              publicKey: "vDAbvtQ-t4ao0CqWi",
+            });
+            emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);
+          })
+        );
       }
-
-      console.log(
-        "🏆 Winner:",
-        winnerEntry.uid,
-        "Votes:",
-        winnerEntry.votes?.length || 0
-      );
-
-      // Close battle
 
       await updateDoc(battleRef, {
         winner: winnerEntry.uid,
