@@ -31,15 +31,19 @@ const UserAuth = ({ setSignedIn }) => {
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [isEmailAvailable, setIsEmailAvailable] = useState(null);
 
-  const [showUsernameMessage, setShowUsernameMessage] = useState(false);
-  const [showEmailMessage, setShowEmailMessage] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const [error, setError] = useState("");
 
   const handleUsernameCheck = async () => {
     try {
       const collectionRef = collection(db, "users");
       const q = query(
         collectionRef,
-        where("username", "==", username.toLowerCase())
+        where("username", "==", username.toLowerCase().trim())
       );
 
       const querySnapshot = await getDocs(q);
@@ -96,6 +100,19 @@ const UserAuth = ({ setSignedIn }) => {
   }, [email]);
 
   const handleSignUp = async () => {
+    if (username.length === 0) {
+      setUsernameError("Please enter a username");
+    } else if (!isUsernameAvailable) {
+      setUsernameError("This username is taken!");
+    }
+
+    if (!isEmailAvailable) {
+      setEmailError("This email is taken!");
+    }
+
+    if (password.length === 0) {
+      setPasswordError("Password must be at least 6 characters");
+    }
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       console.log(auth.currentUser.uid);
@@ -124,19 +141,45 @@ const UserAuth = ({ setSignedIn }) => {
 
       navigate("/emailverification");
     } catch (error) {
-      console.log("Sorry, could not create user");
+      if (
+        error.code === "auth/invalid-email" ||
+        email.length < 0 ||
+        !email.includes("@")
+      ) {
+        setEmailError("Please enter a valid email");
+      }
     }
   };
 
   const handleSignIn = async () => {
+    if (email.length === 0) {
+      setEmailError("Please enter your email");
+    }
+
+    if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+    }
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("Logged in!");
 
       navigate("/");
     } catch (error) {
-      console.log(error);
+      if (
+        error.code === "auth/user-not-found" ||
+        error.code === "auth/wrong-password"
+      ) {
+        setLoginError("You entered a wrong email or password");
+      } else if (error.code === "auth/invalid-email") {
+        setEmailError("Please enter a valid email");
+      }
     }
+  };
+
+  const handleUserInput = (e, fieldSetter, errorSetter) => {
+    const value = e.target.value;
+    fieldSetter(value);
+    errorSetter("");
   };
 
   return (
@@ -163,43 +206,29 @@ const UserAuth = ({ setSignedIn }) => {
           <Input
             type="text"
             placeholder="username"
-            onChange={(e) => {
-              setUsername(e.target.value);
-              console.log(username);
-              setShowUsernameMessage(true);
-            }}
+            onChange={(e) => handleUserInput(e, setUsername, setUsernameError)}
+            available={isUsernameAvailable}
+            displayIcon={username.length > 0}
+            error={usernameError}
           />
-          {showUsernameMessage && (
-            <span style={{ color: "white" }}>
-              {isUsernameAvailable ? "Available" : "Not available"}
-            </span>
-          )}
 
           <Input
             type="email"
             placeholder="email"
-            onChange={(e) => {
-              setEmail(e.target.value);
-              console.log(email);
-              setShowEmailMessage(true);
-            }}
+            onChange={(e) => handleUserInput(e, setEmail, setEmailError)}
+            available={isEmailAvailable}
+            displayIcon={email.length > 0}
+            error={emailError}
           />
-
-          {showEmailMessage && (
-            <span style={{ color: "white" }}>
-              {isEmailAvailable ? "Available" : "Not available"}
-            </span>
-          )}
 
           <Input
             type="password"
             placeholder="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-              console.log(password);
-            }}
+            onChange={(e) => handleUserInput(e, setPassword, setPasswordError)}
+            error={passwordError}
           />
-          <Button onClick={() => handleSignUp()} text="Sign Up" filled>
+
+          <Button onClick={() => handleSignUp()} text="Sign Up" filled_color>
             Sign up
           </Button>
 
@@ -238,13 +267,20 @@ const UserAuth = ({ setSignedIn }) => {
           <Input
             type="email"
             placeholder="email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              handleUserInput(e, setEmail, setEmailError);
+            }}
+            error={emailError}
           />
           <Input
             type="password"
             placeholder="password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              handleUserInput(e, setPassword, setPasswordError);
+            }}
+            error={passwordError}
           />
+          {loginError && <span>{loginError}</span>}
           <Button onClick={() => handleSignIn()} text="Sign In" filled />
           <span onClick={() => setView("sign-up")} className="auth-switch">
             Sign Up instead

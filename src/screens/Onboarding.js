@@ -91,7 +91,7 @@ const Onboarding = () => {
         publicKey: "vDAbvtQ-t4ao0CqWi",
       });
 
-     /* emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);*/
+      emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);
     } catch (error) {
       console.log(error);
     }
@@ -102,8 +102,8 @@ const Onboarding = () => {
   }, [loggedInUser]);
 
   useEffect(() => {
-      setProgress(20 * view);
-      console.log("progress:" + progress, "view:" + view);
+    setProgress(20 * view);
+    console.log("progress:" + progress, "view:" + view);
   }, [view]);
 
   return (
@@ -112,7 +112,10 @@ const Onboarding = () => {
         <div className="progress-bar-outer">
           <div
             className="progress-bar-inner"
-            style={{ width: `${progress}%`, backgroundColor: view === 5 && "gold" }}
+            style={{
+              width: `${progress}%`,
+              backgroundColor: view === 5 && "gold",
+            }}
           >
             <div className="circle"></div>
           </div>

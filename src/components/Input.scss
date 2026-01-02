@@ -11,12 +11,29 @@
     color: grey;
   }
 
-  &.disabled{
+  &.disabled {
     opacity: 0.5;
   }
 }
 
-
-.icon-small{
+.icon-small {
   width: 20px;
+}
+
+.input-container {
+  position: relative;
+}
+
+.input-icon-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.fa-circle-check{
+  color: rgb(39, 236, 233);
+}
+
+.fa-circle-xmark{
+  color:red;
 }
