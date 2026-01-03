@@ -36,6 +36,8 @@ const Onboarding = () => {
 
   const inputRef = useRef(null);
 
+  const [loading, setLoading] = useState(false);
+
   const handleNextView = (state, nextView, errorView) => {
     if (state) {
       setView(nextView);
@@ -56,6 +58,8 @@ const Onboarding = () => {
 
   const handleCompleteOnboarding = async () => {
     const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
+
+    setLoading(true);
     try {
       await uploadBytes(storageRef, file).then(() => {
         getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
@@ -203,18 +207,20 @@ const Onboarding = () => {
                 }
               }}
             ></input>
-            <div
+            {!loading ? <div
               className="headshot-placeholder"
               onClick={() => inputRef.current.click()}
               style={{ backgroundImage: `url(${previewFile})` }}
             >
               {!file && "Click to upload"}
-            </div>
+            </div> : <p>Finishing up..</p>}
             {errorView === 4 && <p>Please upload a headshot</p>}
             <div>
               <Button
                 text="Next"
-                onClick={() => handleCompleteOnboarding()}
+                onClick={() => {
+                  handleCompleteOnboarding();
+                }}
                 filled
               />
               <Button text="Back" onClick={() => setView(view - 1)} outline />

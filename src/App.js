@@ -4,7 +4,7 @@ import UserAuth from "./screens/UserAuth";
 import Feed from "./screens/Feed";
 import { auth } from "./firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Link } from "react-router-dom";
 import Profile from "./screens/Profile";
 import NavBar from "./components/NavBar";
 import { AuthContext } from "./contexts/AuthContext";
@@ -17,15 +17,16 @@ import PrivateRoute from "./components/PrivateRoute";
 import SharedVideo from "./components/SharedVideo";
 import { VerifyEmail } from "./screens/VerifyEmail";
 import Loader from "./components/Loader";
+import Button from "./components/Button";
 
 function App() {
   const { loggedInUser } = useContext(AuthContext);
 
-  const [countryCode, setCountryCode] = useState("gbb");
+  const [countryCode, setCountryCode] = useState("");
 
   const [loading, setLoading] = useState(false);
 
-  /*useEffect(() => {
+  useEffect(() => {
     const getCountry = async () => {
       if (localStorage.getItem("country_code")) {
         setCountryCode(localStorage.getItem("country_code"));
@@ -46,7 +47,7 @@ function App() {
       }
     };
     getCountry();
-  }, []);*/
+  }, []);
 
   useEffect(() => {
     if (localStorage.getItem("country_code")) {
@@ -65,6 +66,10 @@ function App() {
               <div className="location-denied">
                 <h2>There's no arena in your location yet.</h2>
                 <p>We hope to be available in your country soon!</p>
+                <Link to="/">
+                  {" "}
+                  <Button text="Go to homepage" filled_color />
+                </Link>
               </div>
             ) : (
               <Routes>
