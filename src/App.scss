@@ -1,0 +1,17 @@
+.App {
+  background: #080b13;
+  min-height: 100svh;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.location-denied{
+  color: white;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

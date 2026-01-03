@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import "./App.css";
+import "./App.scss";
 import UserAuth from "./screens/UserAuth";
 import Feed from "./screens/Feed";
 import { auth } from "./firebaseConfig";
@@ -21,11 +21,11 @@ import Loader from "./components/Loader";
 function App() {
   const { loggedInUser } = useContext(AuthContext);
 
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState("gbb");
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const getCountry = async () => {
       if (localStorage.getItem("country_code")) {
         setCountryCode(localStorage.getItem("country_code"));
@@ -46,7 +46,7 @@ function App() {
       }
     };
     getCountry();
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     if (localStorage.getItem("country_code")) {
@@ -62,7 +62,10 @@ function App() {
         ) : (
           <>
             {countryCode !== "gb" ? (
-              <h1>No entry!</h1>
+              <div className="location-denied">
+                <h2>There's no arena in your location yet.</h2>
+                <p>We hope to be available in your country soon!</p>
+              </div>
             ) : (
               <Routes>
                 <Route
