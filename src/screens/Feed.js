@@ -62,14 +62,16 @@ const Feed = ({ user }) => {
     }
   };
 
+  
+
   return (
     <>
-       <div className="overlay"></div>
+      <div className="overlay"></div>
       <Header />
-   
+
       <div className="Feed screen-width">
         <>
-        <h1>Battles</h1>
+          <h1>Battles</h1>
           {battles.map((battle) => (
             <BattleCard
               name={battle.title}
