@@ -45,6 +45,10 @@ const Profile = () => {
   const [contactEmail, setContactEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
 
+  const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [sortCode, setSortCode] = useState("");
+
   const [battles, setBattles] = useState([]);
 
   const [bio, setBio] = useState("");
@@ -99,6 +103,9 @@ const Profile = () => {
         publicProfile: data.settings.publicProfile,
         contactNumber: data.contactNumber,
         contactEmail: data.contactEmail,
+        accountName: data.accountName,
+        accountNumber: data.accountNumber,
+        sortCode: data.sortCode,
       });
 
       setTimeout(() => {
@@ -252,6 +259,18 @@ const Profile = () => {
 
       if (contactNumber != originalUser.contactNumber) {
         updates.contactNumber = contactNumber.trim();
+      }
+
+      if (accountName != originalUser.accountName) {
+        updates.accountName = accountName.trim();
+      }
+
+      if (accountNumber != originalUser.accountNumber) {
+        updates.accountNumber = accountNumber.trim();
+      }
+
+      if (sortCode != originalUser.sortCode) {
+        updates.sortCode = accountNumber.trim();
       }
 
       if (updates.length === 0) {
@@ -487,6 +506,28 @@ const Profile = () => {
                         onChange={(e) => {
                           setContactNumber(e.target.value);
                         }}
+                      />
+                    </div>
+
+                    <div className="edit-profile-section">
+                      <h2>Bank details</h2>
+                      <Input
+                        type="text"
+                        placeholder="Account name"
+                        value={accountName}
+                        onChange={(e) => setAccountName(e.target.value)}
+                      />
+                      <Input
+                        type="text"
+                        placeholder="Account number"
+                        value={accountNumber}
+                        onChange={(e) => setAccountNumber(e.target.value)}
+                      />
+                      <Input
+                        type="text"
+                        placeholder="Sort code"
+                        value={sortCode}
+                        onChange={(e) => setSortCode(e.target.value)}
                       />
                     </div>
 

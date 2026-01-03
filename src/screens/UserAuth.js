@@ -135,6 +135,9 @@ const UserAuth = ({ setSignedIn }) => {
         settings: { publicProfile: true },
         contactEmail: "",
         contactNumber: "",
+        accountName: "",
+        accountNumber: "",
+        sortCode:"",
       });
 
       await sendEmailVerification(auth.currentUser);
