@@ -105,11 +105,16 @@
     transform: scale(1);
   }
 
-  50%{
+  50% {
     transform: scale(1.2);
   }
 
   100% {
     transform: scale(1);
   }
+}
+
+.fa-bars {
+  color: white;
+  font-size: 25px;
 }

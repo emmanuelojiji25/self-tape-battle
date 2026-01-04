@@ -30,14 +30,11 @@ const NavBar = () => {
       <div className="nav-bar-inner">
         <Link to={`/`}>
           <div className="nav-icon-container">
-           
             <span>Arena</span>
           </div>
         </Link>
 
         <Link to="/directory">Residents</Link>
-
-        <Link to={`/profile/${username}`}>Profile</Link>
       </div>
     </div>
   );

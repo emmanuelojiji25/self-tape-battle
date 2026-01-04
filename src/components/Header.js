@@ -84,14 +84,7 @@ const Header = () => {
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
       <div className="header-inner">
         <div className="greeting-container">
-          <p onClick={() => toggleMenu()}>Menu</p>
-          <Link
-            to={`/profile/${username}`}
-            className="greeting-container-inner"
-          >
-            <img src={headshot} className="headshot" />
-            <p>{firstName}</p>
-          </Link>
+          <i class="fa-solid fa-bars" onClick={() => toggleMenu()}></i>
         </div>
 
         <div className="header-right">
@@ -101,16 +94,17 @@ const Header = () => {
             </div>
           )}
           {authRole === "actor" && (
-            <>
-              <div
-                className="coins-container"
-                onClick={() => setWalletVisible(true)}
-              >
-                <img src={coin} />
-                {coins}
-              </div>
-            </>
+            <div
+              className="coins-container"
+              onClick={() => setWalletVisible(true)}
+            >
+              <img src={coin} />
+              {coins}
+            </div>
           )}
+          <Link to={`/profile/${username}`}>
+            <img src={headshot} className="headshot" />
+          </Link>
         </div>
       </div>
     </div>
