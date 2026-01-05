@@ -39,6 +39,8 @@ const Dashboard = () => {
   const [reports, setReports] = useState([]);
   const [users, setUsers] = useState({}); // keyed by uid
 
+  const [mailingUsers, setMailingUsers] = useState(0);
+
   const [type, setType] = useState("");
 
   const [winner, setWinner] = useState("");
@@ -241,8 +243,13 @@ const Dashboard = () => {
       const winnerRef = doc(db, "users", winnerEntry.uid);
 
       const battleSnapshot = await getDoc(battleRef);
+      const battleData = battleSnapshot.data();
 
-      const prizeObject = battleSnapshot.data().prize;
+      const prizeObject = battleData.prize;
+
+      emailjs.init({
+        publicKey: "vDAbvtQ-t4ao0CqWi",
+      });
 
       if (prizeObject.type === "coins") {
         await updateDoc(winnerRef, {
@@ -253,8 +260,8 @@ const Dashboard = () => {
         const voters = battleSnapshot.data().voters;
 
         await Promise.all(
-          voters.map(async (voterId) => {
-            const voterRef = doc(db, "users", voterId);
+          winnerEntry.votes.map(async (voter) => {
+            const voterRef = doc(db, "users", voter);
 
             updateDoc(voterRef, {
               coins: increment(1),
@@ -266,12 +273,10 @@ const Dashboard = () => {
 
             const userInfo = {
               name: firstName,
-              email: "ojijimanuel@hotmail.com",
+              email: email,
             };
 
-            emailjs.init({
-              publicKey: "vDAbvtQ-t4ao0CqWi",
-            });
+            // Send email to voters who voted for winning entry
             emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);
           })
         );
@@ -281,6 +286,15 @@ const Dashboard = () => {
         winner: winnerEntry.uid,
         status: "closed",
       });
+
+      const info = {
+        name: winnerData.firstName,
+        email: winnerData.email,
+        battleName: battleData.title,
+      };
+
+      // Send email to winner
+      emailjs.send("service_v3a3sw5", "template_65k4u6r", info);
     } catch (error) {
       console.error("Error in getWinner:", error);
     }
@@ -289,6 +303,30 @@ const Dashboard = () => {
   const handleChangeView = (view) => {
     setView(view);
   };
+
+  const getMailingUsers = async () => {
+    try {
+      const ref = collection(db, "mailing");
+
+      const snapshot = await getDocs(ref);
+
+      const docs = [];
+
+      snapshot.forEach((doc) => {
+        docs.push(doc.data());
+      });
+
+      setMailingUsers(docs.length);
+
+      console.log(doc);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getMailingUsers();
+  }, []);
 
   return (
     <div className="Dashboard">
@@ -299,6 +337,7 @@ const Dashboard = () => {
         <h3 onClick={() => handleChangeView("users")}>Users</h3>
         <h3 onClick={() => handleChangeView("requests")}>Requests</h3>
         <h3 onClick={() => handleChangeView("reports")}>Reports</h3>
+        <h3 onClick={() => handleChangeView("mailing")}>Mailing</h3>
       </div>
 
       {isModalVisible && (
@@ -432,6 +471,13 @@ const Dashboard = () => {
               />
             </>
           ))}
+        </>
+      )}
+
+      {view === "mailing" && (
+        <>
+          <h1>Mailing</h1>
+          <p>Current amount: {mailingUsers}</p>
         </>
       )}
     </div>

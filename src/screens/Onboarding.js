@@ -92,7 +92,7 @@ const Onboarding = () => {
       };
 
       emailjs.init({
-        publicKey: "vDAbvtQ-t4ao0CqWi",
+        publicKey: "vDAbvtQ-t4ao0CqWi", 
       });
 
       emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);

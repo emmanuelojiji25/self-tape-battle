@@ -22,11 +22,11 @@ import Button from "./components/Button";
 function App() {
   const { loggedInUser } = useContext(AuthContext);
 
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState("gb");
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const getCountry = async () => {
       if (localStorage.getItem("country_code")) {
         setCountryCode(localStorage.getItem("country_code"));
@@ -47,7 +47,7 @@ function App() {
       }
     };
     getCountry();
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     if (localStorage.getItem("country_code")) {
