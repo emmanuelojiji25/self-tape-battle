@@ -7,32 +7,33 @@
   align-items: center;
   display: flex;
 
-  a{
-  color: white !important;
+  a {
+    color: white !important;
   }
 
+  img {
+    width: 40px;
+  }
 }
 
 .nav-bar-inner {
   width: 100%;
-background: #12192B;
+  background: #12192b;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: 50px;
   padding-top: 22.5px;
   padding-bottom: 45px;
-  
 }
 
-.arena{
-  width: 40px;
-}
-
-.nav-icon-container{
+.nav-icon-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
 
+.residents{
+  width: 35px !important;
 }
