@@ -316,7 +316,7 @@ const Dashboard = () => {
         docs.push(doc.data());
       });
 
-      setMailingUsers(docs.length);
+      setMailingUsers(docs);
 
       console.log(doc);
     } catch (error) {
@@ -477,7 +477,9 @@ const Dashboard = () => {
       {view === "mailing" && (
         <>
           <h1>Mailing</h1>
-          <p>Current amount: {mailingUsers}</p>
+          {mailingUsers.map((user) => (
+            <p>{user.email}</p>
+          ))}
         </>
       )}
     </div>

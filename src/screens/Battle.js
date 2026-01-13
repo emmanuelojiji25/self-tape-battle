@@ -206,7 +206,7 @@ const Battle = () => {
               <span className="prize-pill">
                 <img
                   src={typeof prize === "string" ? chest : coin}
-                  className="icon-small"
+                
                 />
                 {prize}
               </span>
