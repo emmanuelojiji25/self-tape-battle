@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebaseConfig";
 import Contact from "./Contact";
 import HowToPlay from "./HowToPlay";
 import "./SideMenu.scss";
 import SubmitFeedback from "./SubmitFeedback";
 
 const SideMenu = ({ slideIn, toggleMenu }) => {
+  const navigate = useNavigate();
+
   const [view, setView] = useState("none");
 
   const [outletSlideIn, setOutletSlideIn] = useState(false);
@@ -45,7 +49,15 @@ const SideMenu = ({ slideIn, toggleMenu }) => {
         Submit feedback
       </p>
       <p onClick={() => handleOutletToggle("contact")}>Contact</p>
-      <p>Sign out</p>
+      <p
+        onClick={async () => {
+          await auth.signOut();
+          navigate("/userAuth");
+          localStorage.clear();
+        }}
+      >
+        Sign out
+      </p>
 
       {view !== "none" && (
         <div className={`outlet ${outletSlideIn && "outletSlideIn"}`}>

@@ -392,15 +392,7 @@ const Profile = () => {
                           onClick={() => setIsEditProfileVisible(true)}
                         ></Button>
 
-                        <Button
-                          outline
-                          text="Sign Out"
-                          onClick={() => {
-                            auth.signOut();
-                            localStorage.clear();
-                            navigate("/userAuth");
-                          }}
-                        ></Button>
+                      
                       </>
                     )}
                   </div>

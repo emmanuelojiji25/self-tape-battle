@@ -137,7 +137,7 @@ const UserAuth = ({ setSignedIn }) => {
         contactNumber: "",
         accountName: "",
         accountNumber: "",
-        sortCode:"",
+        sortCode: "",
       });
 
       await sendEmailVerification(auth.currentUser);
@@ -284,7 +284,7 @@ const UserAuth = ({ setSignedIn }) => {
             error={passwordError}
           />
           {loginError && <span>{loginError}</span>}
-          <Button onClick={() => handleSignIn()} text="Sign In" filled />
+          <Button onClick={() => handleSignIn()} text="Sign In" filled_color />
           <span onClick={() => setView("sign-up")} className="auth-switch">
             Sign Up instead
           </span>
