@@ -2,6 +2,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebaseConfig";
 import Button from "./Button";
+import "./SubmitFeedback.scss";
 
 const SubmitFeedback = () => {
   const [feedback, setFeedback] = useState();
@@ -19,7 +20,7 @@ const SubmitFeedback = () => {
 
   return (
     <div className="SubmitFeedback">
-      <h1>Submit feedback</h1>
+      <h2>Submit feedback</h2>
       <p>It would be great if you could help give us feedback.</p>
 
       <textarea
@@ -28,7 +29,7 @@ const SubmitFeedback = () => {
           console.log(feedback);
         }}
       />
-      <Button text="submit" filled onClick={() => submitFeedback()} />
+      <Button text="submit" filled_color onClick={() => submitFeedback()} />
     </div>
   );
 };
