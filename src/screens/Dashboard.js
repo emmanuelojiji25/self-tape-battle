@@ -45,6 +45,10 @@ const Dashboard = () => {
 
   const [winner, setWinner] = useState("");
 
+  const [locked, setLocked] = useState(true);
+
+  const code = "stb_26121999";
+
   const getBattles = () => {
     try {
       const collectionRef = collection(db, "battles");
@@ -330,156 +334,175 @@ const Dashboard = () => {
 
   return (
     <div className="Dashboard">
-      <h1>Dashboard</h1>
-
-      <div className="menu">
-        <h3 onClick={() => handleChangeView("battles")}>Battles</h3>
-        <h3 onClick={() => handleChangeView("users")}>Users</h3>
-        <h3 onClick={() => handleChangeView("requests")}>Requests</h3>
-        <h3 onClick={() => handleChangeView("reports")}>Reports</h3>
-        <h3 onClick={() => handleChangeView("mailing")}>Mailing</h3>
-      </div>
-
-      {isModalVisible && (
-        <div className="create-battle-modal-container">
-          <div className="create-battle-modal">
-            <input
-              type="text"
-              placeholder="Title"
-              onChange={(e) => setTitle(e.target.value)}
-            ></input>
-            <label>Coins</label>
-            <input
-              type="radio"
-              name="type"
-              value="coins"
-              onChange={(e) => setType("coins")}
-            />
-            <label>Custom</label>
-            <input
-              type="radio"
-              name="type"
-              value="custom"
-              onChange={(e) => setType("custom")}
-            ></input>
-            <input
-              type="text"
-              placeholder="prize"
-              onChange={(e) => setPrize(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Deadline"
-              onChange={(e) => setDeadline(e.target.value)}
-            ></input>
-            <input
-              type="text"
-              placeholder="Genre"
-              onChange={(e) => setGenre(e.target.value)}
-            ></input>
-            <Button
-              filled
-              text="Create Battle"
-              onClick={() => handleCreateBattle()}
-            />
-            <input
-              type="file"
-              onChange={(e) => {
-                setFile(e.target.files[0]);
-                console.log(file);
-              }}
-            ></input>
-            <Button
-              outline
-              text="Cancel"
-              onClick={() => setIsModalVisible(false)}
-            />
-          </div>
+      {locked ? (
+        <div className="dashboard-locked">
+          <h2>Please enter password</h2>
+          <input
+            type="text"
+            placeholder="Password"
+            onChange={(e) => {
+              if (e.target.value === code) {
+                setLocked(false);
+              }
+            }}
+          ></input>
         </div>
-      )}
-
-      {view === "battles" && (
+      ) : (
         <>
-          <h2>Battles</h2>
-          <Button
-            filled
-            text="New Battle"
-            onClick={() => setIsModalVisible(true)}
-          />
-          <div className="battles-container">
-            {battles.map((battle) => (
-              <div className="admin-battle-card">
-                <h3>{battle.title}</h3>
-                <p>{battle.id}</p>
-                <p>{battle.prize.type}</p>
-                <p>{battle.prize.value}</p>
+          <h1>Dashboard</h1>
 
-                <p>{battle.status}</p>
+          <div className="menu">
+            <h3 onClick={() => handleChangeView("battles")}>Battles</h3>
+            <h3 onClick={() => handleChangeView("users")}>Users</h3>
+            <h3 onClick={() => handleChangeView("requests")}>Requests</h3>
+            <h3 onClick={() => handleChangeView("reports")}>Reports</h3>
+            <h3 onClick={() => handleChangeView("mailing")}>Mailing</h3>
+          </div>
+
+          {isModalVisible && (
+            <div className="create-battle-modal-container">
+              <div className="create-battle-modal">
+                <input
+                  type="text"
+                  placeholder="Title"
+                  onChange={(e) => setTitle(e.target.value)}
+                ></input>
+                <label>Coins</label>
+                <input
+                  type="radio"
+                  name="type"
+                  value="coins"
+                  onChange={(e) => setType("coins")}
+                />
+                <label>Custom</label>
+                <input
+                  type="radio"
+                  name="type"
+                  value="custom"
+                  onChange={(e) => setType("custom")}
+                ></input>
+                <input
+                  type="text"
+                  placeholder="prize"
+                  onChange={(e) => setPrize(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="Deadline"
+                  onChange={(e) => setDeadline(e.target.value)}
+                ></input>
+                <input
+                  type="text"
+                  placeholder="Genre"
+                  onChange={(e) => setGenre(e.target.value)}
+                ></input>
                 <Button
                   filled
-                  text={
-                    battle.status === "open" ? "Close Battle" : "Open Battle"
-                  }
-                  onClick={async () => {
-                    const docRef = doc(db, "battles", battle.id);
-                    if (battle.status === "open") {
-                      closeBattle(battle.id);
-                    } else {
-                      await updateDoc(docRef, {
-                        status: "open",
-                      });
-                    }
+                  text="Create Battle"
+                  onClick={() => handleCreateBattle()}
+                />
+                <input
+                  type="file"
+                  onChange={(e) => {
+                    setFile(e.target.files[0]);
+                    console.log(file);
                   }}
+                ></input>
+                <Button
+                  outline
+                  text="Cancel"
+                  onClick={() => setIsModalVisible(false)}
                 />
               </div>
-            ))}
-          </div>
-        </>
-      )}
+            </div>
+          )}
 
-      {view === "requests" && (
-        <>
-          {requests.map((request) => {
-            return (
-              <>
-                <h3>{users[request.uid]?.username ?? "Loading…"}</h3>
-                <h4>{request.amount} coins</h4>
-                <Button
-                  filled
-                  text="Complete"
-                  onClick={() =>
-                    handleCompleteTransaction(request.uid, request.id)
-                  }
-                />
-              </>
-            );
-          })}
-        </>
-      )}
-
-      {view === "reports" && (
-        <>
-          {reports.map((report) => (
+          {view === "battles" && (
             <>
-              <h4>Battle ID: {report.battleId}</h4>
-              <h4>UID: {report.uid}</h4>
-              <p>Reason: {report.reason}</p>
-              <video
-                src={report.url}
-                controls
-                className="dashboard-video-report"
+              <h2>Battles</h2>
+              <Button
+                filled
+                text="New Battle"
+                onClick={() => setIsModalVisible(true)}
               />
-            </>
-          ))}
-        </>
-      )}
+              <div className="battles-container">
+                {battles.map((battle) => (
+                  <div className="admin-battle-card">
+                    <h3>{battle.title}</h3>
+                    <p>{battle.id}</p>
+                    <p>{battle.prize.type}</p>
+                    <p>{battle.prize.value}</p>
 
-      {view === "mailing" && (
-        <>
-          <h1>Mailing</h1>
-          {mailingUsers.map((user) => (
-            <p>{user.email}</p>
-          ))}
+                    <p>{battle.status}</p>
+                    <Button
+                      filled
+                      text={
+                        battle.status === "open"
+                          ? "Close Battle"
+                          : "Open Battle"
+                      }
+                      onClick={async () => {
+                        const docRef = doc(db, "battles", battle.id);
+                        if (battle.status === "open") {
+                          closeBattle(battle.id);
+                        } else {
+                          await updateDoc(docRef, {
+                            status: "open",
+                          });
+                        }
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {view === "requests" && (
+            <>
+              {requests.map((request) => {
+                return (
+                  <>
+                    <h3>{users[request.uid]?.username ?? "Loading…"}</h3>
+                    <h4>{request.amount} coins</h4>
+                    <Button
+                      filled
+                      text="Complete"
+                      onClick={() =>
+                        handleCompleteTransaction(request.uid, request.id)
+                      }
+                    />
+                  </>
+                );
+              })}
+            </>
+          )}
+
+          {view === "reports" && (
+            <>
+              {reports.map((report) => (
+                <>
+                  <h4>Battle ID: {report.battleId}</h4>
+                  <h4>UID: {report.uid}</h4>
+                  <p>Reason: {report.reason}</p>
+                  <video
+                    src={report.url}
+                    controls
+                    className="dashboard-video-report"
+                  />
+                </>
+              ))}
+            </>
+          )}
+
+          {view === "mailing" && (
+            <>
+              <h1>Mailing</h1>
+              {mailingUsers.map((user) => (
+                <p>{user.email}</p>
+              ))}
+            </>
+          )}
         </>
       )}
     </div>
