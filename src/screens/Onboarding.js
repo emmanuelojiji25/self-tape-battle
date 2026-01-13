@@ -92,7 +92,7 @@ const Onboarding = () => {
       };
 
       emailjs.init({
-        publicKey: "vDAbvtQ-t4ao0CqWi", 
+        publicKey: "vDAbvtQ-t4ao0CqWi",
       });
 
       emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);
@@ -120,9 +120,7 @@ const Onboarding = () => {
               width: `${progress}%`,
               backgroundColor: view === 5 && "gold",
             }}
-          >
-            <div className="circle"></div>
-          </div>
+          ></div>
         </div>
       </div>
       {view === 5 && <Confetti />}
@@ -138,7 +136,7 @@ const Onboarding = () => {
             <Button
               text="Let's go!"
               onClick={() => handleNextView(loggedInUser, 1)}
-              filled
+              filled_color
             />
           </div>
 
@@ -207,13 +205,17 @@ const Onboarding = () => {
                 }
               }}
             ></input>
-            {!loading ? <div
-              className="headshot-placeholder"
-              onClick={() => inputRef.current.click()}
-              style={{ backgroundImage: `url(${previewFile})` }}
-            >
-              {!file && "Click to upload"}
-            </div> : <p>Finishing up..</p>}
+            {!loading ? (
+              <div
+                className="headshot-placeholder"
+                onClick={() => inputRef.current.click()}
+                style={{ backgroundImage: `url(${previewFile})` }}
+              >
+                {!file && "Click to upload"}
+              </div>
+            ) : (
+              <p>Finishing up..</p>
+            )}
             {errorView === 4 && <p>Please upload a headshot</p>}
             <div>
               <Button

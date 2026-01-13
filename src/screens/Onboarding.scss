@@ -60,7 +60,7 @@
 }
 
 .progress-bar-inner{
-  background:rgb(84, 230, 84);
+  background:#4b7cff;
   height:10px;
   border-radius: 5px;
   transition: 0.3s ease-in-out;
@@ -69,12 +69,4 @@
   justify-content: center;
   justify-content: end;
   padding-left: 5%;
-}
-
-.circle{
-  min-height: 30px;
-  min-width: 30px;
-  background: grey;
-  border-radius: 50px;
-  
 }
