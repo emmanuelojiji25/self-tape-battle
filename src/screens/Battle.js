@@ -4,6 +4,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  increment,
   onSnapshot,
   setDoc,
   updateDoc,
@@ -156,9 +157,9 @@ const Battle = () => {
           });
 
           const userRef = doc(db, "users", loggedInUser.uid);
-          const snapshot = await getDoc(userRef);
+
           await updateDoc(userRef, {
-            coins: snapshot.data().coins + 1,
+            coins: increment(1),
           });
 
           await updateDoc(userRef, {
@@ -203,24 +204,26 @@ const Battle = () => {
             <Skeleton height={100} />
           ) : (
             <div className="battle-info">
-              <span className="prize-pill">
-                <img
-                  src={typeof prize === "string" ? chest : coin}
-                
-                />
+              <span className="prize-container">
+                <img src={typeof prize === "string" ? chest : coin} />
                 {prize}
               </span>
-              <span className="prize-pill">{genre}</span>
-              <span className="deadline">{deadline}</span>
+              <span className="info-pill">
+                <i class="fa-solid fa-masks-theater"></i>
+                {genre}
+              </span>
+              <span className="info-pill">
+                <i class="fa-solid fa-calendar"></i>
+                {deadline}
+              </span>
             </div>
           )}
         </div>
-
-        {/*<a href={`${battleAttachment}`} download>
+        <a href={`${battleAttachment}`} download>
           <div className="download">
             <img src={icon_download} />
           </div>
-          </a>*/}
+        </a>
       </div>
 
       {!userEntry && !file && loading === false && battleStatus === "open" && (

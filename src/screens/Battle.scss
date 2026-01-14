@@ -42,22 +42,39 @@
   min-width: 100%;
   width: 100%;
   flex-wrap: wrap;
+  gap: 20px;
+  font-size: 14px;
 
+  img {
+    width: 30px;
+  }
 }
 
-.prize-pill {
+.prize{
   color: white;
-  padding: 3px 10px;
+}
+
+.info-pill{
+  color: white;
+  background: #12192b;
+  border-radius: 50px;
+  padding: 5px 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  i{
+    color: white;
+  }
+}
+
+.prize-container {
+  color: white;
   display: block;
   width: fit-content;
   display: flex;
   gap: 5px;
   align-items: center;
-
-
-  img{
-    width: 30px;
-  }
 }
 
 .deadline {

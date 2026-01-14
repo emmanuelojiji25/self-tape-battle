@@ -4,6 +4,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   updateDoc,
 } from "firebase/firestore";
@@ -25,48 +26,38 @@ const Feed = ({ user }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const cachedBattles = localStorage.getItem("battles");
+    const cached = localStorage.getItem("battles");
 
-    if (cachedBattles) {
+    if (cached) {
       try {
-        setBattles(JSON.parse(cachedBattles));
-
+        setBattles(JSON.parse(cached));
         setLoading(false);
-      } catch (err) {
-        console.warn("Failed to parse cached data, refetching...", err);
-        handleGetBattles();
-      }
-    } else {
-      handleGetBattles();
+      } catch {}
     }
-  }, []);
 
-  const handleGetBattles = async () => {
-    const battles = [];
-    try {
-      const querySnapshot = await getDocs(collection(db, "battles"));
+    const battlesRef = collection(db, "battles");
 
-      if (querySnapshot.empty) {
-        setLoading(false);
-      }
+    const unsubscribe = onSnapshot(battlesRef, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-      querySnapshot.forEach((doc) => {
-        battles.push(doc.data());
+      setBattles((prev) => {
+        if (JSON.stringify(prev) === JSON.stringify(data)) return prev;
+        return data;
       });
 
-      setBattles(battles);
+      localStorage.setItem("battles", JSON.stringify(data));
+      setLoading(false);
+    });
 
-      localStorage.setItem("battles", JSON.stringify(battles));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>
-      <div className="overlay"></div>
+      {/*<div className="overlay"></div>*/}
       <Header />
 
       <div className="Feed screen-width">

@@ -24,7 +24,7 @@ const EntryCard = ({
   voteButtonVisible,
   battleStatus,
   isPillVisible,
-  menu
+  menu,
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -196,7 +196,7 @@ const EntryCard = ({
               onClick={() => setMenuVisible(!menuVisible)}
               ref={menuButtonRef}
             >
-              ...
+              <span>...</span>
             </div>
             {menuVisible && (
               <div className="card-menu" ref={menuRef}>

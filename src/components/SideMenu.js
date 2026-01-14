@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 import { auth } from "../firebaseConfig";
 import Contact from "./Contact";
 import HowToPlay from "./HowToPlay";
@@ -8,6 +9,8 @@ import SubmitFeedback from "./SubmitFeedback";
 
 const SideMenu = ({ slideIn, toggleMenu }) => {
   const navigate = useNavigate();
+
+  const { username } = useContext(AuthContext);
 
   const [view, setView] = useState("none");
 
@@ -43,7 +46,9 @@ const SideMenu = ({ slideIn, toggleMenu }) => {
   return (
     <div className={`SideMenu ${slideIn && "slideIn"}`}>
       <h2 onClick={toggleMenu}>close</h2>
-      <p>Profile</p>
+      <Link to={`/profile/${username}`}>
+        <p>Profile</p>
+      </Link>
       <p onClick={() => handleOutletToggle("how_to_play")}>How to play</p>
       <p onClick={() => handleOutletToggle("submit_feedback")}>
         Submit feedback
