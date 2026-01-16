@@ -15,6 +15,7 @@ const AuthProvider = ({ children }) => {
   const [firstName, setFirstName] = useState("");
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
+  const [email, setEmail] = useState("");
 
   const [userDocLoaded, setUserDocLoaded] = useState(false);
 
@@ -39,6 +40,7 @@ const AuthProvider = ({ children }) => {
               setFirstName(snapshot.data().firstName);
               setUsername(snapshot.data().username);
               setHeadshot(snapshot.data().headshot);
+              setEmail(snapshot.data().email);
 
               setLoading(false);
             },
@@ -75,6 +77,7 @@ const AuthProvider = ({ children }) => {
         username,
         headshot,
         userDocLoaded,
+        email,
       }}
     >
       {children}

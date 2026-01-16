@@ -16,8 +16,10 @@ import ConfirmationModal from "./ConfirmationModal";
 import MessageModal from "./MessageModal";
 import "./Wallet.scss";
 import coin from "../media/stb_coin.svg";
+import emailjs from "@emailjs/browser";
+
 const Wallet = ({ visibleClass, setWalletVisible }) => {
-  const { loggedInUser } = useContext(AuthContext);
+  const { loggedInUser, email } = useContext(AuthContext);
 
   const [coins, setCoins] = useState();
 
@@ -103,7 +105,16 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
         withdrawalPending: true,
       });
 
-      console.log(newDoc.id);
+      emailjs.init({
+        publicKey: "vDAbvtQ-t4ao0CqWi",
+      });
+
+      const info = {
+        email: email,
+        amount: coins
+      }
+ 
+      emailjs.send("service_v3a3sw5", "template_adqujmn", info);
 
       setConfirmationModalVisible(false);
     } catch (error) {
