@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import Button from "../components/Button";
 import { redirect, useNavigate } from "react-router-dom";
+import logo from "../media/logo-purple-white.svg";
 
 const UserAuth = ({ setSignedIn }) => {
   const navigate = useNavigate();
@@ -189,22 +190,22 @@ const UserAuth = ({ setSignedIn }) => {
     <div className="UserAuth screen-width">
       {view === "sign-up" && (
         <div className="sign-up">
-          <h2>I am a..</h2>
+          <h2>I am..</h2>
 
           <div className="sign-up-choice-container">
-            <div className="sign-up-choice" onClick={() => setView("actor")}>
-              Actor
-            </div>
-
-            <div className="sign-up-choice" onClick={() => setView("casting")}>
-              Casting Director
-            </div>
+            <Button text="An actor" onClick={() => setView("actor")} filled />
+            <Button
+              text="An industry professional"
+              onClick={() => setView("casting")}
+              filled
+            />
           </div>
         </div>
       )}
 
       {view === "actor" && (
         <div className="actor-sign-up">
+          <img src={logo} />
           <h2>Hey actor!</h2>
           <Input
             type="text"
@@ -235,12 +236,12 @@ const UserAuth = ({ setSignedIn }) => {
             Sign up
           </Button>
 
-          <span onClick={() => setView("sign-in")} className="auth-switch">
+          <p onClick={() => setView("sign-in")} className="auth-switch">
             Sign In instead
-          </span>
-          <span onClick={() => setView("casting")} className="auth-switch">
+          </p>
+          <p onClick={() => setView("casting")} className="auth-switch">
             I'm a casting director
-          </span>
+          </p>
         </div>
       )}
 
@@ -249,23 +250,24 @@ const UserAuth = ({ setSignedIn }) => {
           <h2>Hey CD!</h2>
           <p>
             For safety and verification purposes. Please email
-            accounts@selftapebattle.com with your company name, website if
-            applicable, or any social media. Emails must come from your company
-            email. <br />
+            <span className="highlight"> accounts@selftapebattle.com</span> with
+            your company name, website if applicable, or any social media.
+            Emails must come from your company email. <br />
             <br />
             Your account will be set up manually within 24-48 hours.
           </p>
-          <span onClick={() => setView("sign-in")} className="auth-switch">
+          <p onClick={() => setView("sign-in")} className="auth-switch">
             Sign In instead
-          </span>
-          <span onClick={() => setView("actor")} className="auth-switch">
+          </p>
+          <p onClick={() => setView("actor")} className="auth-switch">
             I'm an actor
-          </span>
+          </p>
         </div>
       )}
 
       {view === "sign-in" && (
         <div className="sign-in">
+          <img src={logo} />
           <h2>Sign In</h2>
           <Input
             type="email"
@@ -285,9 +287,9 @@ const UserAuth = ({ setSignedIn }) => {
           />
           {loginError && <span>{loginError}</span>}
           <Button onClick={() => handleSignIn()} text="Sign In" filled_color />
-          <span onClick={() => setView("sign-up")} className="auth-switch">
+          <p onClick={() => setView("sign-up")} className="auth-switch">
             Sign Up instead
-          </span>
+          </p>
         </div>
       )}
     </div>

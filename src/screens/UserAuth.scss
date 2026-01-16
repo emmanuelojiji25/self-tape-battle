@@ -5,7 +5,11 @@
   padding-top: 20px;
   color: white;
 
-  h1 {
+  img {
+    margin-bottom: 50px;
+  }
+
+  h2 {
     color: white;
     margin-bottom: 20px;
   }
@@ -17,11 +21,6 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-}
-
-.actor-sign-up {
-  display: flex;
-  flex-direction: column;
 }
 
 .sign-up-choice-container {
