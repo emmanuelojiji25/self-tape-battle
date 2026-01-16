@@ -219,31 +219,34 @@ const Battle = () => {
             </div>
           )}
         </div>
-        <a href={`${battleAttachment}`} download>
-          <div className="download">
-            <img src={icon_download} />
-          </div>
-        </a>
       </div>
 
-      {!userEntry && !file && loading === false && battleStatus === "open" && (
-        <Button
-          onClick={() => {
-            if (!userHasVoted && voters.length > 5) {
-              console.log("You must vote first!");
-              setErrorMessage(
-                "You must vote for at least 1 entry before you can join this battle"
-              );
-              return;
-            } else {
-              inputRef.current.click();
-            }
-          }}
-          text="Upload Tape"
-          className="upload-tape"
-          filled_color
-        />
-      )}
+      <div className="button-container">
+        {!userEntry &&
+          !file &&
+          loading === false &&
+          battleStatus === "open" && (
+            <Button
+              onClick={() => {
+                if (!userHasVoted && voters.length > 5) {
+                  console.log("You must vote first!");
+                  setErrorMessage(
+                    "You must vote for at least 1 entry before you can join this battle"
+                  );
+                  return;
+                } else {
+                  inputRef.current.click();
+                }
+              }}
+              text="Upload Tape"
+              className="upload-tape"
+              filled_color
+            />
+          )}
+        <a href={`${battleAttachment}`} download>
+          <Button text="Download Monologue" outline />
+        </a>
+      </div>
       {file && (
         <div className="file-container">
           {uploadStatus === "uploading" && (

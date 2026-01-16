@@ -13,4 +13,18 @@
 }
 
 .report-modal-inner {
+  background: #0f121a;
+  border: solid 1px #1e2c47;
+  padding: 30px;
+  border-radius: 10px;
+  z-index: 2;
+  color: white;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    margin-bottom: 25px;
+  }
 }

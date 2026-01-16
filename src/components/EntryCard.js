@@ -3,6 +3,7 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  increment,
   onSnapshot,
   updateDoc,
 } from "firebase/firestore";
@@ -118,8 +119,8 @@ const EntryCard = ({
         const currentCoins = userSnap.data()?.coins || 0;
 
         await updateDoc(userRef, {
-          coins: currentCoins + 1,
-          totalCoinsEarned: userSnap.data().totalCoinsEarned + 1,
+          coins: increment(1),
+          totalCoinsEarned: increment(1),
         });
 
         await updateDoc(userRef, {
@@ -189,41 +190,39 @@ const EntryCard = ({
           )}
         </div>
 
-        {menu && (
-          <div className="card-menu-container">
-            <div
-              className="card-menu-icon"
-              onClick={() => setMenuVisible(!menuVisible)}
-              ref={menuButtonRef}
-            >
-              <span>...</span>
-            </div>
-            {menuVisible && (
-              <div className="card-menu" ref={menuRef}>
-                {uid === loggedInUser?.uid && (
-                  <>
-                    <span
-                      className="share"
-                      onClick={() => {
-                        setShareModalVisible(true);
-                      }}
-                    >
-                      Share
-                    </span>
-
-                    <p
-                      onClick={() => setDeleteModalVisible(true)}
-                      className="delete"
-                    >
-                      Delete
-                    </p>
-                  </>
-                )}
-                <p onClick={() => setIsReportModalVisible(true)}>Report</p>
-              </div>
-            )}
+        <div className="card-menu-container">
+          <div
+            className="card-menu-icon"
+            onClick={() => setMenuVisible(!menuVisible)}
+            ref={menuButtonRef}
+          >
+            <span>...</span>
           </div>
-        )}
+          {menuVisible && (
+            <div className="card-menu" ref={menuRef}>
+              {uid === loggedInUser?.uid && (
+                <>
+                  <span
+                    className="share"
+                    onClick={() => {
+                      setShareModalVisible(true);
+                    }}
+                  >
+                    Share
+                  </span>
+
+                  <p
+                    onClick={() => setDeleteModalVisible(true)}
+                    className="delete"
+                  >
+                    Delete
+                  </p>
+                </>
+              )}
+              <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="video-container">

@@ -258,7 +258,7 @@ const Dashboard = () => {
       if (prizeObject.type === "coins") {
         await updateDoc(winnerRef, {
           coins: increment(prizeObject.value),
-          totalCoins: winnerData.coins + prizeObject.value,
+          totalCoins: increment(prizeObject.value),
         });
 
         const voters = battleSnapshot.data().voters;
