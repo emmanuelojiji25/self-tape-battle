@@ -247,7 +247,7 @@ const UserAuth = ({ setSignedIn }) => {
 
       {view === "casting" && (
         <div className="casting">
-          <h2>Hey CD!</h2>
+          <h2>Hey professional!</h2>
           <p>
             For safety and verification purposes. Please email
             <span className="highlight"> accounts@selftapebattle.com</span> with
@@ -256,12 +256,18 @@ const UserAuth = ({ setSignedIn }) => {
             <br />
             Your account will be set up manually within 24-48 hours.
           </p>
-          <p onClick={() => setView("sign-in")} className="auth-switch">
-            Sign In instead
-          </p>
-          <p onClick={() => setView("actor")} className="auth-switch">
-            I'm an actor
-          </p>
+
+          <Button
+            text="Sign in instead"
+            outline
+            onClick={() => setView("sign-in")}
+          ></Button>
+
+          <Button
+            text="I'm an actor"
+            outline
+            onClick={() => setView("actor")}
+          ></Button>
         </div>
       )}
 
