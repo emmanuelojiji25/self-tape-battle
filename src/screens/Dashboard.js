@@ -257,7 +257,7 @@ const Dashboard = () => {
 
       if (prizeObject.type === "coins") {
         await updateDoc(winnerRef, {
-          coins: winnerData.coins + prizeObject.value,
+          coins: increment(prizeObject.value),
           totalCoins: winnerData.coins + prizeObject.value,
         });
 
@@ -281,7 +281,7 @@ const Dashboard = () => {
             };
 
             // Send email to voters who voted for winning entry
-            emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);
+            emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
           })
         );
       }
