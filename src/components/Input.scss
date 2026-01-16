@@ -6,9 +6,11 @@
   background: #0f121a;
   color: white;
   margin-bottom: 10px;
+  border-radius: 10px;
 
   &::placeholder {
-    color: grey;
+    color: #515C84;
+    text-transform: capitalize;
   }
 
   &.disabled {

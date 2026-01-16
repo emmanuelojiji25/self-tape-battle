@@ -498,6 +498,7 @@ const Dashboard = () => {
           {view === "mailing" && (
             <>
               <h1>Mailing</h1>
+              <h1>{mailingUsers.length} Signups</h1>
               {mailingUsers.map((user) => (
                 <p>{user.email}</p>
               ))}
