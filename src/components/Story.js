@@ -12,7 +12,7 @@ const Story = ({ onClick }) => {
         <Typewriter
           options={{
             strings: [
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur iaculis consequat odio at porta. Morbi volutpat a purus a dapibus. Nam ut vulputate dui, eu gravida magna. Integer dapibus convallis dui nec dapibus. Mauris aliquet turpis nibh. Proin eu eleifend turpis, eget congue est. Nunc cursus tempus pharetra.",
+              "This will be a welcome message for actors and industry professionals. This will be a welcome message for actors and industry professionals. This will be a welcome message for actors and industry professionals. This will be a welcome message for actors and industry professionals. This will be a welcome message for actors and industry professionals.",
             ],
             autoStart: true,
             loop: true,
