@@ -243,7 +243,7 @@ const Battle = () => {
               filled_color
             />
           )}
-        <a href={`${battleAttachment}`} download>
+        <a href={`${battleAttachment}`} download target="_blank">
           <Button text="Download Monologue" outline />
         </a>
       </div>
