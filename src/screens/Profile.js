@@ -391,8 +391,6 @@ const Profile = () => {
                           text="Edit Profile"
                           onClick={() => setIsEditProfileVisible(true)}
                         ></Button>
-
-                      
                       </>
                     )}
                   </div>
@@ -537,17 +535,19 @@ const Profile = () => {
                       {publicProfile && <p>Share your profile: </p>}
                     </div>
 
-                    <Button
-                      filled
-                      text="Save"
-                      onClick={() => handleUpdateUser()}
-                    />
+                    <div className="button-container">
+                      <Button
+                        filled
+                        text="Save"
+                        onClick={() => handleUpdateUser()}
+                      />
 
-                    <Button
-                      outline
-                      text="Cancel"
-                      onClick={() => setIsEditProfileVisible(false)}
-                    />
+                      <Button
+                        outline
+                        text="Cancel"
+                        onClick={() => setIsEditProfileVisible(false)}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
