@@ -24,6 +24,8 @@ export const VerifyEmail = () => {
       }
     }, 1000);
 
+    console.log(auth.currentUser);
+
     return () => clearInterval(interval);
   }, [loggedInUser, navigate, setIsEmailVerified]);
 
@@ -53,6 +55,7 @@ export const VerifyEmail = () => {
             onClick={async () => {
               try {
                 await sendEmailVerification(auth.currentUser);
+                console.log("sent!")
               } catch (error) {
                 console.log(error);
               }

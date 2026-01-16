@@ -37,6 +37,8 @@ const UserAuth = ({ setSignedIn }) => {
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
 
+
+
   const [error, setError] = useState("");
 
   const handleUsernameCheck = async () => {
@@ -140,7 +142,7 @@ const UserAuth = ({ setSignedIn }) => {
         accountNumber: "",
         sortCode: "",
       });
-
+ 
       await sendEmailVerification(auth.currentUser);
 
       navigate("/emailverification");
