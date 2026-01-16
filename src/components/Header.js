@@ -5,7 +5,6 @@ import { db } from "../firebaseConfig";
 import "./Header.scss";
 import coin from "../media/stb_coin.svg";
 import { Link } from "react-router-dom";
-import { Resend } from "resend";
 import Wallet from "./Wallet";
 import Story from "./Story";
 import scroll from "../media/scroll.png";
