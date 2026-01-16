@@ -532,7 +532,7 @@ const Profile = () => {
                         checked={publicProfile}
                       ></input>
                       <span>Public Profile</span>
-                      {publicProfile && <p>Share your profile: </p>}
+                      {/*publicProfile && <p>Share your profile: </p>*/}
                     </div>
 
                     <div className="button-container">
