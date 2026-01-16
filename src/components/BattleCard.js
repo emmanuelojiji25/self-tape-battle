@@ -1,14 +1,5 @@
-import {
-  collection,
-  doc,
-  DocumentSnapshot,
-  getDoc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { db } from "../firebaseConfig";
 import "./BattleCard.scss";
 import chest from "../media/chest.svg";
 import fire from "../media/fire.svg";
@@ -53,7 +44,10 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         <h5>{prize}</h5>
       </div>
       <Link to={`/arena/${battleId}`}>
-        <Button text={authRole === "actor" ? "Join Battle" : "View"} filled_color />
+        <Button
+          text={authRole === "actor" ? "Join Battle" : "View"}
+          filled_color
+        />
       </Link>
     </div>
   );

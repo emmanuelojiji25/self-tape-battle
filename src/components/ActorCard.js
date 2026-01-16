@@ -5,7 +5,6 @@ import star from "../media/star_outline.svg";
 import star_filled from "../media/star.svg";
 import { db } from "../firebaseConfig";
 import {
-  collection,
   deleteDoc,
   doc,
   getDoc,

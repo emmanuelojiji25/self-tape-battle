@@ -2,14 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import "./App.scss";
 import UserAuth from "./screens/UserAuth";
 import Feed from "./screens/Feed";
-import { auth } from "./firebaseConfig";
-import { onAuthStateChanged } from "firebase/auth";
+
 import { Route, Routes, Link } from "react-router-dom";
 import Profile from "./screens/Profile";
-import NavBar from "./components/NavBar";
+
 import { AuthContext } from "./contexts/AuthContext";
 import Battle from "./screens/Battle";
-import Header from "./components/Header";
+
 import Onboarding from "./screens/Onboarding";
 import Dashboard from "./screens/Dashboard";
 import Directory from "./screens/Directory";
@@ -20,9 +19,8 @@ import Loader from "./components/Loader";
 import Button from "./components/Button";
 
 function App() {
-  const { loggedInUser } = useContext(AuthContext);
-
-  const [countryCode, setCountryCode] = useState("gb");
+  //const [countryCode, setCountryCode] = useState("gb");
+  const countryCode = "gb";
 
   const [loading, setLoading] = useState(false);
 
