@@ -33,8 +33,7 @@ const HowToPlay = () => {
         <p>
           You earn coins for: Entering battles Voting on performances Winning
           battles Smart voting — if you vote for an actor and they win, you earn
-          double coins Coins can be withdrawn once you reach the minimum
-          threshold.
+          double coins. Coins can be withdrawn once you reach 500 coins.
         </p>
       </section>
 

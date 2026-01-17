@@ -51,6 +51,8 @@ const Profile = () => {
 
   const [battles, setBattles] = useState([]);
 
+  const [battlesEntered, setBattlesEntered] = useState(null);
+
   const [bio, setBio] = useState("");
   const [link, setLink] = useState("");
   const [headshot, setHeadshot] = useState("");
@@ -93,6 +95,7 @@ const Profile = () => {
       setRole(data.role || "");
       setContactNumber(data.contactNumber);
       setContactEmail(data.contactEmail);
+      setBattlesEntered(data.battlesEntered);
 
       setOriginalUser({
         username: data.username,
@@ -400,7 +403,7 @@ const Profile = () => {
               {role === "actor" && (
                 <div className="stat-card-container">
                   <div className="stat-card">
-                    <h2 className="number">{battles.length}</h2>
+                    <h2 className="number">{battlesEntered}</h2>
                     <p className="label">Battles Entered</p>
                   </div>
                   <div className="stat-card">

@@ -50,7 +50,7 @@ const Directory = () => {
         className={`tab ${view === "casting" && "active"}`}
         onClick={() => setView("casting")}
       >
-        Casting
+        Casting & Agents
       </span>
 
       {view === "actors" && (
@@ -63,6 +63,7 @@ const Directory = () => {
 
       {view === "casting" && (
         <div className="actors">
+          <p>You'll see some familiar faces here, check back soon!</p>
           {casting.map((casting) => (
             <ActorCard uid={casting.uid} />
           ))}

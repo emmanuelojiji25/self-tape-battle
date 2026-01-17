@@ -141,6 +141,7 @@ const UserAuth = ({ setSignedIn }) => {
         accountName: "",
         accountNumber: "",
         sortCode: "",
+        battlesEntered: ""
       });
  
       await sendEmailVerification(auth.currentUser);
