@@ -24,6 +24,7 @@ import LockedProfile from "../components/LockedProfile";
 import Wallet from "../components/Wallet";
 import ActorCard from "../components/ActorCard";
 import Loader from "../components/Loader";
+import BackButton from "../components/BackButton";
 
 const Profile = () => {
   const params = useParams();
@@ -222,7 +223,7 @@ const Profile = () => {
     }
   };
 
-  const [isEditPrfofileVisible, setIsEditProfileVisible] = useState(false);
+  const [isEditProfileVisible, setEditProfileVisible] = useState(false);
 
   const handleCopyInfo = async (text) => {
     clearTimeout();
@@ -278,11 +279,11 @@ const Profile = () => {
 
       if (updates.length === 0) {
         console.log("no changes");
-        setIsEditProfileVisible(false);
+        setEditProfileVisible(false);
       } else {
         try {
           await updateDoc(docRef, updates);
-          setIsEditProfileVisible(false);
+          setEditProfileVisible(false);
         } catch (error) {
           console.log(error);
         }
@@ -353,7 +354,7 @@ const Profile = () => {
                         <Button
                           filled
                           text="My bookmarks"
-                          onClick={() => setIsEditProfileVisible(true)}
+                          onClick={() => setEditProfileVisible(true)}
                         ></Button>
                       )}
 
@@ -392,7 +393,7 @@ const Profile = () => {
                         <Button
                           outline
                           text="Edit Profile"
-                          onClick={() => setIsEditProfileVisible(true)}
+                          onClick={() => setEditProfileVisible(true)}
                         ></Button>
                       </>
                     )}
@@ -442,9 +443,10 @@ const Profile = () => {
                 </div>
               )}
 
-              {isEditPrfofileVisible && (
+              {isEditProfileVisible && (
                 <div className="edit-profile">
                   <div className="edit-profile-inner screen-width">
+                    <BackButton onClick={() => setEditProfileVisible(false)} />
                     <div className="edit-profile-section">
                       <h2>Your details</h2>
                       <Input type="text" value={firstName} disabled />
@@ -548,7 +550,7 @@ const Profile = () => {
                       <Button
                         outline
                         text="Cancel"
-                        onClick={() => setIsEditProfileVisible(false)}
+                        onClick={() => setEditProfileVisible(false)}
                       />
                     </div>
                   </div>

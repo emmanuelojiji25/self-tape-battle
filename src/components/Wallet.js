@@ -17,6 +17,7 @@ import MessageModal from "./MessageModal";
 import "./Wallet.scss";
 import coin from "../media/stb_coin.svg";
 import emailjs from "@emailjs/browser";
+import BackButton from "./BackButton";
 
 const Wallet = ({ visibleClass, setWalletVisible }) => {
   const { loggedInUser, email } = useContext(AuthContext);
@@ -111,9 +112,9 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
 
       const info = {
         email: email,
-        amount: coins
-      }
- 
+        amount: coins,
+      };
+
       emailjs.send("service_v3a3sw5", "template_adqujmn", info);
 
       setConfirmationModalVisible(false);
@@ -148,10 +149,7 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
             cancel={() => setConfirmationModalVisible(false)}
           />
         )}
-        <div className="back-container" onClick={() => setWalletVisible(false)}>
-          <i class="fa-solid fa-arrow-left"></i>
-          <p>Back</p>
-        </div>
+        <BackButton onClick={() => setWalletVisible(false)} />
         <h2>Wallet</h2>
 
         <div className="amount-button-container">

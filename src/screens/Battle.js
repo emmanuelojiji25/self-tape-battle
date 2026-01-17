@@ -28,6 +28,7 @@ import MessageModal from "../components/MessageModal";
 import coin from "../media/stb_coin.svg";
 import Skeleton from "../components/Skeleton";
 import chest from "../media/chest.svg";
+import BackButton from "../components/BackButton";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -192,7 +193,7 @@ const Battle = () => {
         />
       )}
       <Link to="/" className="back">
-        Back
+        <BackButton />
       </Link>
       <div className="battle-header">
         <div className="battle-header-left">

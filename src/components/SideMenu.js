@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import { auth } from "../firebaseConfig";
+import BackButton from "./BackButton";
 import Contact from "./Contact";
 import HowToPlay from "./HowToPlay";
 import "./SideMenu.scss";
@@ -45,7 +46,7 @@ const SideMenu = ({ slideIn, toggleMenu }) => {
 
   return (
     <div className={`SideMenu ${slideIn && "slideIn"}`}>
-      <h2 onClick={toggleMenu}>close</h2>
+      <BackButton onClick={toggleMenu} />
       <Link to={`/profile/${username}`}>
         <p>Profile</p>
       </Link>
