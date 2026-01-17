@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { AuthContext } from "../contexts/AuthContext";
-import arena from "../media/arena.png";
 import residents from "../media/residents.svg";
+import icon_arena from "../media/icon_arena.svg";
 
 const NavBar = () => {
   const { loggedInUser, authRole } = useContext(AuthContext);
@@ -31,7 +31,7 @@ const NavBar = () => {
       <div className="nav-bar-inner">
         <Link to={`/`}>
           <div className="nav-icon-container">
-            <img src={arena} />
+            <img src={icon_arena} />
           </div>
         </Link>
 

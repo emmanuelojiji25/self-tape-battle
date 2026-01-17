@@ -7,6 +7,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { db, storage } from "../firebaseConfig";
 import Confetti from "react-confetti-boom";
 import emailjs from "@emailjs/browser";
+import icon_arena from "../media/icon_arena.svg";
 
 import "./Onboarding.scss";
 import { useNavigate } from "react-router-dom";
@@ -230,6 +231,7 @@ const Onboarding = () => {
           </div>
 
           <div className="carousel-item centered">
+            <img src={icon_arena} style={{width: "100px"}} />
             <h1>You're in, {firstName}!</h1>
             <p>You've earned 100 coins</p>
 
