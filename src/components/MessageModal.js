@@ -16,11 +16,11 @@ const MessageModal = ({ onClick, title, text, buttonText, icon, confetti }) => {
   });
 
   return (
-    <div className="message-modal">
-      <img src={icon} />
+    <div className="message-modal"> 
+      {icon}
       <h2>{title}</h2>
       <p>{text}</p>
-      <Button filled text={buttonText} onClick={onClick} />
+      <Button filled_color text={buttonText} onClick={onClick} />
 
       <div className="confetti-container">{confetti && <Confetti />}</div>
     </div>
