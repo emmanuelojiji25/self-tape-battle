@@ -132,7 +132,7 @@ const Onboarding = () => {
           <div className="carousel-item">
             {" "}
             <h1>Hey {username}</h1>
-            <p>Let's get your profile finished!</p>
+            <p>Let's finish your profile and get you battling!</p>
             <Button
               text="Let's go!"
               onClick={() => handleNextView(loggedInUser, 1)}
@@ -149,7 +149,7 @@ const Onboarding = () => {
               <Button
                 text="Next"
                 onClick={() => handleNextView(firstName, 2, 1)}
-                filled
+                filled_color
               />
 
               <Button text="Back" onClick={() => setView(view - 1)} outline />
@@ -164,7 +164,7 @@ const Onboarding = () => {
               <Button
                 text="Next"
                 onClick={() => handleNextView(lastName, 3, 2)}
-                filled
+                filled_color
               />
 
               <Button text="Back" onClick={() => setView(view - 1)} outline />
@@ -179,7 +179,7 @@ const Onboarding = () => {
               <Button
                 text="Next"
                 onClick={() => handleNextView(webLink, 4, 3)}
-                filled
+                filled_color
               />
 
               <Button text="Back" onClick={() => setView(view - 1)} outline />
@@ -223,7 +223,7 @@ const Onboarding = () => {
                 onClick={() => {
                   handleCompleteOnboarding();
                 }}
-                filled
+                filled_color
               />
               <Button text="Back" onClick={() => setView(view - 1)} outline />
             </div>

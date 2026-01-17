@@ -6,6 +6,7 @@ import fire from "../media/fire.svg";
 import coin from "../media/stb_coin.svg";
 import Button from "./Button";
 import { AuthContext } from "../contexts/AuthContext";
+import Coin from "./Coin";
 
 const BattleCard = ({ name, prize, battleId, mostPopular }) => {
   const [voteComplete, setVoteComplete] = useState(false);
@@ -37,7 +38,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
       <h3 className="title">{name}</h3>
       <div className="prize">
         {typeof prize === "number" ? (
-          <img src={coin} className="icon-small" />
+          <Coin width="25" />
         ) : (
           <img src={chest} className="chest" />
         )}

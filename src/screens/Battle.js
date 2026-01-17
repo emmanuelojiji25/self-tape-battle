@@ -29,6 +29,7 @@ import coin from "../media/stb_coin.svg";
 import Skeleton from "../components/Skeleton";
 import chest from "../media/chest.svg";
 import BackButton from "../components/BackButton";
+import Coin from "../components/Coin";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -54,7 +55,7 @@ const Battle = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(true);
 
   const [userEntry, setUserEntry] = useState(null);
 
@@ -189,7 +190,7 @@ const Battle = () => {
           title="Nice work!"
           text="5 coins earned"
           buttonText="Close"
-          icon={coin}
+          icon={<Coin width="100" />}
         />
       )}
       <Link to="/" className="back">
@@ -207,7 +208,7 @@ const Battle = () => {
           ) : (
             <div className="battle-info">
               <span className="prize-container">
-                <img src={typeof prize === "string" ? chest : coin} />
+                {typeof prize === "string" ? <img src={chest} /> : <Coin width="30" />}
                 {prize}
               </span>
               <span className="info-pill">

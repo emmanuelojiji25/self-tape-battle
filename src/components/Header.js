@@ -9,6 +9,7 @@ import Wallet from "./Wallet";
 import Story from "./Story";
 import scroll from "../media/scroll.png";
 import SideMenu from "./SideMenu";
+import Coin from "./Coin";
 
 const Header = () => {
   const { loggedInUser, authRole, firstName, username, headshot, coins } =
@@ -97,7 +98,7 @@ const Header = () => {
               className="coins-container"
               onClick={() => setWalletVisible(true)}
             >
-              <img src={coin} />
+              <Coin width="30"/>
               {coins}
             </div>
           )}

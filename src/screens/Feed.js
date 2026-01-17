@@ -19,6 +19,7 @@ import Wallet from "../components/Wallet";
 import Story from "../components/Story";
 
 import { AuthContext } from "../contexts/AuthContext";
+import Coin from "../components/Coin";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);

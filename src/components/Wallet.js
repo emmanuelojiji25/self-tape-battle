@@ -18,6 +18,7 @@ import "./Wallet.scss";
 import coin from "../media/stb_coin.svg";
 import emailjs from "@emailjs/browser";
 import BackButton from "./BackButton";
+import Coin from "./Coin";
 
 const Wallet = ({ visibleClass, setWalletVisible }) => {
   const { loggedInUser, email } = useContext(AuthContext);
@@ -154,7 +155,7 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
 
         <div className="amount-button-container">
           <div className="coin-container">
-            {view === "coins" && <img src={coin} className="coin" />}
+            {view === "coins" && <Coin width="50"/>}
             <h3 className="amount">
               {view === "coins" ? coins : `£${pounds}`}
             </h3>
