@@ -90,7 +90,7 @@ const Profile = () => {
       setFirstName(data.firstName || "");
       setLastName(data.lastName || "");
       setBio(data.bio || "");
-      setLink(data.webLink || "");
+      setLink(`http://${data.webLink}` || "");
       setHeadshot(data.headshot || "");
       setPublicProfile(data.settings.publicProfile || false);
       setRole(data.role || "");
@@ -102,7 +102,7 @@ const Profile = () => {
         username: data.username,
         lastName: data.firstName,
         bio: data.bio,
-        link: data.link,
+        link: `http://${data.webLink}`,
         headhsot: data.headshot,
         publicProfile: data.settings.publicProfile,
         contactNumber: data.contactNumber,
@@ -250,7 +250,7 @@ const Profile = () => {
       }
 
       if (link.trim() !== originalUser.link) {
-        updates.link = link.trim();
+        updates.webLink = link.trim();
       }
 
       if (publicProfile !== originalUser.PublicProfile) {

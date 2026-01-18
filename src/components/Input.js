@@ -4,7 +4,7 @@ const Input = ({
   type,
   onChange,
   value,
-  placeholder,
+  placeholder ,
   disabled,
   displayIcon,
   available,
