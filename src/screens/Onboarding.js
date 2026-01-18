@@ -174,7 +174,11 @@ const Onboarding = () => {
 
           <div className="carousel-item">
             <h2>Do you have any web links?</h2>
-            <Input type="text" onChange={(e) => setWebLink(e.target.value)} link />
+            <Input
+              type="text"
+              onChange={(e) => setWebLink(e.target.value)}
+              link
+            />
             {errorView === 3 && <p>Please enter your web link</p>}
             <div>
               <Button
@@ -205,6 +209,7 @@ const Onboarding = () => {
                   setPreviewfile(preview);
                 }
               }}
+              accept="image/*"
             ></input>
             {!loading ? (
               <div
@@ -231,7 +236,7 @@ const Onboarding = () => {
           </div>
 
           <div className="carousel-item centered">
-            <img src={icon_arena} style={{width: "100px"}} />
+            <img src={icon_arena} style={{ width: "100px" }} />
             <h1>You're in, {firstName}!</h1>
             <p>You've earned 100 coins</p>
 

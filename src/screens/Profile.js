@@ -295,6 +295,8 @@ const Profile = () => {
     }
   };
 
+  
+
   useEffect(() => {
     if (!loggedInUser?.uid) return;
 
