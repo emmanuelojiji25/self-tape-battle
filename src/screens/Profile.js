@@ -250,7 +250,10 @@ const Profile = () => {
       }
 
       if (link.trim() !== originalUser.link) {
-        updates.webLink = link.trim();
+        updates.webLink =
+          link.includes("https://") || link.includes("http://")
+            ? link.trim()
+            : `https://${link}`;
       }
 
       if (publicProfile !== originalUser.PublicProfile) {
