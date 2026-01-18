@@ -137,7 +137,7 @@ const Wallet = ({ visibleClass, setWalletVisible }) => {
             title={
               isWithdrawalPending
                 ? "You already have a pending withdrawal"
-                : "Not enough coins sorry!"
+                : "You must have at least 500 coins to make a withdrawal."
             }
             buttonText="Close"
             onClick={() => setMessageModalVisible(false)}
