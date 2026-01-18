@@ -32,9 +32,12 @@ const HowToPlay = () => {
         <h3>5. Earn Coins</h3>
         <p>
           You earn coins for: Entering battles, Voting on performances and
-          Winning battles. <br />
+          Winning battles.  <br />
+          <br />
           Smart voting — if you vote for an actor and they win, you earn double
           coins. <br />
+          <br />
+          1 coin = 1p
           <br />
           Coins can be withdrawn once you reach 500 coins.
         </p>
