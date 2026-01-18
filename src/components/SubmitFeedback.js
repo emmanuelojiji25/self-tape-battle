@@ -21,7 +21,10 @@ const SubmitFeedback = () => {
   return (
     <div className="SubmitFeedback">
       <h2>Submit feedback</h2>
-      <p>It would be great if you could help give us feedback.</p>
+      <p>
+        It would be great if you could help give us feedback to allow us improve
+        your experience.
+      </p>
 
       <textarea
         onChange={(e) => {
@@ -29,7 +32,7 @@ const SubmitFeedback = () => {
           console.log(feedback);
         }}
       />
-      <Button text="submit" filled_color onClick={() => submitFeedback()} />
+      <Button text="Submit" filled_color onClick={() => submitFeedback()} />
     </div>
   );
 };

@@ -67,7 +67,7 @@ const SideMenu = ({ slideIn, toggleMenu }) => {
 
       {view !== "none" && (
         <div className={`outlet ${outletSlideIn && "outletSlideIn"}`}>
-          <h2 onClick={() => handleOutletToggle()}>back</h2>
+          <BackButton onClick={() => handleOutletToggle()} />
           <div className="content">{registry[view]}</div>
         </div>
       )}
