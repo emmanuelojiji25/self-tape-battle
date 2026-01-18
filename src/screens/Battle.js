@@ -319,7 +319,7 @@ const Battle = () => {
           );
         })}
       </div>
-      <NavBar />
+ 
     </div>
   );
 };
