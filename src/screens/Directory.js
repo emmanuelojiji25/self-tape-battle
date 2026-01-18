@@ -15,7 +15,11 @@ const Directory = () => {
     try {
       const collectionRef = collection(db, "users");
 
-      const q = query(collectionRef, where("role", "==", role));
+      const q = query(
+        collectionRef,
+        where("role", "==", role),
+        where("isOnboardingComplete", "==", true)
+      );
 
       const snapshot = await getDocs(q);
 
