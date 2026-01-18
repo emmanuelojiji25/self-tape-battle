@@ -9,9 +9,11 @@ const Input = ({
   displayIcon,
   available,
   error,
+  link,
 }) => {
   return (
     <div className="input-container">
+      {link && <p>www.</p>}
       <input
         type={type}
         onChange={onChange}

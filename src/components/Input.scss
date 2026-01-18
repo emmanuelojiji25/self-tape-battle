@@ -5,11 +5,10 @@
   border: 0;
   background: #0f121a;
   color: white;
-  margin-bottom: 10px;
   border-radius: 10px;
 
   &::placeholder {
-    color: #515C84;
+    color: #515c84;
     text-transform: capitalize;
   }
 
@@ -24,6 +23,9 @@
 
 .input-container {
   position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .input-icon-container {
@@ -32,10 +34,10 @@
   top: 0;
 }
 
-.fa-circle-check{
+.fa-circle-check {
   color: rgb(39, 236, 233);
 }
 
-.fa-circle-xmark{
-  color:red;
+.fa-circle-xmark {
+  color: red;
 }

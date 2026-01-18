@@ -174,7 +174,7 @@ const Onboarding = () => {
 
           <div className="carousel-item">
             <h2>Do you have any web links?</h2>
-            <Input type="text" onChange={(e) => setWebLink(e.target.value)} />
+            <Input type="text" onChange={(e) => setWebLink(e.target.value)} link />
             {errorView === 3 && <p>Please enter your web link</p>}
             <div>
               <Button
