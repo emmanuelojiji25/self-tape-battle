@@ -15,6 +15,10 @@
     font-size: 20px;
     gap: 5px;
   }
+
+  p {
+    color: gold;
+  }
 }
 
 .poll-card-header {
@@ -62,15 +66,10 @@
   color: white;
 }
 
-
-
 .title {
   font-size: 18px;
-
   text-transform: capitalize;
 }
-
-
 
 .most-popular {
   .most-popular-label {

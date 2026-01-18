@@ -8,7 +8,7 @@ import Button from "./Button";
 import { AuthContext } from "../contexts/AuthContext";
 import Coin from "./Coin";
 
-const BattleCard = ({ name, prize, battleId, mostPopular }) => {
+const BattleCard = ({ name, prize, battleId, mostPopular, scheduled }) => {
   const [voteComplete, setVoteComplete] = useState(false);
   const [collapseCard, setCollapseCard] = useState(false);
   const [removeCard, setRemoveCard] = useState(false);
@@ -23,19 +23,15 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
   const { authRole } = useContext(AuthContext);
 
   return (
-    <div className={`PollCard ${mostPopular && "most-popular"}`}>
-      {mostPopular && (
-        <span className="most-popular-label">
-          <div className="image-container">
-            <div className="dot-1 dot"></div>
-            <div className="dot-2 dot"></div>
-            <div className="dot-3 dot"></div>
-            <img src={fire} />
-          </div>
-          Most Popular
-        </span>
+    <div className={`PollCard`}>
+      {!scheduled ? (
+        <h3 className="title">{name}</h3>
+      ) : (
+        <>
+          <h3 className="title">Coming soon</h3>
+          <p>1st February</p>
+        </>
       )}
-      <h3 className="title">{name}</h3>
       <div className="prize">
         {typeof prize === "number" ? (
           <Coin width="25" />
@@ -44,12 +40,14 @@ const BattleCard = ({ name, prize, battleId, mostPopular }) => {
         )}
         <h5>{prize}</h5>
       </div>
-      <Link to={`/arena/${battleId}`}>
-        <Button
-          text={authRole === "actor" ? "Join Battle" : "View"}
-          filled_color
-        />
-      </Link>
+      {!scheduled && (
+        <Link to={`/arena/${battleId}`}>
+          <Button
+            text={authRole === "actor" ? "Join Battle" : "View"}
+            filled_color
+          />
+        </Link>
+      )}
     </div>
   );
 };
