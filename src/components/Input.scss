@@ -24,11 +24,16 @@
 .input-container {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+
   margin-bottom: 10px;
 }
 
-.input-icon-container {
+.input-container-inner {
+  display: flex;
+}
+
+.input-container .input-icon-container {
   position: absolute;
   right: 0;
   top: 0;

@@ -102,7 +102,7 @@ const Profile = () => {
         username: data.username,
         lastName: data.firstName,
         bio: data.bio,
-        link: `http://${data.webLink}`,
+        link: data.webLink,
         headhsot: data.headshot,
         publicProfile: data.settings.publicProfile,
         contactNumber: data.contactNumber,
@@ -333,7 +333,7 @@ const Profile = () => {
                   <h1>{name}</h1>
                   <span className="username">{username}</span>
                   <span>{bio}</span>
-                  <a href={link} target="_" className="web-link">
+                  <a href={`${link}`} target="_" className="web-link">
                     {link}
                   </a>
 

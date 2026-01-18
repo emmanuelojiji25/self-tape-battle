@@ -30,7 +30,7 @@ const UserAuth = ({ setSignedIn }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
+  const [secretPin, setSecretPin] = useState("");
 
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [isEmailAvailable, setIsEmailAvailable] = useState(null);
@@ -39,7 +39,7 @@ const UserAuth = ({ setSignedIn }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [verificationCodeError, setVerificationCodeError] = useState("");
+  const [secretPinError, setSecretPinError] = useState("");
 
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyPolicyVisible, setPrivacyPolicyVisible] = useState(false);
@@ -111,6 +111,11 @@ const UserAuth = ({ setSignedIn }) => {
 
     if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
+      hasError = true;
+    }
+
+    if (secretPin !== "1826") {
+      setSecretPinError("Are you sure you're meant to be here?👀 Try again!");
       hasError = true;
     }
 
@@ -187,7 +192,8 @@ const UserAuth = ({ setSignedIn }) => {
   };
 
   const toggleTerms = () => setTermsVisible(!termsVisible);
-  const togglePrivacyPolicy = () => setPrivacyPolicyVisible(!privacyPolicyVisible);
+  const togglePrivacyPolicy = () =>
+    setPrivacyPolicyVisible(!privacyPolicyVisible);
 
   return (
     <div className="UserAuth screen-width">
@@ -208,7 +214,9 @@ const UserAuth = ({ setSignedIn }) => {
       {view === "actor" && (
         <div className="actor-sign-up">
           {termsVisible && <Terms toggleTerms={toggleTerms} />}
-          {privacyPolicyVisible && <PrivacyPolicy togglePrivacyPolicy={togglePrivacyPolicy} />}
+          {privacyPolicyVisible && (
+            <PrivacyPolicy togglePrivacyPolicy={togglePrivacyPolicy} />
+          )}
           <img src={logo} />
           <h2>Hey actor!</h2>
           <Input
@@ -236,8 +244,10 @@ const UserAuth = ({ setSignedIn }) => {
           <Input
             type="text"
             placeholder="Secret pin"
-            onChange={(e) => handleUserInput(e, setVerificationCode, setVerificationCodeError)}
-            error={passwordError}
+            onChange={(e) =>
+              handleUserInput(e, setSecretPin, setSecretPinError)
+            }
+            error={secretPinError}
           />
 
           <p>
@@ -272,8 +282,16 @@ const UserAuth = ({ setSignedIn }) => {
             <br />
             Your account will be set up manually within 24-48 hours.
           </p>
-          <Button text="Sign in instead" outline onClick={() => setView("sign-in")} />
-          <Button text="I'm an actor" outline onClick={() => setView("actor")} />
+          <Button
+            text="Sign in instead"
+            outline
+            onClick={() => setView("sign-in")}
+          />
+          <Button
+            text="I'm an actor"
+            outline
+            onClick={() => setView("actor")}
+          />
         </div>
       )}
 

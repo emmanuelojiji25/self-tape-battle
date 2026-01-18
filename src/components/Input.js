@@ -4,7 +4,7 @@ const Input = ({
   type,
   onChange,
   value,
-  placeholder ,
+  placeholder,
   disabled,
   displayIcon,
   available,
@@ -13,15 +13,17 @@ const Input = ({
 }) => {
   return (
     <div className="input-container">
-      {link && <p>www.</p>}
-      <input
-        type={type}
-        onChange={onChange}
-        className={`Input ${disabled && "disabled"}`}
-        value={value}
-        placeholder={placeholder}
-        disabled={disabled}
-      ></input>
+      <div className="input-container-inner">
+        {link && <p>www.</p>}
+        <input
+          type={type}
+          onChange={onChange}
+          className={`Input ${disabled && "disabled"}`}
+          value={value}
+          placeholder={placeholder}
+          disabled={disabled}
+        ></input>
+      </div>
       {error && <span>{error}</span>}
       {displayIcon && (
         <div className="input-icon-container">
