@@ -48,14 +48,17 @@ export const VerifyEmail = () => {
       ) : (
         <>
           <h2>You're almost in!</h2>
-          <p>Please verify the email sent to {loggedInUser.email}</p>
+          <p>
+            Please verify the email sent to {loggedInUser.email}. This can take
+            up to 10 minutes to arrive and may land in your spam folder.
+          </p>
 
           <Button
             text="Resend email"
             onClick={async () => {
               try {
                 await sendEmailVerification(auth.currentUser);
-                console.log("sent!")
+                console.log("sent!");
               } catch (error) {
                 console.log(error);
               }

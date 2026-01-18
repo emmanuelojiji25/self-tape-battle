@@ -23,27 +23,30 @@ const HowToPlay = () => {
       <section>
         <h3>4. Vote to Compete</h3>
         <p>
-          Before your entry goes live, you’ll vote on another actor’s
-          performance. This keeps the game fair, active, and skill-focused — not
-          popularity-based.
+          If there are more than 5 entries in a battle, you must vote on another
+          actor’s performance to submit your own tape. This keeps the platform
+          alive and ensures fair play.
         </p>
       </section>
       <section>
         <h3>5. Earn Coins</h3>
         <p>
-          You earn coins for: Entering battles Voting on performances, Winning
-          battles, Smart voting — if you vote for an actor and they win, you earn
-          double coins. Coins can be withdrawn once you reach 500 coins.
+          You earn coins for: Entering battles, Voting on performances and
+          Winning battles. <br />
+          Smart voting — if you vote for an actor and they win, you earn double
+          coins. <br />
+          <br />
+          Coins can be withdrawn once you reach 500 coins.
         </p>
       </section>
 
       <section>
         <h3>6. Win Battles. Build Your Portfolio.</h3>
         <p>
-          Winners take the prize — and every entry you submit builds your acting
-          portfolio, visible to casting directors and industry professionals.
-          New battles launch every week, so there’s always another chance to
-          compete, improve, and win.
+          Winners take the prize — and every entry you submit builds your
+          diverse acting portfolio, visible to casting directors and industry
+          professionals. New battles launch every week, so there’s always
+          another chance to compete, improve, and win.
         </p>
       </section>
     </div>
