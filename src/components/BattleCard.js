@@ -43,7 +43,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular, scheduled }) => {
       {!scheduled && (
         <Link to={`/arena/${battleId}`}>
           <Button
-            text={authRole === "actor" ? "Join Battle" : "View"}
+            text={authRole === "actor" ? "Join Test Battle" : "View"}
             filled_color
           />
         </Link>
