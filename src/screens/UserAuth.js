@@ -187,7 +187,7 @@ const UserAuth = ({ setSignedIn }) => {
 
   const handleUserInput = (e, fieldSetter, errorSetter) => {
     const value = e.target.value;
-    fieldSetter(value);
+    fieldSetter(value.trim());
     errorSetter("");
   };
 
