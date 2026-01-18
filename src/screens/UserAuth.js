@@ -17,7 +17,7 @@ import {
   where,
 } from "firebase/firestore";
 import Button from "../components/Button";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "../media/logo-purple-white.svg";
 import Terms from "../components/Terms";
 import PrivacyPolicy from "../components/PrivacyPolicy";
@@ -30,6 +30,7 @@ const UserAuth = ({ setSignedIn }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
 
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [isEmailAvailable, setIsEmailAvailable] = useState(null);
@@ -38,8 +39,7 @@ const UserAuth = ({ setSignedIn }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
-
-  const [error, setError] = useState("");
+  const [verificationCodeError, setVerificationCodeError] = useState("");
 
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyPolicyVisible, setPrivacyPolicyVisible] = useState(false);
@@ -54,19 +54,11 @@ const UserAuth = ({ setSignedIn }) => {
 
       const querySnapshot = await getDocs(q);
 
-      console.log(querySnapshot.docs);
-
       if (querySnapshot.docs.length === 0) {
-        console.log("Available!");
         setIsUsernameAvailable(true);
-      }
-
-      if (querySnapshot.docs.length === 1) {
-        console.log("Unavailable!");
+      } else {
         setIsUsernameAvailable(false);
       }
-
-      console.log(isUsernameAvailable);
     } catch (error) {
       console.log(error);
     }
@@ -79,19 +71,11 @@ const UserAuth = ({ setSignedIn }) => {
 
       const querySnapshot = await getDocs(q);
 
-      console.log(querySnapshot.docs);
-
       if (querySnapshot.docs.length === 0) {
-        console.log("Available!");
         setIsEmailAvailable(true);
-      }
-
-      if (querySnapshot.docs.length === 1) {
-        console.log("Unavailable!");
+      } else {
         setIsEmailAvailable(false);
       }
-
-      console.log(isEmailAvailable);
     } catch (error) {
       console.log(error);
     }
@@ -106,26 +90,39 @@ const UserAuth = ({ setSignedIn }) => {
   }, [email]);
 
   const handleSignUp = async () => {
+    let hasError = false;
+
+    // Validation
     if (username.length === 0) {
       setUsernameError("Please enter a username");
+      hasError = true;
     } else if (!isUsernameAvailable) {
       setUsernameError("This username is taken!");
+      hasError = true;
     }
 
-    if (!isEmailAvailable) {
+    if (email.length === 0 || !email.includes("@")) {
+      setEmailError("Please enter a valid email");
+      hasError = true;
+    } else if (!isEmailAvailable) {
       setEmailError("This email is taken!");
+      hasError = true;
     }
 
-    if (password.length === 0) {
+    if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
+      hasError = true;
     }
+
+    if (hasError) return; // Stop execution if any errors
+
+    // Firebase signup
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      console.log(auth.currentUser.uid);
 
       await setDoc(doc(db, "users", auth.currentUser.uid), {
-        username: username,
-        email: email,
+        username,
+        email,
         firstName: "",
         lastName: "",
         bio: "",
@@ -148,15 +145,13 @@ const UserAuth = ({ setSignedIn }) => {
       });
 
       await sendEmailVerification(auth.currentUser);
-
       navigate("/emailverification");
     } catch (error) {
-      if (
-        error.code === "auth/invalid-email" ||
-        email.length < 0 ||
-        !email.includes("@")
-      ) {
+      console.log(error);
+      if (error.code === "auth/invalid-email") {
         setEmailError("Please enter a valid email");
+      } else if (error.code === "auth/email-already-in-use") {
+        setEmailError("This email is already in use");
       }
     }
   };
@@ -169,10 +164,9 @@ const UserAuth = ({ setSignedIn }) => {
     if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
     }
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("Logged in!");
-
       navigate("/");
     } catch (error) {
       if (
@@ -192,21 +186,14 @@ const UserAuth = ({ setSignedIn }) => {
     errorSetter("");
   };
 
-  const toggleTerms = () => {
-    setTermsVisible(!termsVisible);
-  };
-
-  const togglePrivacyPolicy = () => {
-    setPrivacyPolicyVisible(!privacyPolicyVisible);
-    console.log("hey");
-  };
+  const toggleTerms = () => setTermsVisible(!termsVisible);
+  const togglePrivacyPolicy = () => setPrivacyPolicyVisible(!privacyPolicyVisible);
 
   return (
     <div className="UserAuth screen-width">
       {view === "sign-up" && (
         <div className="sign-up">
           <h2>I am..</h2>
-
           <div className="sign-up-choice-container">
             <Button text="An actor" onClick={() => setView("actor")} filled />
             <Button
@@ -221,9 +208,7 @@ const UserAuth = ({ setSignedIn }) => {
       {view === "actor" && (
         <div className="actor-sign-up">
           {termsVisible && <Terms toggleTerms={toggleTerms} />}
-          {privacyPolicyVisible && (
-            <PrivacyPolicy togglePrivacyPolicy={togglePrivacyPolicy} />
-          )}
+          {privacyPolicyVisible && <PrivacyPolicy togglePrivacyPolicy={togglePrivacyPolicy} />}
           <img src={logo} />
           <h2>Hey actor!</h2>
           <Input
@@ -234,7 +219,6 @@ const UserAuth = ({ setSignedIn }) => {
             displayIcon={username.length > 0}
             error={usernameError}
           />
-
           <Input
             type="email"
             placeholder="email"
@@ -243,29 +227,31 @@ const UserAuth = ({ setSignedIn }) => {
             displayIcon={email.length > 0}
             error={emailError}
           />
-
           <Input
             type="password"
             placeholder="password"
             onChange={(e) => handleUserInput(e, setPassword, setPasswordError)}
             error={passwordError}
           />
+          <Input
+            type="text"
+            placeholder="Secret pin"
+            onChange={(e) => handleUserInput(e, setVerificationCode, setVerificationCodeError)}
+            error={passwordError}
+          />
 
           <p>
             By signing up, you agree to our{" "}
-            <span className="highlight" onClick={() => toggleTerms()}>
+            <span className="highlight" onClick={toggleTerms}>
               terms of use
             </span>{" "}
             and{" "}
-            <span className="highlight" onClick={() => togglePrivacyPolicy()}>
+            <span className="highlight" onClick={togglePrivacyPolicy}>
               privacy policy
             </span>
           </p>
 
-          <Button onClick={() => handleSignUp()} text="Sign Up" filled_color>
-            Sign up
-          </Button>
-
+          <Button onClick={handleSignUp} text="Sign Up" filled_color />
           <p onClick={() => setView("sign-in")} className="auth-switch">
             Sign In instead
           </p>
@@ -279,25 +265,15 @@ const UserAuth = ({ setSignedIn }) => {
         <div className="casting">
           <h2>Hey professional!</h2>
           <p>
-            For safety and verification purposes. Please email
-            <span className="highlight"> accounts@selftapebattle.com</span> with
+            For safety and verification purposes. Please email{" "}
+            <span className="highlight">accounts@selftapebattle.com</span> with
             your company name, website if applicable, or any social media.
             Emails must come from your company email. <br />
             <br />
             Your account will be set up manually within 24-48 hours.
           </p>
-
-          <Button
-            text="Sign in instead"
-            outline
-            onClick={() => setView("sign-in")}
-          ></Button>
-
-          <Button
-            text="I'm an actor"
-            outline
-            onClick={() => setView("actor")}
-          ></Button>
+          <Button text="Sign in instead" outline onClick={() => setView("sign-in")} />
+          <Button text="I'm an actor" outline onClick={() => setView("actor")} />
         </div>
       )}
 
@@ -308,21 +284,17 @@ const UserAuth = ({ setSignedIn }) => {
           <Input
             type="email"
             placeholder="email"
-            onChange={(e) => {
-              handleUserInput(e, setEmail, setEmailError);
-            }}
+            onChange={(e) => handleUserInput(e, setEmail, setEmailError)}
             error={emailError}
           />
           <Input
             type="password"
             placeholder="password"
-            onChange={(e) => {
-              handleUserInput(e, setPassword, setPasswordError);
-            }}
+            onChange={(e) => handleUserInput(e, setPassword, setPasswordError)}
             error={passwordError}
           />
           {loginError && <span>{loginError}</span>}
-          <Button onClick={() => handleSignIn()} text="Sign In" filled_color />
+          <Button onClick={handleSignIn} text="Sign In" filled_color />
           <p onClick={() => setView("sign-up")} className="auth-switch">
             Sign Up instead
           </p>
