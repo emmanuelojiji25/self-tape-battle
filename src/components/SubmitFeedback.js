@@ -7,12 +7,15 @@ import "./SubmitFeedback.scss";
 const SubmitFeedback = () => {
   const [feedback, setFeedback] = useState();
 
+  const [submitted, setSubmitted] = useState(false);
+
   const submitFeedback = async () => {
     const feedbackRef = collection(db, "feedback");
     try {
       await addDoc(feedbackRef, {
         feedback: feedback,
       });
+      setSubmitted(true);
     } catch (error) {
       console.log(error);
     }
@@ -21,18 +24,24 @@ const SubmitFeedback = () => {
   return (
     <div className="SubmitFeedback">
       <h2>Submit feedback</h2>
-      <p>
-        It would be great if you could help give us feedback to allow us improve
-        your experience.
-      </p>
+      {submitted ? (
+        <p>Thank you for your feedback!</p>
+      ) : (
+        <>
+          <p>
+            It would be great if you could help give us feedback to allow us
+            improve your experience.
+          </p>
 
-      <textarea
-        onChange={(e) => {
-          setFeedback(e.target.value);
-          console.log(feedback);
-        }}
-      />
-      <Button text="Submit" filled_color onClick={() => submitFeedback()} />
+          <textarea
+            onChange={(e) => {
+              setFeedback(e.target.value);
+              console.log(feedback);
+            }}
+          />
+          <Button text="Submit" filled_color onClick={() => submitFeedback()} />
+        </>
+      )}
     </div>
   );
 };
