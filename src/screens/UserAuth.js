@@ -19,6 +19,8 @@ import {
 import Button from "../components/Button";
 import { redirect, useNavigate } from "react-router-dom";
 import logo from "../media/logo-purple-white.svg";
+import Terms from "../components/Terms";
+import PrivacyPolicy from "../components/PrivacyPolicy";
 
 const UserAuth = ({ setSignedIn }) => {
   const navigate = useNavigate();
@@ -37,9 +39,10 @@ const UserAuth = ({ setSignedIn }) => {
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
 
-
-
   const [error, setError] = useState("");
+
+  const [termsVisible, setTermsVisible] = useState(false);
+  const [privacyPolicyVisible, setPrivacyPolicyVisible] = useState(false);
 
   const handleUsernameCheck = async () => {
     try {
@@ -141,9 +144,9 @@ const UserAuth = ({ setSignedIn }) => {
         accountName: "",
         accountNumber: "",
         sortCode: "",
-        battlesEntered: ""
+        battlesEntered: "",
       });
- 
+
       await sendEmailVerification(auth.currentUser);
 
       navigate("/emailverification");
@@ -189,6 +192,15 @@ const UserAuth = ({ setSignedIn }) => {
     errorSetter("");
   };
 
+  const toggleTerms = () => {
+    setTermsVisible(!termsVisible);
+  };
+
+  const togglePrivacyPolicy = () => {
+    setPrivacyPolicyVisible(!privacyPolicyVisible);
+    console.log("hey");
+  };
+
   return (
     <div className="UserAuth screen-width">
       {view === "sign-up" && (
@@ -208,6 +220,10 @@ const UserAuth = ({ setSignedIn }) => {
 
       {view === "actor" && (
         <div className="actor-sign-up">
+          {termsVisible && <Terms toggleTerms={toggleTerms} />}
+          {privacyPolicyVisible && (
+            <PrivacyPolicy togglePrivacyPolicy={togglePrivacyPolicy} />
+          )}
           <img src={logo} />
           <h2>Hey actor!</h2>
           <Input
@@ -234,6 +250,17 @@ const UserAuth = ({ setSignedIn }) => {
             onChange={(e) => handleUserInput(e, setPassword, setPasswordError)}
             error={passwordError}
           />
+
+          <p>
+            By signing up, you agree to our{" "}
+            <span className="highlight" onClick={() => toggleTerms()}>
+              terms of use
+            </span>{" "}
+            and{" "}
+            <span className="highlight" onClick={() => togglePrivacyPolicy()}>
+              privacy policy
+            </span>
+          </p>
 
           <Button onClick={() => handleSignUp()} text="Sign Up" filled_color>
             Sign up

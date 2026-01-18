@@ -78,8 +78,6 @@
   position: fixed;
   background: rgba(0, 0, 0);
   overflow-y: auto;
-  top: 0;
-  left: 0;
   z-index: 1;
   padding: 5%;
   inset: 0; // sets top, left, bottom, right to 0. This creates a fixed height which allows scrolling.
