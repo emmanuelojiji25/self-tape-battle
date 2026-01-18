@@ -50,12 +50,12 @@ const SideMenu = ({ slideIn, toggleMenu }) => {
       <Link to={`/profile/${username}`}>
         <p>Profile</p>
       </Link>
-      <p onClick={() => handleOutletToggle("how_to_play")}>How to play</p>
-      <p onClick={() => handleOutletToggle("submit_feedback")}>
+      <span onClick={() => handleOutletToggle("how_to_play")}>How to play</span>
+      <span onClick={() => handleOutletToggle("submit_feedback")}>
         Submit feedback
-      </p>
-      <p onClick={() => handleOutletToggle("contact")}>Contact</p>
-      <p
+      </span>
+      <span onClick={() => handleOutletToggle("contact")}>Contact</span>
+      <span
         onClick={async () => {
           await auth.signOut();
           navigate("/userAuth");
@@ -63,7 +63,7 @@ const SideMenu = ({ slideIn, toggleMenu }) => {
         }}
       >
         Sign out
-      </p>
+      </span>
 
       {view !== "none" && (
         <div className={`outlet ${outletSlideIn && "outletSlideIn"}`}>

@@ -196,7 +196,7 @@ const EntryCard = ({
             onClick={() => setMenuVisible(!menuVisible)}
             ref={menuButtonRef}
           >
-            <span>...</span>
+            <i class="fa-solid fa-ellipsis"></i>
           </div>
           {menuVisible && (
             <div className="card-menu" ref={menuRef}>

@@ -4,7 +4,7 @@ const BackButton = ({ onClick }) => {
   return (
     <div className="back-container" onClick={onClick}>
       <i class="fa-solid fa-arrow-left"></i>
-      <p>Back</p>
+      <span>Back</span>
     </div>
   );
 };

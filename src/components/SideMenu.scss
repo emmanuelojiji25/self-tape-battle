@@ -1,7 +1,7 @@
 .SideMenu {
   height: 100svh;
   width: 100%;
-  background: #4b7cff;
+  background-color: #0f1422;
   position: fixed;
   top: 0;
   left: 0;
@@ -9,6 +9,13 @@
   transition: 0.3s ease-in-out;
   padding: 3%;
   z-index: 1;
+  color: white;
+
+  span{
+    display: block;
+    font-size: 30px;
+  }
+
 }
 
 .slideIn {
@@ -27,9 +34,9 @@
   z-index: 40;
   padding: 3%;
   color: white;
-h2{
-  margin-bottom: 25px;
-}
+  h2 {
+    margin-bottom: 25px;
+  }
 }
 
 .outletSlideIn {
