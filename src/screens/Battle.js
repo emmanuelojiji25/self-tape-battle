@@ -183,6 +183,15 @@ const Battle = () => {
   };
   return (
     <div className="Battle screen-width">
+      {errorMessage && (
+        <MessageModal
+          onClick={() => setErrorMessage("")}
+          title="Hang on!"
+          text={errorMessage}
+          buttonText="Close"
+        />
+      )}
+
       {showMessageModal && (
         <MessageModal
           confetti
@@ -208,7 +217,11 @@ const Battle = () => {
           ) : (
             <div className="battle-info">
               <span className="prize-container">
-                {typeof prize === "string" ? <img src={chest} /> : <Coin width="30" />}
+                {typeof prize === "string" ? (
+                  <img src={chest} />
+                ) : (
+                  <Coin width="30" />
+                )}
                 {prize}
               </span>
               <span className="info-pill">
@@ -231,7 +244,7 @@ const Battle = () => {
           battleStatus === "open" && (
             <Button
               onClick={() => {
-                if (!userHasVoted && voters.length > 5) {
+                if (!userHasVoted && entries > 5) {
                   console.log("You must vote first!");
                   setErrorMessage(
                     "You must vote for at least 1 entry before you can join this battle"
@@ -319,7 +332,6 @@ const Battle = () => {
           );
         })}
       </div>
- 
     </div>
   );
 };
