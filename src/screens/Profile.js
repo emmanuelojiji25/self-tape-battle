@@ -295,7 +295,7 @@ const Profile = () => {
     }
   };
 
-  
+
 
   useEffect(() => {
     if (!loggedInUser?.uid) return;
@@ -346,7 +346,7 @@ const Profile = () => {
                         text="Share Card"
                         onClick={() =>
                           handleCopyInfo(
-                            `http://localhost:3000/profile/${params.username}`
+                            `http://app.selftapebattle.com/profile/${params.username}`
                           )
                         }
                       ></Button>
@@ -451,6 +451,7 @@ const Profile = () => {
                     <BackButton onClick={() => setEditProfileVisible(false)} />
                     <div className="edit-profile-section">
                       <h2>Your details</h2>
+                      <div className="headshot"></div>
                       <Input type="text" value={firstName} disabled />
                       <Input type="text" value={lastName} disabled />
                       <Input
