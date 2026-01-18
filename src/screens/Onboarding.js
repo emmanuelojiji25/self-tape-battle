@@ -184,11 +184,7 @@ const Onboarding = () => {
             />
             {errorView === 3 && <p>Please enter your web link</p>}
             <div>
-              <Button
-                text="Next"
-                onClick={() => handleNextView(webLink, 4, 3)}
-                filled_color
-              />
+              <Button text="Next" onClick={() => setView(4)} filled_color />
 
               <Button text="Back" onClick={() => setView(view - 1)} outline />
             </div>
