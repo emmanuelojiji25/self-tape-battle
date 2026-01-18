@@ -14,7 +14,7 @@ const Input = ({
   return (
     <div className="input-container">
       <div className="input-container-inner">
-        {link && <p>www.</p>}
+      
         <input
           type={type}
           onChange={onChange}
