@@ -17,11 +17,17 @@
   flex-direction: column;
   margin-bottom: 15px;
 
+  a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   h1 {
     font-size: 20px;
   }
-  
-  .username{
+
+  .username {
     font-size: 16px;
   }
 
@@ -68,7 +74,7 @@
   padding: 5%;
   border-radius: 10px;
 
-  .label{
+  .label {
     font-size: 14px;
   }
 }
@@ -101,11 +107,11 @@
   transform: translate(-50%, -50%);
 }
 
-.profile-button-container{
+.profile-button-container {
   display: flex;
   gap: 10px;
 
-  button{
+  button {
     width: 100%;
   }
 }
