@@ -90,7 +90,7 @@ const Profile = () => {
       setFirstName(data.firstName || "");
       setLastName(data.lastName || "");
       setBio(data.bio || "");
-      setLink(`http://${data.webLink}` || "");
+      setLink(data.webLink || "");
       setHeadshot(data.headshot || "");
       setPublicProfile(data.settings.publicProfile || false);
       setRole(data.role || "");
@@ -294,8 +294,6 @@ const Profile = () => {
       console.log(error);
     }
   };
-
-
 
   useEffect(() => {
     if (!loggedInUser?.uid) return;

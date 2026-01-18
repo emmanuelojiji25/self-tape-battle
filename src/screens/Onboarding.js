@@ -77,7 +77,10 @@ const Onboarding = () => {
       await updateDoc(docRef, {
         firstName: firstName,
         lastName: lastName,
-        webLink: webLink,
+        webLink:
+          webLink.includes("https://") || webLink.includes("http://")
+            ? webLink
+            : `https://${webLink}`,
         isOnboardingComplete: true,
         coins: 100,
         totalCoinsEarned: 100,
