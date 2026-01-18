@@ -77,10 +77,11 @@ const Onboarding = () => {
       await updateDoc(docRef, {
         firstName: firstName,
         lastName: lastName,
-        webLink:
-          webLink.includes("https://") || webLink.includes("http://")
-            ? webLink
-            : `https://${webLink}`,
+        webLink: !webLink
+          ? ""
+          : webLink.includes("https://") || webLink.includes("http://")
+          ? webLink
+          : `https://${webLink}`,
         isOnboardingComplete: true,
         coins: 100,
         totalCoinsEarned: 100,
@@ -88,7 +89,7 @@ const Onboarding = () => {
 
       setIsOnboardingComplete(true);
 
-      handleNextView(webLink, 5, 5);
+      setView(5);
 
       const userInfo = {
         name: firstName,
@@ -182,13 +183,9 @@ const Onboarding = () => {
               onChange={(e) => setWebLink(e.target.value)}
               link
             />
-            {errorView === 3 && <p>Please enter your web link</p>}
+
             <div>
-              <Button
-                text="Next"
-                onClick={() => handleNextView(webLink, 4, 3)}
-                filled_color
-              />
+              <Button text="Next" onClick={() => setView(4)} filled_color />
 
               <Button text="Back" onClick={() => setView(view - 1)} outline />
             </div>
