@@ -1,6 +1,9 @@
 .ActorCard {
   display: flex;
   margin-bottom: 30px;
+  align-items: center;
+  gap: 10px;
+
 }
 
 .actor-card-headshot {
@@ -20,4 +23,6 @@
 
 .actor-card-name {
   color: white;
+  display: block;
+  margin-bottom: 10px;
 }

@@ -144,7 +144,7 @@ const UserAuth = ({ setSignedIn }) => {
         accountName: "",
         accountNumber: "",
         sortCode: "",
-        battlesEntered: "",
+        battlesEntered: 0,
       });
 
       await sendEmailVerification(auth.currentUser);

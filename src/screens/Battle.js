@@ -55,7 +55,7 @@ const Battle = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(true);
 
   const [userEntry, setUserEntry] = useState(null);
 

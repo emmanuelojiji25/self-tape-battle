@@ -4,13 +4,7 @@ import "./ActorCard.scss";
 import star from "../media/star_outline.svg";
 import star_filled from "../media/star.svg";
 import { db } from "../firebaseConfig";
-import {
-  deleteDoc,
-  doc,
-  getDoc,
-  onSnapshot,
-  setDoc,
-} from "firebase/firestore";
+import { deleteDoc, doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -22,7 +16,6 @@ const ActorCard = ({ uid }) => {
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
   const [name, setName] = useState("");
-  
 
   useEffect(() => {
     const docRef = doc(db, "users", loggedInUser.uid, "bookmarks", uid);
@@ -44,12 +37,12 @@ const ActorCard = ({ uid }) => {
   const getActor = async () => {
     const docRef = doc(db, "users", uid);
 
-    try {   
+    try {
       const docSnapshot = await getDoc(docRef);
-      const data = docSnapshot.data()
-      setName(`${data.firstName + data.lastName}`) 
-      setHeadshot(data.headshot)        
-      setUsername(data.username)                                                                         
+      const data = docSnapshot.data();
+      setName(`${data.firstName} ${data.lastName}`);
+      setHeadshot(data.headshot);
+      setUsername(data.username);
     } catch (error) {
       console.log(error);
     }
@@ -95,9 +88,11 @@ const ActorCard = ({ uid }) => {
         style={{ backgroundImage: `url(${headshot})` }}
       />
       <div>
-        <Link to={`/profile/${username}`} className="actor-card-name">{name}</Link>
+        <Link to={`/profile/${username}`} className="actor-card-name">
+          {name}
+        </Link>
         <Link to={`/profile/${username}`}>
-          <Button filled text="View Profile" />
+          <Button filled_color text="View Profile" />
         </Link>
       </div>
     </div>
