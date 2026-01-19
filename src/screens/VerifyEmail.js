@@ -8,12 +8,14 @@ import Loader from "../components/Loader";
 import Button from "../components/Button";
 
 export const VerifyEmail = () => {
+  const [resent, setResent] = useState(false);
+
   const { loggedInUser, isEmailVerified, setIsEmailVerified, loading } =
     useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!loggedInUser) return;
 
     const interval = setInterval(async () => {
@@ -27,7 +29,7 @@ export const VerifyEmail = () => {
     console.log(auth.currentUser);
 
     return () => clearInterval(interval);
-  }, [loggedInUser, navigate, setIsEmailVerified]);
+  }, [loggedInUser, navigate, setIsEmailVerified]);*/
 
   if (!loggedInUser) {
     return <Navigate to="/userAuth" replace />;
@@ -48,23 +50,34 @@ export const VerifyEmail = () => {
       ) : (
         <>
           <h2>You're almost in!</h2>
-          <p>
-            Please verify the email sent to {loggedInUser.email}. This can take
-            up to 10 minutes to arrive and may land in your spam folder.
-          </p>
 
-          <Button
-            text="Resend email"
-            onClick={async () => {
-              try {
-                await sendEmailVerification(auth.currentUser);
-                console.log("sent!");
-              } catch (error) {
-                console.log(error);
-              }
-            }}
-            filled
-          />
+          {!resent ? (
+            <p>
+              Please verify the email sent to {loggedInUser.email}. This can
+              take up to 10 minutes to arrive and may land in your spam folder.
+            </p>
+          ) : (
+            <p>
+              A new email verification has been sent. This can take up to 10
+              minutes to arrive and may land in your spam folder.
+            </p>
+          )}
+
+          {!resent && (
+            <Button
+              text="Resend email"
+              onClick={async () => {
+                try {
+                  await sendEmailVerification(auth.currentUser);
+                  setResent(true);
+                  console.log("sent!");
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
+              filled
+            />
+          )}
 
           <Button
             onClick={() => {

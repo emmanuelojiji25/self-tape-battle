@@ -126,8 +126,8 @@ const UserAuth = ({ setSignedIn }) => {
       await createUserWithEmailAndPassword(auth, email, password);
 
       await setDoc(doc(db, "users", auth.currentUser.uid), {
-        username,
-        email,
+        username: username.trim().toLowerCase(),
+        email: email.trim().toLowerCase(),
         firstName: "",
         lastName: "",
         bio: "",
@@ -208,10 +208,10 @@ const UserAuth = ({ setSignedIn }) => {
         snapshot.forEach((snapshot) => {
           users.push(snapshot.data());
         });
-        
-        setUsers(users)
+
+        setUsers(users);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     };
 
