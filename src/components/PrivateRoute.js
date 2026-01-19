@@ -4,10 +4,8 @@ import { AuthContext } from "../contexts/AuthContext";
 import Loader from "./Loader";
 
 const PrivateRoute = ({ children }) => {
-  const { loggedInUser, loading, /*isEmailVerified*/ isOnboardingComplete } =
+  const { loggedInUser, loading, isEmailVerified, isOnboardingComplete } =
     useContext(AuthContext);
-
-  const isEmailVerified = false;
 
   if (loading) {
     return <Loader />;
