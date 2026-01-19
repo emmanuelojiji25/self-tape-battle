@@ -11,10 +11,10 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BattleCard from "../components/BattleCard";
-import { auth, db } from "../firebaseConfig";
+import { auth, db, storage } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
 import EntryCard from "../components/EntryCard";
 import Button from "../components/Button";
@@ -25,13 +25,14 @@ import Wallet from "../components/Wallet";
 import ActorCard from "../components/ActorCard";
 import Loader from "../components/Loader";
 import BackButton from "../components/BackButton";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Profile = () => {
   const params = useParams();
 
   const navigate = useNavigate();
 
-  const { loggedInUser, authRole } = useContext(AuthContext);
+  const { loggedInUser, authRole, headshot } = useContext(AuthContext);
 
   const [originalUser, setOriginalUser] = useState({});
 
@@ -56,7 +57,7 @@ const Profile = () => {
 
   const [bio, setBio] = useState("");
   const [link, setLink] = useState("");
-  const [headshot, setHeadshot] = useState("");
+ 
 
   const [battlesWon, setBattlesWon] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
@@ -91,7 +92,6 @@ const Profile = () => {
       setLastName(data.lastName || "");
       setBio(data.bio || "");
       setLink(data.webLink || "");
-      setHeadshot(data.headshot || "");
       setPublicProfile(data.settings.publicProfile || false);
       setRole(data.role || "");
       setContactNumber(data.contactNumber);
@@ -286,6 +286,7 @@ const Profile = () => {
       } else {
         try {
           await updateDoc(docRef, updates);
+          updateHeadshot();
           setEditProfileVisible(false);
         } catch (error) {
           console.log(error);
@@ -313,6 +314,31 @@ const Profile = () => {
 
     return () => unsubscribe();
   }, [loggedInUser?.uid]);
+
+  // Edit headshot
+
+  const inputRef = useRef(null);
+
+  const [file, setFile] = useState([]);
+  const [previewFile, setPreviewfile] = useState();
+
+  const updateHeadshot = async () => {
+    const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
+
+    if (previewFile) {
+      await uploadBytes(storageRef, file).then(() => {
+        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
+          async (url) => {
+            const docRef = doc(db, "users", loggedInUser.uid);
+            await updateDoc(docRef, {
+              headshot: `${url}`,
+            });
+            console.log("complete!");
+          }
+        );
+      });
+    }
+  };
 
   return (
     <div className="Profile screen-width">
@@ -452,7 +478,36 @@ const Profile = () => {
                     <BackButton onClick={() => setEditProfileVisible(false)} />
                     <div className="edit-profile-section">
                       <h2>Your details</h2>
-                      <div className="headshot"></div>
+                      <div className="headshot-container">
+                      <div
+                        className="headshot"
+                        style={{
+                          backgroundImage: `url(${
+                            previewFile ? previewFile : headshot
+                          })`,
+                        }}
+                      ></div>
+
+                      <p onClick={() => inputRef.current.click()} className="highlight">
+                        Change headshot
+                      </p>
+                      </div>
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        ref={inputRef}
+                        onChange={(e) => {
+                          const newFile = e.target.files;
+                          if (newFile && newFile[0]) {
+                            setFile(newFile[0]);
+                            const preview = window.URL.createObjectURL(
+                              newFile[0]
+                            );
+                            setPreviewfile(preview);
+                          }
+                        }}
+                        accept="image/*"
+                      ></input>
                       <Input type="text" value={firstName} disabled />
                       <Input type="text" value={lastName} disabled />
                       <Input
