@@ -293,7 +293,7 @@ const UserAuth = ({ setSignedIn }) => {
             Sign In instead
           </p>
           <p onClick={() => setView("casting")} className="auth-switch">
-            I'm a casting director
+            I'm an industry professional
           </p>
         </div>
       )}
