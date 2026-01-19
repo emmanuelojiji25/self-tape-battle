@@ -178,6 +178,10 @@ const Onboarding = () => {
 
           <div className="carousel-item">
             <h2>Do you have any web links?</h2>
+            <p className="description">
+              This can be your Spotlight, imdb, social media, or any other
+              relevant links. It's optional, but encouraged!
+            </p>
             <Input
               type="text"
               onChange={(e) => setWebLink(e.target.value)}
