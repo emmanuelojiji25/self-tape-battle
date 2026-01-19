@@ -23,7 +23,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import emailjs from "@emailjs/browser";
-import { sendEmailVerification } from "firebase/auth";
+import { sendEmailVerification, updateProfile } from "firebase/auth";
 
 const Dashboard = () => {
   const [view, setView] = useState("battles");
@@ -360,6 +360,17 @@ const Dashboard = () => {
     getOutstandingUsers();
   });
 
+
+  const handleManualVerify = async (uid) => {
+    try {
+      await updateProfile(uid, {
+        email: "test.com",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="Dashboard">
       {locked ? (
@@ -550,6 +561,11 @@ const Dashboard = () => {
               {outstandingUsers.map((user) => (
                 <>
                   <h1>{user.email}</h1>
+                  <Button
+                    filled_color
+                    text="Verify Email"
+                    onClick={() => handleManualVerify()}
+                  />
                 </>
               ))}
             </>

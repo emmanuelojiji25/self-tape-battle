@@ -32,7 +32,7 @@ const HowToPlay = () => {
         <h3>5. Earn Coins</h3>
         <p>
           You earn coins for: Entering battles, Voting on performances and
-          Winning battles.  <br />
+          Winning battles. <br />
           <br />
           Smart voting — if you vote for an actor and they win, you earn double
           coins. <br />
@@ -46,10 +46,13 @@ const HowToPlay = () => {
       <section>
         <h3>6. Win Battles. Build Your Portfolio.</h3>
         <p>
-          Winners take the prize — and every entry you submit builds your
-          diverse acting portfolio, visible to casting directors and industry
-          professionals. New battles launch every week, so there’s always
-          another chance to compete, improve, and win.
+          The entry with the highest amount of votes at the end of the battle
+          take the prize. <br />
+          <br />
+          Every entry you submit builds your diverse acting portfolio, visible
+          to casting directors and industry professionals. New battles launch
+          every week, so there’s always another chance to compete, improve, and
+          win.
         </p>
       </section>
     </div>
