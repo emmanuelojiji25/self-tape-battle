@@ -126,8 +126,8 @@ const UserAuth = ({ setSignedIn }) => {
       await createUserWithEmailAndPassword(auth, email, password);
 
       await setDoc(doc(db, "users", auth.currentUser.uid), {
-        username: username.trim().toLowerCase(),
-        email: email.trim().toLowerCase(),
+        username: username.toLowerCase(),
+        email: email.toLowerCase(),
         firstName: "",
         lastName: "",
         bio: "",
@@ -249,7 +249,14 @@ const UserAuth = ({ setSignedIn }) => {
           <Input
             type="text"
             placeholder="username"
-            onChange={(e) => handleUserInput(e, setUsername, setUsernameError)}
+            onChange={(e) => {
+              handleUserInput(e, setUsername, setUsernameError);
+            }}
+            onKeyDown={(e) => {
+              if (e.code === "Space") {
+                e.preventDefault();
+              }
+            }}
             available={isUsernameAvailable}
             displayIcon={username.length > 0}
             error={usernameError}

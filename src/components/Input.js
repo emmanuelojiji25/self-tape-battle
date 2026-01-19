@@ -10,11 +10,11 @@ const Input = ({
   available,
   error,
   link,
+  onKeyDown,
 }) => {
   return (
     <div className="input-container">
       <div className="input-container-inner">
-      
         <input
           type={type}
           onChange={onChange}
@@ -22,6 +22,7 @@ const Input = ({
           value={value}
           placeholder={placeholder}
           disabled={disabled}
+          onKeyDown={onKeyDown}
         ></input>
       </div>
       {error && <span>{error}</span>}
