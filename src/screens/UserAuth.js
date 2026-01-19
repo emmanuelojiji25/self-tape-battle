@@ -195,6 +195,29 @@ const UserAuth = ({ setSignedIn }) => {
   const togglePrivacyPolicy = () =>
     setPrivacyPolicyVisible(!privacyPolicyVisible);
 
+  const [users, setUsers] = useState(0);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const usersCollection = collection(db, "users");
+        const snapshot = await getDocs(usersCollection);
+
+        const users = [];
+
+        snapshot.forEach((snapshot) => {
+          users.push(snapshot.data());
+        });
+        
+        setUsers(users)
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    getUsers();
+  }, []);
+
   return (
     <div className="UserAuth screen-width">
       {view === "sign-up" && (
@@ -219,6 +242,10 @@ const UserAuth = ({ setSignedIn }) => {
           )}
           <img src={logo} />
           <h2>Hey actor!</h2>
+          <p className="join-others">
+            Join <span className="highlight">{users.length}</span> other actors
+            in the arena!
+          </p>
           <Input
             type="text"
             placeholder="username"
