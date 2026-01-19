@@ -32,7 +32,7 @@ const Profile = () => {
 
   const navigate = useNavigate();
 
-  const { loggedInUser, authRole, headshot } = useContext(AuthContext);
+  const { loggedInUser, authRole } = useContext(AuthContext);
 
   const [originalUser, setOriginalUser] = useState({});
 
@@ -47,6 +47,8 @@ const Profile = () => {
   const [contactEmail, setContactEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
 
+  const [headshot, setHeadshot] = useState("")
+
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [sortCode, setSortCode] = useState("");
@@ -57,7 +59,6 @@ const Profile = () => {
 
   const [bio, setBio] = useState("");
   const [link, setLink] = useState("");
- 
 
   const [battlesWon, setBattlesWon] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
@@ -90,6 +91,7 @@ const Profile = () => {
       setName(`${data.firstName || ""} ${data.lastName || ""}`.trim());
       setFirstName(data.firstName || "");
       setLastName(data.lastName || "");
+      setHeadshot(data.headshot || "");
       setBio(data.bio || "");
       setLink(data.webLink || "");
       setPublicProfile(data.settings.publicProfile || false);
@@ -479,18 +481,21 @@ const Profile = () => {
                     <div className="edit-profile-section">
                       <h2>Your details</h2>
                       <div className="headshot-container">
-                      <div
-                        className="headshot"
-                        style={{
-                          backgroundImage: `url(${
-                            previewFile ? previewFile : headshot
-                          })`,
-                        }}
-                      ></div>
+                        <div
+                          className="headshot"
+                          style={{
+                            backgroundImage: `url(${
+                              previewFile ? previewFile : headshot
+                            })`,
+                          }}
+                        ></div>
 
-                      <p onClick={() => inputRef.current.click()} className="highlight">
-                        Change headshot
-                      </p>
+                        <p
+                          onClick={() => inputRef.current.click()}
+                          className="highlight"
+                        >
+                          Change headshot
+                        </p>
                       </div>
                       <input
                         type="file"
