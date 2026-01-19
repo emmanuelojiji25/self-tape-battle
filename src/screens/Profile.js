@@ -47,7 +47,7 @@ const Profile = () => {
   const [contactEmail, setContactEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
 
-  const [headshot, setHeadshot] = useState("")
+  const [headshot, setHeadshot] = useState("");
 
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
@@ -284,12 +284,11 @@ const Profile = () => {
 
       if (updates.length === 0) {
         console.log("no changes");
-        setEditProfileVisible(false);
       } else {
         try {
           await updateDoc(docRef, updates);
-          updateHeadshot();
-          setEditProfileVisible(false);
+          await updateHeadshot();
+          window.location.reload();
         } catch (error) {
           console.log(error);
         }
