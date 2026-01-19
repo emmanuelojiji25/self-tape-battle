@@ -13,7 +13,7 @@ import {
   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db, storage } from "../firebaseConfig";
+import { auth, db, storage } from "../firebaseConfig";
 import "./Dashboard.scss";
 import Button from "../components/Button";
 import {
@@ -23,11 +23,14 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import emailjs from "@emailjs/browser";
+import { sendEmailVerification } from "firebase/auth";
 
 const Dashboard = () => {
   const [view, setView] = useState("battles");
 
   const [battles, setBattles] = useState([]);
+
+  const [outstandingUsers, setOutstandingUsers] = useState();
 
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("");
@@ -332,6 +335,31 @@ const Dashboard = () => {
     getMailingUsers();
   }, []);
 
+  useEffect(() => {
+    const getOutstandingUsers = async () => {
+      const collectionRef = collection(db, "users");
+      const q = query(
+        collectionRef,
+        where("isOnboardingComplete", "==", false)
+      );
+
+      const snapshot = await getDocs(q);
+
+      const docs = [];
+
+      snapshot.forEach((doc) => {
+        docs.push(doc.data());
+      });
+      setOutstandingUsers(docs);
+      try {
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getOutstandingUsers();
+  });
+
   return (
     <div className="Dashboard">
       {locked ? (
@@ -357,6 +385,9 @@ const Dashboard = () => {
             <h3 onClick={() => handleChangeView("requests")}>Requests</h3>
             <h3 onClick={() => handleChangeView("reports")}>Reports</h3>
             <h3 onClick={() => handleChangeView("mailing")}>Mailing</h3>
+            <h3 onClick={() => handleChangeView("action-required")}>
+              Action required
+            </h3>
           </div>
 
           {isModalVisible && (
@@ -501,6 +532,25 @@ const Dashboard = () => {
               <h1>{mailingUsers.length} Signups</h1>
               {mailingUsers.map((user) => (
                 <p>{user.email}</p>
+              ))}
+            </>
+          )}
+
+          {view === "action-required" && (
+            <>
+              <Button
+                filled_color
+                text="Resend verification"
+                onClick={() => {
+                  outstandingUsers.forEach(async (user) => {
+                    await sendEmailVerification(user.email);
+                  });
+                }}
+              />
+              {outstandingUsers.map((user) => (
+                <>
+                  <h1>{user.email}</h1>
+                </>
               ))}
             </>
           )}
