@@ -184,6 +184,11 @@ const Battle = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log("Has user voted? " + userHasVoted);
+    console.log("Entry count:" + entries.length);
+  }, [userHasVoted]);
   return (
     <div className="Battle screen-width">
       {errorMessage && (
@@ -255,7 +260,7 @@ const Battle = () => {
           battleStatus === "open" && (
             <Button
               onClick={() => {
-                if (!userHasVoted && entries > 5) {
+                if (!userHasVoted && entries.length > 5) {
                   console.log("You must vote first!");
                   setErrorMessage(
                     "You must vote for at least 1 entry before you can join this battle"

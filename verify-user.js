@@ -9,7 +9,7 @@ admin.initializeApp({
 
 async function verifyUser() {
   try {
-    const user = await admin.auth().getUserByEmail("danieldavidrock@icloud.com");
+    const user = await admin.auth().getUserByEmail("josiesullivan10@gmail.com");
     await admin.auth().updateUser(user.uid, { emailVerified: true });
 
     console.log(`User ${user.uid} has been verified!`);
