@@ -196,7 +196,7 @@ const Battle = () => {
           onClick={() => setErrorMessage("")}
           title="Hang on!"
           text={errorMessage}
-          buttonText="Close"
+          buttonText="Okay, got it!"
         />
       )}
 
