@@ -51,11 +51,12 @@ const HowToPlay = () => {
           • Voting on performances
           <br />• Winning battles
         </p>
+        <br/>
         <p>
           <strong>Smart Voting Bonus:</strong> If you vote for an actor and they
           win the battle, you earn double coins!
         </p>
-        <p>
+        <p><br/>
           Coins convert at a rate of 1 coin = 1p and can be withdrawn once you
           reach 500 coins.
         </p>
@@ -88,9 +89,9 @@ const HowToPlay = () => {
           <br />
           • Vote counts are hidden until battles end (except your own)
           <br />
-          • In case of tied votes, the earliest entry wins
-          <br />• These rules are subject to change to ensure the best
-          experience for all users
+          • In case of tied votes, the earliest entry wins<br/>
+          <br />These rules are constantly reviewed and subject to change to ensure the best
+          experience for all users.
         </p>
       </section>
     </div>
