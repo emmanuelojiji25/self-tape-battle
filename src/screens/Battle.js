@@ -185,10 +185,6 @@ const Battle = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Has user voted? " + userHasVoted);
-    console.log("Entry count:" + entries.length);
-  }, [userHasVoted]);
   return (
     <div className="Battle screen-width">
       {errorMessage && (
