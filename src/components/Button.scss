@@ -4,6 +4,11 @@ button {
   padding: 10px 20px;
   color: white;
   display: block;
+  white-space: nowrap;
+
+  i {
+    margin-right: 5px;
+  }
 
   font-size: 12px;
 

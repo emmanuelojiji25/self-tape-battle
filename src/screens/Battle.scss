@@ -2,6 +2,11 @@
   padding-top: 30px;
   min-height: 100svh;
   padding-bottom: 100px;
+
+  .button-container{
+    display: flex;
+    gap: 15px;
+  }
 }
 
 .battle-header-left {

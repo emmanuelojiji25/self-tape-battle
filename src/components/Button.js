@@ -1,6 +1,6 @@
 import "./Button.scss";
 
-const Button = ({ text, onClick, filled, outline, filled_color }) => {
+const Button = ({ text, onClick, filled, outline, filled_color, icon }) => {
   return (
     <button
       onClick={onClick}
@@ -8,6 +8,7 @@ const Button = ({ text, onClick, filled, outline, filled_color }) => {
         filled_color && "filled_color"
       }`}
     >
+      {icon}
       {text}
     </button>
   );

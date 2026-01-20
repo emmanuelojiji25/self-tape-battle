@@ -25,6 +25,7 @@
 .button-container {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .coin-container {
@@ -34,7 +35,7 @@
   margin-bottom: 50px;
 }
 
-.transaction-title{
+.transaction-title {
   margin-bottom: 20px;
 }
 
@@ -48,22 +49,20 @@
   font-size: 16px;
 }
 
-.transaction-status{
+.transaction-status {
   text-transform: capitalize;
   font-size: 14px;
   color: rgb(63, 214, 63);
 }
 
-.complete{
-  color: rgb(63, 214, 63);;
+.complete {
+  color: rgb(63, 214, 63);
 }
 
-.pending{
+.pending {
   color: orange;
 }
 
-
-
-.coin{
-width: 40px;
+.coin {
+  width: 40px;
 }

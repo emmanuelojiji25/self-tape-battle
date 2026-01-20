@@ -30,6 +30,7 @@ import Skeleton from "../components/Skeleton";
 import chest from "../media/chest.svg";
 import BackButton from "../components/BackButton";
 import Coin from "../components/Coin";
+import HowToPlay from "../components/HowToPlay";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -58,6 +59,8 @@ const Battle = () => {
   const [showMessageModal, setShowMessageModal] = useState(false);
 
   const [userEntry, setUserEntry] = useState(null);
+
+  const [howToPlayVisible, setHowToPlayVisible] = useState(false);
 
   useEffect(() => {
     getBattle();
@@ -202,6 +205,14 @@ const Battle = () => {
           icon={<Coin width="100" />}
         />
       )}
+      {howToPlayVisible && (
+        <>
+          <div className="battle-how-to-play-container">
+            <BackButton onClick={() => setHowToPlayVisible(false)} />
+            <HowToPlay />
+          </div>
+        </>
+      )}
       <Link to="/" className="back">
         <BackButton />
       </Link>
@@ -262,6 +273,12 @@ const Battle = () => {
         <a href={`${battleAttachment}`} download target="_blank">
           <Button text="Download Monologue" outline />
         </a>
+        <Button
+          text="How to play"
+          icon={<i class="fa-solid fa-circle-info"></i>}
+          onClick={() => setHowToPlayVisible(true)}
+          outline
+        />
       </div>
       {file && (
         <div className="file-container">
