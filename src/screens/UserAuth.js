@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./UserAuth.scss";
 import { auth, db } from "../firebaseConfig";
 import Input from "../components/Input";
@@ -17,13 +17,17 @@ import {
   where,
 } from "firebase/firestore";
 import Button from "../components/Button";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import logo from "../media/logo-purple-white.svg";
 import Terms from "../components/Terms";
 import PrivacyPolicy from "../components/PrivacyPolicy";
+import { AuthContext } from "../contexts/AuthContext";
+import Loader from "../components/Loader";
 
 const UserAuth = ({ setSignedIn }) => {
   const navigate = useNavigate();
+
+  const { loggedInUser, loading } = useContext(AuthContext);
 
   const [view, setView] = useState("sign-in");
 
@@ -218,142 +222,156 @@ const UserAuth = ({ setSignedIn }) => {
     getUsers();
   }, []);
 
-  return (
-    <div className="UserAuth screen-width">
-      {view === "sign-up" && (
-        <div className="sign-up">
-          <h2>I am..</h2>
-          <div className="sign-up-choice-container">
-            <Button text="An actor" onClick={() => setView("actor")} filled />
+  if (loading) {
+    <Loader />;
+  }
+
+  if (loggedInUser) {
+    return <Navigate to="/" />;
+  }
+
+  if (!loggedInUser) {
+    return (
+      <div className="UserAuth screen-width">
+        {view === "sign-up" && (
+          <div className="sign-up">
+            <h2>I am..</h2>
+            <div className="sign-up-choice-container">
+              <Button text="An actor" onClick={() => setView("actor")} filled />
+              <Button
+                text="An industry professional"
+                onClick={() => setView("casting")}
+                filled
+              />
+            </div>
+          </div>
+        )}
+
+        {view === "actor" && (
+          <div className="actor-sign-up">
+            {termsVisible && <Terms toggleTerms={toggleTerms} />}
+            {privacyPolicyVisible && (
+              <PrivacyPolicy togglePrivacyPolicy={togglePrivacyPolicy} />
+            )}
+            <img src={logo} />
+            <h2>Hey actor!</h2>
+            <p className="join-others">
+              Join <span className="highlight">{users.length}</span> other
+              actors in the arena!
+            </p>
+            <Input
+              type="text"
+              placeholder="username"
+              onChange={(e) => {
+                handleUserInput(e, setUsername, setUsernameError);
+              }}
+              onKeyDown={(e) => {
+                if (e.code === "Space") {
+                  e.preventDefault();
+                }
+              }}
+              available={isUsernameAvailable}
+              displayIcon={username.length > 0}
+              error={usernameError}
+            />
+            <Input
+              type="email"
+              placeholder="email"
+              onChange={(e) => handleUserInput(e, setEmail, setEmailError)}
+              available={isEmailAvailable}
+              displayIcon={email.length > 0}
+              error={emailError}
+            />
+            <Input
+              type="password"
+              placeholder="password"
+              onChange={(e) =>
+                handleUserInput(e, setPassword, setPasswordError)
+              }
+              error={passwordError}
+            />
+            <Input
+              type="text"
+              placeholder="Secret pin"
+              onChange={(e) =>
+                handleUserInput(e, setSecretPin, setSecretPinError)
+              }
+              error={secretPinError}
+            />
+
+            <p>
+              By signing up, you agree to our{" "}
+              <span className="highlight" onClick={toggleTerms}>
+                terms of use
+              </span>{" "}
+              and{" "}
+              <span className="highlight" onClick={togglePrivacyPolicy}>
+                privacy policy
+              </span>
+            </p>
+
+            <Button onClick={handleSignUp} text="Sign Up" filled_color />
+            <p onClick={() => setView("sign-in")} className="auth-switch">
+              Sign In instead
+            </p>
+            <p onClick={() => setView("casting")} className="auth-switch">
+              I'm an industry professional
+            </p>
+          </div>
+        )}
+
+        {view === "casting" && (
+          <div className="casting">
+            <h2>Hey professional!</h2>
+            <p>
+              For safety and verification purposes. Please email{" "}
+              <span className="highlight">accounts@selftapebattle.com</span>{" "}
+              with your company name, website if applicable, or any social
+              media. Emails must come from your company email. <br />
+              <br />
+              Your account will be set up manually within 24-48 hours.
+            </p>
             <Button
-              text="An industry professional"
-              onClick={() => setView("casting")}
-              filled
+              text="Sign in instead"
+              outline
+              onClick={() => setView("sign-in")}
+            />
+            <Button
+              text="I'm an actor"
+              outline
+              onClick={() => setView("actor")}
             />
           </div>
-        </div>
-      )}
+        )}
 
-      {view === "actor" && (
-        <div className="actor-sign-up">
-          {termsVisible && <Terms toggleTerms={toggleTerms} />}
-          {privacyPolicyVisible && (
-            <PrivacyPolicy togglePrivacyPolicy={togglePrivacyPolicy} />
-          )}
-          <img src={logo} />
-          <h2>Hey actor!</h2>
-          <p className="join-others">
-            Join <span className="highlight">{users.length}</span> other actors
-            in the arena!
-          </p>
-          <Input
-            type="text"
-            placeholder="username"
-            onChange={(e) => {
-              handleUserInput(e, setUsername, setUsernameError);
-            }}
-            onKeyDown={(e) => {
-              if (e.code === "Space") {
-                e.preventDefault();
+        {view === "sign-in" && (
+          <div className="sign-in">
+            <img src={logo} />
+            <h2>Sign In</h2>
+            <Input
+              type="email"
+              placeholder="email"
+              onChange={(e) => handleUserInput(e, setEmail, setEmailError)}
+              error={emailError}
+            />
+            <Input
+              type="password"
+              placeholder="password"
+              onChange={(e) =>
+                handleUserInput(e, setPassword, setPasswordError)
               }
-            }}
-            available={isUsernameAvailable}
-            displayIcon={username.length > 0}
-            error={usernameError}
-          />
-          <Input
-            type="email"
-            placeholder="email"
-            onChange={(e) => handleUserInput(e, setEmail, setEmailError)}
-            available={isEmailAvailable}
-            displayIcon={email.length > 0}
-            error={emailError}
-          />
-          <Input
-            type="password"
-            placeholder="password"
-            onChange={(e) => handleUserInput(e, setPassword, setPasswordError)}
-            error={passwordError}
-          />
-          <Input
-            type="text"
-            placeholder="Secret pin"
-            onChange={(e) =>
-              handleUserInput(e, setSecretPin, setSecretPinError)
-            }
-            error={secretPinError}
-          />
-
-          <p>
-            By signing up, you agree to our{" "}
-            <span className="highlight" onClick={toggleTerms}>
-              terms of use
-            </span>{" "}
-            and{" "}
-            <span className="highlight" onClick={togglePrivacyPolicy}>
-              privacy policy
-            </span>
-          </p>
-
-          <Button onClick={handleSignUp} text="Sign Up" filled_color />
-          <p onClick={() => setView("sign-in")} className="auth-switch">
-            Sign In instead
-          </p>
-          <p onClick={() => setView("casting")} className="auth-switch">
-            I'm an industry professional
-          </p>
-        </div>
-      )}
-
-      {view === "casting" && (
-        <div className="casting">
-          <h2>Hey professional!</h2>
-          <p>
-            For safety and verification purposes. Please email{" "}
-            <span className="highlight">accounts@selftapebattle.com</span> with
-            your company name, website if applicable, or any social media.
-            Emails must come from your company email. <br />
-            <br />
-            Your account will be set up manually within 24-48 hours.
-          </p>
-          <Button
-            text="Sign in instead"
-            outline
-            onClick={() => setView("sign-in")}
-          />
-          <Button
-            text="I'm an actor"
-            outline
-            onClick={() => setView("actor")}
-          />
-        </div>
-      )}
-
-      {view === "sign-in" && (
-        <div className="sign-in">
-          <img src={logo} />
-          <h2>Sign In</h2>
-          <Input
-            type="email"
-            placeholder="email"
-            onChange={(e) => handleUserInput(e, setEmail, setEmailError)}
-            error={emailError}
-          />
-          <Input
-            type="password"
-            placeholder="password"
-            onChange={(e) => handleUserInput(e, setPassword, setPasswordError)}
-            error={passwordError}
-          />
-          {loginError && <span>{loginError}</span>}
-          <Button onClick={handleSignIn} text="Sign In" filled_color />
-          <p onClick={() => setView("sign-up")} className="auth-switch">
-            Sign Up instead
-          </p>
-        </div>
-      )}
-    </div>
-  );
+              error={passwordError}
+            />
+            {loginError && <span>{loginError}</span>}
+            <Button onClick={handleSignIn} text="Sign In" filled_color />
+            <p onClick={() => setView("sign-up")} className="auth-switch">
+              Sign Up instead
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
 };
 
 export default UserAuth;
