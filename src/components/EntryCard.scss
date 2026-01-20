@@ -2,14 +2,12 @@
   width: 100%;
   position: relative;
 
-
   video {
     width: 100%;
-    min-height: 250px;
+    height: 500px;
     object-fit: cover;
     border-radius: 12px;
     display: block;
-
   }
 }
 
@@ -97,16 +95,16 @@
 }
 
 .vote-button {
-  background: white;
+  background: #4b7cff;
   border-radius: 50px;
   width: fit-content;
   padding: 8px 15px;
-  color: black;
+  color: white;
 }
 
 .user-actions {
   position: absolute;
-  bottom: 10px;
+  bottom: 85px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -119,8 +117,6 @@
   color: rgb(87, 74, 0);
 }
 
-
 .share-link {
   color: white;
 }
-

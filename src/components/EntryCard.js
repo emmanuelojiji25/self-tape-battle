@@ -35,6 +35,7 @@ const EntryCard = ({
   const [isExploding, setIsExploding] = useState(false);
   const [username, setUsername] = useState("");
   const [entryUid, setEntryUid] = useState("");
+  const [headshot, setHeadshot] = useState("")
 
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -74,6 +75,7 @@ const EntryCard = ({
           setName(`${userData.firstName} ${userData.lastName}`);
           setUsername(userData.username);
           setEntryUid(userData.uid);
+          setHeadshot(userData.headshot)
         }
 
         // Fetch votes
@@ -226,7 +228,7 @@ const EntryCard = ({
       </div>
 
       <div className="video-container">
-        <video src={url} controls />
+        <video src={url} controls poster={headshot}/>
         <div className="user-actions">
           {loggedInUser && voteButtonVisible && battleStatus === "open" && (
             <span
