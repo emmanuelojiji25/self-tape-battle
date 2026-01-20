@@ -2,7 +2,7 @@ import "./HowToPlay.scss";
 
 const HowToPlay = () => {
   return (
-    <div className="HowToPlay">
+    <div className="HowToPlay screen-width">
       <h2>How to play</h2>
 
       <section>
