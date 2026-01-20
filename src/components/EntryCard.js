@@ -226,7 +226,7 @@ const EntryCard = ({
       </div>
 
       <div className="video-container">
-        <video src={url} controls preload="metadata" />
+        <video src={url} controls />
         <div className="user-actions">
           {loggedInUser && voteButtonVisible && battleStatus === "open" && (
             <span
