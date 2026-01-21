@@ -259,7 +259,7 @@ const Battle = () => {
                 if (!userHasVoted && entries.length > 5) {
                   console.log("You must vote first!");
                   setErrorMessage(
-                    "You must watch & vote for at least 1 entry before you can join this battle. You can vote multiple times in a battle."
+                    "You must watch & vote for at least 1 entry before you can join this battle. You can still vote for other entries in this battle."
                   );
                   return;
                 } else {

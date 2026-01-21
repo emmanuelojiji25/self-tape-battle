@@ -18,9 +18,10 @@ const HowToPlay = () => {
         <h3>2. Vote to Enter (If Required)</h3>
         <p>
           If a battle has more than 5 entries, you must vote on one existing
-          performance before you can submit your own. This ensures fair play and
-          keeps the community engaged. Remember: once you vote for an actor,
-          that vote is final and cannot be changed.
+          performance before you can submit your own. You can still vote for
+          other entries in this battle. This ensures fair play and keeps the
+          community engaged. Remember: once you vote for an actor, that vote is
+          final and cannot be changed.
         </p>
       </section>
 
@@ -51,12 +52,13 @@ const HowToPlay = () => {
           • Voting on performances
           <br />• Winning battles
         </p>
-        <br/>
+        <br />
         <p>
           <strong>Smart Voting Bonus:</strong> If you vote for an actor and they
           win the battle, you earn double coins!
         </p>
-        <p><br/>
+        <p>
+          <br />
           Coins convert at a rate of 1 coin = 1p and can be withdrawn once you
           reach 500 coins.
         </p>
@@ -89,9 +91,11 @@ const HowToPlay = () => {
           <br />
           • Vote counts are hidden until battles end (except your own)
           <br />
-          • In case of tied votes, the earliest entry wins<br/>
-          <br />These rules are constantly reviewed and subject to change to ensure the best
-          experience for all users.
+          • In case of tied votes, the earliest entry wins
+          <br />
+          <br />
+          These rules are constantly reviewed and subject to change to ensure
+          the best experience for all users.
         </p>
       </section>
     </div>
