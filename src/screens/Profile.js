@@ -510,7 +510,7 @@ const Profile = () => {
                             setPreviewfile(preview);
                           }
                         }}
-                        accept="image/*"
+                        accept="image/jpeg, image/png"
                       ></input>
                       <Input type="text" value={firstName} disabled />
                       <Input type="text" value={lastName} disabled />

@@ -213,7 +213,7 @@ const Onboarding = () => {
                   setPreviewfile(preview);
                 }
               }}
-              accept="image/*"
+              accept="image/jpeg, image/png"
             ></input>
             {!loading ? (
               <div
