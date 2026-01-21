@@ -233,7 +233,6 @@ const EntryCard = ({
           ref={videoRef}
           poster={headshot}
           preload="metadata" // loads only minimal info
-          playsInline
           controls
           src={url}
         />
