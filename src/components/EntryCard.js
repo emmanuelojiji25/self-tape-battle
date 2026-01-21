@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import ShareModal from "./ShareModal";
 import DeleteModal from "./DeleteModal";
 import ReportModal from "./ReportModal";
-import Confetti from "react-confetti-boom";
 
 const EntryCard = ({
   url,
@@ -25,7 +24,6 @@ const EntryCard = ({
   voteButtonVisible,
   battleStatus,
   isPillVisible,
-  menu,
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -34,8 +32,8 @@ const EntryCard = ({
   const [userhasVoted, setUserHasVoted] = useState(false);
   const [isExploding, setIsExploding] = useState(false);
   const [username, setUsername] = useState("");
-  const [entryUid, setEntryUid] = useState("");
-  const [headshot, setHeadshot] = useState("")
+
+  const [headshot, setHeadshot] = useState("");
 
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -45,6 +43,8 @@ const EntryCard = ({
 
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
+
+  const [videoClicked, setVideoClicked] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -74,8 +74,8 @@ const EntryCard = ({
         if (userData) {
           setName(`${userData.firstName} ${userData.lastName}`);
           setUsername(userData.username);
-          setEntryUid(userData.uid);
-          setHeadshot(userData.headshot)
+
+          setHeadshot(userData.headshot);
         }
 
         // Fetch votes
@@ -118,7 +118,6 @@ const EntryCard = ({
 
         const userRef = doc(db, "users", loggedInUser.uid);
         const userSnap = await getDoc(userRef);
-        const currentCoins = userSnap.data()?.coins || 0;
 
         await updateDoc(userRef, {
           coins: increment(1),
@@ -152,6 +151,8 @@ const EntryCard = ({
       console.log(error);
     }
   };
+
+  const videoRef = useRef(null);
 
   return (
     <div className="EntryCard">
@@ -228,7 +229,14 @@ const EntryCard = ({
       </div>
 
       <div className="video-container">
-        <video src={url} controls poster={headshot}/>
+        <video
+          ref={videoRef}
+          poster={headshot}
+          preload="metadata" // loads only minimal info
+          playsInline
+          controls
+          src={url}
+        />
         <div className="user-actions">
           {loggedInUser && voteButtonVisible && battleStatus === "open" && (
             <span
