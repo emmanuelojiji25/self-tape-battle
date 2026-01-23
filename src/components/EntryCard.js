@@ -193,38 +193,57 @@ const EntryCard = ({
           )}
         </div>
 
-        <div className="card-menu-container">
-          <div
-            className="card-menu-icon"
-            onClick={() => setMenuVisible(!menuVisible)}
-            ref={menuButtonRef}
-          >
-            <i class="fa-solid fa-ellipsis"></i>
+        <div className="entry-card-header-right">
+          <div className="user-actions">
+            {loggedInUser && voteButtonVisible && battleStatus === "open" && (
+              <span
+                onClick={() => handleVote()}
+                className={`vote-button ${userhasVoted ? "voted" : ""}`}
+              >
+                {!userhasVoted ? "Vote" : "You voted!"}
+              </span>
+            )}
+            {((loggedInUser && uid === loggedInUser.uid) ||
+              battleStatus === "closed") && (
+              <span className="votes">
+                {votes > 0 ? votes : "No"} Vote{votes < 1 && "s"}
+              </span>
+            )}
           </div>
-          {menuVisible && (
-            <div className="card-menu" ref={menuRef}>
-              {uid === loggedInUser?.uid && (
-                <>
-                  <span
-                    className="share"
-                    onClick={() => {
-                      setShareModalVisible(true);
-                    }}
-                  >
-                    Share
-                  </span>
 
-                  <p
-                    onClick={() => setDeleteModalVisible(true)}
-                    className="delete"
-                  >
-                    Delete
-                  </p>
-                </>
-              )}
-              <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+          <div className="card-menu-container">
+            <div
+              className="card-menu-icon"
+              onClick={() => setMenuVisible(!menuVisible)}
+              ref={menuButtonRef}
+            >
+              <i class="fa-solid fa-ellipsis"></i>
             </div>
-          )}
+            {menuVisible && (
+              <div className="card-menu" ref={menuRef}>
+                {uid === loggedInUser?.uid && (
+                  <>
+                    <span
+                      className="share"
+                      onClick={() => {
+                        setShareModalVisible(true);
+                      }}
+                    >
+                      Share
+                    </span>
+
+                    <p
+                      onClick={() => setDeleteModalVisible(true)}
+                      className="delete"
+                    >
+                      Delete
+                    </p>
+                  </>
+                )}
+                <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -236,22 +255,6 @@ const EntryCard = ({
           controls
           src={url}
         />
-        <div className="user-actions">
-          {loggedInUser && voteButtonVisible && battleStatus === "open" && (
-            <span
-              onClick={() => handleVote()}
-              className={`vote-button ${userhasVoted ? "voted" : ""}`}
-            >
-              {!userhasVoted ? "Vote" : "You voted!"}
-            </span>
-          )}
-          {((loggedInUser && uid === loggedInUser.uid) ||
-            battleStatus === "closed") && (
-            <span className="votes">
-              {votes > 0 ? votes : "No"} Vote{votes < 1 && "s"}
-            </span>
-          )}
-        </div>
       </div>
     </div>
   );

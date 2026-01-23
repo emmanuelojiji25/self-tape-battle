@@ -25,6 +25,8 @@
   .name {
     font-size: 16px;
     color: white;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 
@@ -89,7 +91,6 @@
   background: white;
   border-radius: 50px;
   width: fit-content;
-
   padding: 8px 15px;
   color: black;
 }
@@ -103,13 +104,9 @@
 }
 
 .user-actions {
-  position: absolute;
-  bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
   padding: 0 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .voted {
@@ -119,4 +116,9 @@
 
 .share-link {
   color: white;
+}
+
+.entry-card-header-right {
+  display: flex;
+  align-items: center;
 }
