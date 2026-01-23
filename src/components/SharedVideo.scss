@@ -1,9 +1,18 @@
-.SharedVideo{
-    height: 100svh;
-    color: white !important;
-    padding-top: 25px;
+.SharedVideo {
+  height: 100svh;
+  color: white !important;
+  padding-top: 25px;
 
-    header{
-        margin-bottom: 50px;
-    }
+  header {
+    margin-bottom: 50px;
+  }
+}
+
+.private-entry {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }

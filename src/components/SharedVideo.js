@@ -6,12 +6,14 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import EntryCard from "./EntryCard";
 import "./SharedVideo.scss";
 import logo from "../media/logo-purple-white.svg";
+import Button from "./Button";
+import { AuthContext } from "../contexts/AuthContext";
 
 const SharedVideo = () => {
   const { battleId, username } = useParams();
@@ -20,6 +22,8 @@ const SharedVideo = () => {
 
   const [battleName, setBattleName] = useState("");
   const [prize, setPrize] = useState("");
+
+  const { loggedInUser } = useContext(AuthContext);
 
   const getVideo = async () => {
     try {
@@ -56,19 +60,20 @@ const SharedVideo = () => {
   }, [battleId, username]);
   return (
     <div className="SharedVideo screen-width">
-      {entry.shareSetting === "private" ? (
-        <h1>Private</h1>
+      {entry.shareSetting === "private" && !loggedInUser ? (
+        <div className="private-entry">
+          <h1>{user.firstName}'s entry is private.</h1>
+          <Link to="/userAuth">
+            <Button filled_color text="Enter Arena to view" />
+          </Link>
+        </div>
       ) : (
         <>
           <header>
             <img src={logo} />
           </header>
-          
-          <h2>{`${user?.firstName} ${user?.lastName}`}</h2>
-          <h3>{battleName}</h3>
-          <h3>{prize}</h3>
 
-          <EntryCard url={entry.url} />
+          <EntryCard url={entry.url} uid={user.uid} />
         </>
       )}
     </div>
