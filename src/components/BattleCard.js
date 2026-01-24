@@ -33,7 +33,7 @@ const BattleCard = ({ name, prize, battleId, mostPopular, scheduled }) => {
         {typeof prize === "number" ? (
           <Coin width="25" coin />
         ) : (
-          <Chest width="25"/>
+          <Chest width="30"/>
         )}
         <h5>{prize}</h5>
       </div>
