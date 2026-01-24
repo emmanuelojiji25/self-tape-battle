@@ -34,3 +34,34 @@
     transform: rotate(360deg);
   }
 }
+
+.Chest {
+  position: relative;
+  display: flex;
+  animation: shake 0.5s infinite;
+
+  .chest_img {
+    width: 100%;
+  }
+
+  .sparkle {
+    width: 40%;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(-10deg);
+  }
+
+  75% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(0deg);
+  }
+}
