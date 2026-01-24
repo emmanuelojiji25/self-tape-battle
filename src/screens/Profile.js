@@ -457,6 +457,12 @@ const Profile = () => {
                           url={battle.url}
                           uid={battle.uid}
                           battleId={battle.battleId}
+                          userData={{
+                            firstName: firstName,
+                            lastName: lastName,
+                            username: username,
+                            headshot: headshot,
+                          }}
                         />
                       }
                     </>

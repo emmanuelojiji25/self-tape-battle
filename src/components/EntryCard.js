@@ -28,11 +28,17 @@ const EntryCard = ({
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
+  const {
+    firstName = "",
+    lastName = "",
+    username = "",
+    headshot = "",
+  } = userData || {};
+
   const [name, setName] = useState("");
   const [votes, setVotes] = useState(0);
   const [userhasVoted, setUserHasVoted] = useState(false);
   const [isExploding, setIsExploding] = useState(false);
-  const [username, setUsername] = useState("");
 
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -44,8 +50,6 @@ const EntryCard = ({
   const menuButtonRef = useRef(null);
 
   const [videoClicked, setVideoClicked] = useState(false);
-
-  // const { firstName, lastName, headshot } = userData;
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -176,8 +180,8 @@ const EntryCard = ({
 
       <div className="entry-card-header">
         <div className="entry-card-header-left">
-          <Link to={`/profile/${userData?.username}`} className="name">
-            {`${userData?.firstName} ${userData?.lastName}`}
+          <Link to={`/profile/${username}`} className="name">
+            {`${firstName} ${lastName}`}
           </Link>
           {uid === loggedInUser?.uid && isPillVisible && (
             <div className="pill">Your entry!</div>
