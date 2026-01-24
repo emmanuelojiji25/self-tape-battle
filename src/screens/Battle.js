@@ -73,8 +73,12 @@ const Battle = () => {
     const entriesRef = collection(db, "battles", battleId, "entries");
 
     const entriesDocs = await getDocs(entriesRef);
-    onSnapshot(docRef, (snapshot) => {
-      const data = snapshot.data();
+
+    const battleSnapshot = await getDoc(docRef);
+
+    const data = battleSnapshot.data();
+
+    if (data) {
       setTitle(data.title);
       setBattleStatus(data.status);
       setBattleAttachment(data.file);
@@ -83,7 +87,7 @@ const Battle = () => {
       setPrize(data.prize.value);
       setGenre(data.genre);
       setVoters(data.voters);
-    });
+    }
 
     let entries = [];
 
