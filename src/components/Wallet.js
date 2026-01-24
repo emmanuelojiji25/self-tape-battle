@@ -18,7 +18,7 @@ import "./Wallet.scss";
 import coin from "../media/stb_coin.svg";
 import emailjs from "@emailjs/browser";
 import BackButton from "./BackButton";
-import Coin from "./Coin";
+import {Coin} from "./Icon";
 
 const Wallet = ({ visibleClass, setWalletVisible }) => {
   const { loggedInUser, email } = useContext(AuthContext);

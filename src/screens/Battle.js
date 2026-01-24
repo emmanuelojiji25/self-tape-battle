@@ -25,11 +25,10 @@ import { db, storage } from "../firebaseConfig";
 import "./Battle.scss";
 import NavBar from "../components/NavBar";
 import MessageModal from "../components/MessageModal";
-import coin from "../media/stb_coin.svg";
 import Skeleton from "../components/Skeleton";
 import chest from "../media/chest.svg";
 import BackButton from "../components/BackButton";
-import Coin from "../components/Coin";
+import {Coin} from "../components/Icon";
 import HowToPlay from "../components/HowToPlay";
 
 const Battle = () => {

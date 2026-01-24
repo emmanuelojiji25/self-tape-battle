@@ -9,7 +9,7 @@ import Wallet from "./Wallet";
 import Story from "./Story";
 import scroll from "../media/scroll.png";
 import SideMenu from "./SideMenu";
-import Coin from "./Coin";
+import {Coin, Chest} from "./Icon";
 
 const Header = () => {
   const { loggedInUser, authRole, firstName, username, headshot, coins } =

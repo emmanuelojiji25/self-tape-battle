@@ -1,12 +1,9 @@
 import { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./BattleCard.scss";
-import chest from "../media/chest.svg";
-import fire from "../media/fire.svg";
-import coin from "../media/stb_coin.svg";
 import Button from "./Button";
 import { AuthContext } from "../contexts/AuthContext";
-import Coin from "./Coin";
+import { Coin, Chest } from "./Icon";
 
 const BattleCard = ({ name, prize, battleId, mostPopular, scheduled }) => {
   const [voteComplete, setVoteComplete] = useState(false);
@@ -34,9 +31,9 @@ const BattleCard = ({ name, prize, battleId, mostPopular, scheduled }) => {
       )}
       <div className="prize">
         {typeof prize === "number" ? (
-          <Coin width="25" />
+          <Coin width="25" coin />
         ) : (
-          <img src={chest} className="chest" />
+          <Chest width="25"/>
         )}
         <h5>{prize}</h5>
       </div>
