@@ -18,6 +18,7 @@ import DeleteModal from "./DeleteModal";
 import ReportModal from "./ReportModal";
 
 const EntryCard = ({
+  userData,
   url,
   uid,
   battleId,
@@ -33,8 +34,6 @@ const EntryCard = ({
   const [isExploding, setIsExploding] = useState(false);
   const [username, setUsername] = useState("");
 
-  const [headshot, setHeadshot] = useState("");
-
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [isReportModalVisible, setIsReportModalVisible] = useState(false);
@@ -45,6 +44,8 @@ const EntryCard = ({
   const menuButtonRef = useRef(null);
 
   const [videoClicked, setVideoClicked] = useState(false);
+
+  // const { firstName, lastName, headshot } = userData;
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -68,16 +69,6 @@ const EntryCard = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch entry owner's name and username
-        const userDoc = await getDoc(doc(db, "users", uid));
-        const userData = userDoc.data();
-        if (userData) {
-          setName(`${userData.firstName} ${userData.lastName}`);
-          setUsername(userData.username);
-
-          setHeadshot(userData.headshot);
-        }
-
         // Fetch votes
         const entryRef = doc(db, "battles", battleId, "entries", uid);
         const entrySnap = await getDoc(entryRef);
@@ -185,8 +176,8 @@ const EntryCard = ({
 
       <div className="entry-card-header">
         <div className="entry-card-header-left">
-          <Link to={`/profile/${username}`} className="name">
-            {name}
+          <Link to={`/profile/${userData?.username}`} className="name">
+            {`${userData?.firstName} ${userData?.lastName}`}
           </Link>
           {uid === loggedInUser?.uid && isPillVisible && (
             <div className="pill">Your entry!</div>
@@ -250,8 +241,8 @@ const EntryCard = ({
       <div className="video-container">
         <video
           ref={videoRef}
-          poster={headshot}
-          preload="metadata" // loads only minimal info
+          poster={userData?.headshot}
+          preload="none" // loads only minimal info
           controls
           src={url}
         />

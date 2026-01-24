@@ -62,11 +62,17 @@ const Battle = () => {
 
   const [howToPlayVisible, setHowToPlayVisible] = useState(false);
 
+  const [usersCache, setUsersCache] = useState({});
+
   useEffect(() => {
     getBattle();
     getWinner();
     getUserEntry();
   }, []);
+
+  useEffect(() => {
+    fetchUsersForEntries(entries);
+  }, [entries]);
 
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
@@ -103,6 +109,40 @@ const Battle = () => {
 
     try {
     } catch (error) {}
+  };
+
+  const fetchUsersForEntries = async (entriesData) => {
+    if (entriesData.length === 0) return;
+
+    const uniqueUids = [...new Set(entriesData.map((e) => e.uid))];
+
+    // Only fetch users we don't have cached yet
+    const uncachedUids = uniqueUids.filter((uid) => !usersCache[uid]);
+
+    if (uncachedUids.length === 0) return;
+
+    const userPromises = uncachedUids.map((uid) =>
+      getDoc(doc(db, "users", uid))
+    );
+
+    const userDocs = await Promise.all(userPromises);
+
+    // Create an object keyed by uid
+    const newCache = { ...usersCache };
+
+    userDocs.forEach((userDoc, index) => {
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        newCache[uncachedUids[index]] = {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          username: data.username,
+          headshot: data.headshot,
+        };
+      }
+    });
+
+    setUsersCache(newCache);
   };
 
   const getUserEntry = () => {
@@ -345,11 +385,13 @@ const Battle = () => {
         {entries.map((entry) => {
           return (
             <EntryCard
+              key={entry.uid} // Add key!
               url={entry.url}
               uid={entry.uid}
               battleId={battleId}
               voteButtonVisible={entry.uid != loggedInUser.uid}
               battleStatus={battleStatus}
+              userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
             />
           );
         })}
