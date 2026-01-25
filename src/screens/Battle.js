@@ -28,7 +28,7 @@ import MessageModal from "../components/MessageModal";
 import Skeleton from "../components/Skeleton";
 import chest from "../media/chest.svg";
 import BackButton from "../components/BackButton";
-import {Coin} from "../components/Icon";
+import { Coin } from "../components/Icon";
 import HowToPlay from "../components/HowToPlay";
 
 const Battle = () => {
@@ -227,6 +227,54 @@ const Battle = () => {
       console.log(error);
     }
   };
+
+  /*useEffect(() => {
+    const checkWinner = async () => {
+      const battleRef = doc(db, "battles", battleId);
+      try {
+        const collectionRef = collection(db, "battles", battleId, "entries");
+        const snapshot = await getDocs(collectionRef);
+
+        const entries = snapshot.docs.map((d) => d.data());
+
+        if (!entries.length) {
+          console.warn("No entries found for this battle.");
+          setWinner(null);
+          return;
+        }
+
+        // Helper function to normalize date types
+        const toMillis = (date) => {
+          if (!date) return 0;
+          if (typeof date === "number") return date; // from Date.now()
+          if (date.seconds) return date.seconds * 1000; // from Firestore Timestamp
+          if (typeof date.toMillis === "function") return date.toMillis();
+          return 0;
+        };
+
+        // 🔥 Sort once by votes desc, then date asc (earliest wins tie)
+        entries.sort((a, b) => {
+          const votesA = a.votes?.length || 0;
+          const votesB = b.votes?.length || 0;
+
+          if (votesB !== votesA) return votesB - votesA; // Most votes first
+          return toMillis(a.date) - toMillis(b.date); // Earlier entry wins ties
+        });
+
+        const winnerEntry = entries[0];
+
+        console.log(winnerEntry);
+        if (!winnerEntry?.uid) {
+          console.warn("No valid winner UID found in entries.");
+          setWinner(null);
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    checkWinner();
+  });*/
 
   return (
     <div className="Battle screen-width">

@@ -197,6 +197,7 @@ const Dashboard = () => {
     getReports();
   }, []);
 
+
   const closeBattle = async (battleId) => {
     const battleRef = doc(db, "battles", battleId);
     try {
