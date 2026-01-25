@@ -201,7 +201,8 @@ const EntryCard = ({
             {((loggedInUser && uid === loggedInUser.uid) ||
               battleStatus === "closed") && (
               <span className="votes">
-                {votes > 0 ? votes : "No"} Vote{votes < 1 && "s"}
+                {votes > 0 ? votes : "No"} Vote
+                {votes > 1 && "s"}
               </span>
             )}
           </div>
