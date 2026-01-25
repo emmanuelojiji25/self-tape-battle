@@ -248,7 +248,7 @@ const EntryCard = ({
           poster={userData?.headshot}
           preload="none" // loads only minimal info
           controls
-          src={url}
+          src={`${url}.mp4`}
         />
       </div>
     </div>

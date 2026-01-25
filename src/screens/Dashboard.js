@@ -197,7 +197,6 @@ const Dashboard = () => {
     getReports();
   }, []);
 
-
   const closeBattle = async (battleId) => {
     const battleRef = doc(db, "battles", battleId);
     try {
@@ -282,6 +281,7 @@ const Dashboard = () => {
             const userInfo = {
               name: firstName,
               email: email,
+              link: `https://app.selftapebattle.com/arena/${battleId}`,
             };
 
             // Send email to voters who voted for winning entry
