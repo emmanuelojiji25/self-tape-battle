@@ -298,6 +298,9 @@ const Dashboard = () => {
         name: winnerData.firstName,
         email: winnerData.email,
         battleName: battleData.title,
+        prize: `${prizeObject.value} ${
+          typeof prizeObject.value === "number" && "coins"
+        }`,
       };
 
       // Send email to winner
@@ -359,7 +362,6 @@ const Dashboard = () => {
 
     getOutstandingUsers();
   });
-
 
   const handleManualVerify = async (uid) => {
     try {
