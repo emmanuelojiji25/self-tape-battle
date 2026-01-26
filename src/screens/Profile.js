@@ -151,6 +151,8 @@ const Profile = () => {
     }
   };
 
+  dev branch test
+
   const getTotalVotes = async () => {
     try {
       const collectionRef = collectionGroup(db, "entries");
