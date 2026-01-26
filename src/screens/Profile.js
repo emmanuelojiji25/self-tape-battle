@@ -151,7 +151,6 @@ const Profile = () => {
     }
   };
 
-  dev branch test
 
   const getTotalVotes = async () => {
     try {

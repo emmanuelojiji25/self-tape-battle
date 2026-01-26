@@ -15,12 +15,12 @@ const firebaseConfig = {
   projectId: "self-tape-battle",
   storageBucket: "self-tape-battle.appspot.com",
   messagingSenderId: "746282940351",
-  appId: "1:746282940351:web:d117a1a8a7c94cd27e130a"
+  appId: "1:746282940351:web:d117a1a8a7c94cd27e130a",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = getFirestore(app, "default-clone");
 export const storage = getStorage(app);
 const analytics = getAnalytics(app);
