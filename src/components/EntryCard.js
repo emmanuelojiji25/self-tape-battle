@@ -1,6 +1,7 @@
 import {
   arrayUnion,
   collection,
+  collectionGroup,
   deleteDoc,
   doc,
   getDoc,
@@ -30,17 +31,12 @@ const EntryCard = ({
   voteButtonVisible,
   battleStatus,
   isPillVisible,
+  userVotes,
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
-  const {
-    firstName = "",
-    lastName = "",
-    username = "",
-    headshot = "",
-  } = userData || {};
+  const { firstName = "", lastName = "", username = "" } = userData || {};
 
-  const [name, setName] = useState("");
   const [votes, setVotes] = useState(0);
   const [userhasVoted, setUserHasVoted] = useState(false);
   const [isExploding, setIsExploding] = useState(false);
@@ -55,6 +51,8 @@ const EntryCard = ({
   const menuButtonRef = useRef(null);
 
   const [videoClicked, setVideoClicked] = useState(false);
+
+  const [voteLimitedReached, setVoteLimitReached] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -97,11 +95,7 @@ const EntryCard = ({
         const q = query(votesCollection, where("uid", "==", loggedInUser.uid));
         const querySnapshot = await getDocs(q);
 
-        if (loggedInUser) {
-          setUserHasVoted(querySnapshot.size > 0);
-        }
-
-        // Optional: You can also fetch battle status here if needed
+        setUserHasVoted(querySnapshot.size > 0);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -126,6 +120,7 @@ const EntryCard = ({
 
         await setDoc(voteDoc, {
           uid: loggedInUser.uid,
+          battleId: battleId,
         });
 
         // Award User coin
@@ -208,14 +203,17 @@ const EntryCard = ({
 
         <div className="entry-card-header-right">
           <div className="user-actions">
-            {loggedInUser && voteButtonVisible && battleStatus === "open" && (
-              <span
-                onClick={() => handleVote()}
-                className={`vote-button ${userhasVoted ? "voted" : ""}`}
-              >
-                {!userhasVoted ? "Vote" : "You voted!"}
-              </span>
-            )}
+            {loggedInUser &&
+              voteButtonVisible &&
+              battleStatus === "open" &&
+              userVotes < 5 && (
+                <span
+                  onClick={() => handleVote()}
+                  className={`vote-button ${userhasVoted ? "voted" : ""}`}
+                >
+                  {!userhasVoted ? "Vote" : "You voted!"}
+                </span>
+              )}
             {((loggedInUser && uid === loggedInUser.uid) ||
               battleStatus === "closed") && (
               <span className="votes">

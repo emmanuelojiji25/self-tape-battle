@@ -1,13 +1,16 @@
 import {
   arrayUnion,
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,
   increment,
   onSnapshot,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import {
   getDownloadURL,
@@ -63,6 +66,8 @@ const Battle = () => {
 
   const [usersCache, setUsersCache] = useState({});
 
+  const [userVotes, setUserVotes] = useState(0);
+
   useEffect(() => {
     getBattle();
     getWinner();
@@ -105,6 +110,19 @@ const Battle = () => {
     setTimeout(() => {
       setLoading(false);
     }, 300);
+
+    // Check if vote limit reached for Battle
+    const votesRef = collectionGroup(db, "votes");
+
+    const votesQuery = query(
+      votesRef,
+      where("uid", "==", loggedInUser.uid),
+      where("battleId", "==", battleId)
+    );
+
+    const votesQuerySnapshot = await getDocs(votesQuery);
+
+    setUserVotes(votesQuerySnapshot.docs.length);
 
     try {
     } catch (error) {}
@@ -362,6 +380,7 @@ const Battle = () => {
               filled_color
             />
           )}
+        <p className="user-votes">Votes Remaining: {5 - userVotes}</p>
         <a href={`${battleAttachment}`} download target="_blank">
           <Button text="Download Monologue" outline />
         </a>
@@ -439,6 +458,7 @@ const Battle = () => {
               voteButtonVisible={entry.uid != loggedInUser.uid}
               battleStatus={battleStatus}
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
+              userVotes={userVotes}
             />
           );
         })}
