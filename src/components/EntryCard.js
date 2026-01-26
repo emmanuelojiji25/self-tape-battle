@@ -1,11 +1,16 @@
 import {
   arrayUnion,
+  collection,
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
   increment,
   onSnapshot,
+  query,
+  setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
@@ -73,15 +78,27 @@ const EntryCard = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch votes
-        const entryRef = doc(db, "battles", battleId, "entries", uid);
-        const entrySnap = await getDoc(entryRef);
-        const data = entrySnap.data();
-        const voteList = data?.votes || [];
+        // Fetch amount of votes
+        const votesCollection = collection(
+          db,
+          "battles",
+          battleId,
+          "entries",
+          uid,
+          "votes"
+        );
+        const snapshot = await getDocs(votesCollection);
 
-        setVotes(voteList.length);
+        onSnapshot(votesCollection, (snapshot) => {
+          setVotes(snapshot.size);
+        });
+
+        // Check if user has voted for entry
+        const q = query(votesCollection, where("uid", "==", loggedInUser.uid));
+        const querySnapshot = await getDocs(q);
+
         if (loggedInUser) {
-          setUserHasVoted(voteList.includes(loggedInUser.uid));
+          setUserHasVoted(querySnapshot.size > 0);
         }
 
         // Optional: You can also fetch battle status here if needed
@@ -96,29 +113,30 @@ const EntryCard = ({
   const handleVote = async () => {
     if (!userhasVoted) {
       try {
-        const entryRef = doc(db, "battles", battleId, "entries", uid);
+        // Add user vote
+        const voteDoc = doc(
+          db,
+          "battles",
+          battleId,
+          "entries",
+          uid,
+          "votes",
+          loggedInUser.uid
+        );
 
-        await updateDoc(entryRef, {
-          votes: arrayUnion(loggedInUser.uid),
+        await setDoc(voteDoc, {
+          uid: loggedInUser.uid,
         });
 
-        onSnapshot(entryRef, (snapshot) => {
-          const updatedVotes = snapshot.data().votes || [];
-          setVotes(updatedVotes.length);
-        });
-
-        await updateDoc(doc(db, "battles", battleId), {
-          voters: arrayUnion(loggedInUser.uid),
-        });
-
+        // Award User coin
         const userRef = doc(db, "users", loggedInUser.uid);
-        const userSnap = await getDoc(userRef);
 
         await updateDoc(userRef, {
           coins: increment(1),
           totalCoinsEarned: increment(1),
         });
 
+        // Update transactions array
         await updateDoc(userRef, {
           withdrawals: arrayUnion({
             amount: 1,
