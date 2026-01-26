@@ -68,15 +68,24 @@ const Battle = () => {
 
   const [userVotes, setUserVotes] = useState(0);
 
+  const [loggedInUserDoc, setLoggedInUserDoc] = useState({});
+
   useEffect(() => {
+    getUser();
     getBattle();
     getWinner();
     getUserEntry();
   }, []);
 
   useEffect(() => {
-    fetchUsersForEntries(entries);
-  }, [entries]);
+    console.log(usersCache);
+  }, [usersCache]);
+
+  const getUser = async () => {
+    const userRef = doc(db, "users", loggedInUser.uid);
+    const snapshot = await getDoc(userRef);
+    setLoggedInUserDoc(snapshot.data());
+  };
 
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
@@ -105,13 +114,15 @@ const Battle = () => {
       entries.push(doc.data());
     });
 
-    setEntries(entries.filter((entry) => entry.uid != loggedInUser.uid));
+    const filtered = entries.filter((e) => e.uid !== loggedInUser.uid);
+    setEntries(filtered);
+    await fetchUsersForEntries(filtered);
 
     setTimeout(() => {
       setLoading(false);
     }, 300);
 
-    // Check if vote limit reached for Battle
+    // Vote limit query
     const votesRef = collectionGroup(db, "votes");
 
     const votesQuery = query(
@@ -120,9 +131,10 @@ const Battle = () => {
       where("battleId", "==", battleId)
     );
 
-    const votesQuerySnapshot = await getDocs(votesQuery);
-
-    setUserVotes(votesQuerySnapshot.docs.length);
+    onSnapshot(votesRef, async () => {
+      const votesQuerySnapshot = await getDocs(votesQuery);
+      setUserVotes(votesQuerySnapshot.docs.length);
+    });
 
     try {
     } catch (error) {}
@@ -444,6 +456,8 @@ const Battle = () => {
             voteButtonVisible={userEntry.uid != loggedInUser.uid}
             battleStatus={battleStatus}
             isPillVisible={true}
+            userData={loggedInUserDoc} // Changed from userDocs to usersCache
+            userVotes={userVotes}
             menu
           />
         )}
