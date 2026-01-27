@@ -20,7 +20,6 @@ import Story from "../components/Story";
 
 import { AuthContext } from "../contexts/AuthContext";
 
-
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
 

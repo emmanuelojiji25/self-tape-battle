@@ -154,7 +154,7 @@ const UserAuth = ({ setSignedIn }) => {
       });
 
       await sendEmailVerification(auth.currentUser);
-      navigate("/emailverification");
+      navigate("/onboarding");
     } catch (error) {
       console.log(error);
       if (error.code === "auth/invalid-email") {
