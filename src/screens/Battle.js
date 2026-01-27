@@ -102,7 +102,6 @@ const Battle = () => {
       setBattleStatus(data.status);
       setBattleAttachment(data.file);
       setDeadline(data.deadline);
-      setUserHasVoted(data.voters.includes(loggedInUser.uid));
       setPrize(data.prize.value);
       setGenre(data.genre);
       setVoters(data.voters);
@@ -118,10 +117,6 @@ const Battle = () => {
     setEntries(filtered);
     await fetchUsersForEntries(filtered);
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
-
     // Vote limit query
     const votesRef = collectionGroup(db, "votes");
 
@@ -136,6 +131,9 @@ const Battle = () => {
       setUserVotes(votesQuerySnapshot.docs.length);
     });
 
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
     try {
     } catch (error) {}
   };
@@ -377,7 +375,7 @@ const Battle = () => {
           battleStatus === "open" && (
             <Button
               onClick={() => {
-                if (!userHasVoted && entries.length > 5) {
+                if (userVotes === 0 && entries.length > 5) {
                   console.log("You must vote first!");
                   setErrorMessage(
                     "You must watch & vote for at least 1 entry before you can join this battle. You can still vote for other entries in this battle."
@@ -392,7 +390,7 @@ const Battle = () => {
               filled_color
             />
           )}
-        <p className="user-votes">Votes Remaining: {5 - userVotes}</p>
+
         <a href={`${battleAttachment}`} download target="_blank">
           <Button text="Download Monologue" outline />
         </a>
@@ -402,6 +400,9 @@ const Battle = () => {
           onClick={() => setHowToPlayVisible(true)}
           outline
         />
+        <p className="user-votes">
+          Votes Remaining: <strong>{5 - userVotes}</strong>
+        </p>
       </div>
       {file && (
         <div className="file-container">
