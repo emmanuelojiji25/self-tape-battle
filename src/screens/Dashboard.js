@@ -240,8 +240,14 @@ const Dashboard = () => {
         });
 
         // Award coin to all voters of winning entry
-
-        const votesRef = collection(db, "battles", battleId, winnerUid);
+        const votesRef = collection(
+          db,
+          "battles",
+          battleId,
+          "entries",
+          winnerUid,
+          "votes"
+        );
         const votesSnapshot = await getDocs(votesRef);
 
         const voteDocs = votesSnapshot.docs.map((doc) => doc.data());
@@ -254,9 +260,9 @@ const Dashboard = () => {
               coins: increment(1),
             });
 
-            const userSnapshot = await getDoc(voterRef);
+            const voterSnapshot = await getDoc(voterRef);
 
-            const { firstName, email } = userSnapshot.data();
+            const { firstName, email } = voterSnapshot.data();
 
             const userInfo = {
               name: firstName,
