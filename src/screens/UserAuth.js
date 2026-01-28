@@ -5,6 +5,7 @@ import Input from "../components/Input";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import {
@@ -47,6 +48,9 @@ const UserAuth = ({ setSignedIn }) => {
 
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyPolicyVisible, setPrivacyPolicyVisible] = useState(false);
+
+  const [passwordResetEmailSent, setPasswordResetEmailSent] = useState(false);
+  const [passwordResetError, setPasswordResetError] = useState("");
 
   const handleUsernameCheck = async () => {
     try {
@@ -362,11 +366,71 @@ const UserAuth = ({ setSignedIn }) => {
               }
               error={passwordError}
             />
+            <p className="highlight" onClick={() => setView("forgot_password")}>
+              Forgot password
+            </p>
             {loginError && <span>{loginError}</span>}
             <Button onClick={handleSignIn} text="Sign In" filled_color />
+
             <p onClick={() => setView("sign-up")} className="auth-switch">
               Sign Up instead
             </p>
+          </div>
+        )}
+
+        {view === "forgot_password" && (
+          <div className="forgot_passwoord">
+            <h3>Forgot password</h3>
+            <p>
+              {!passwordResetEmailSent
+                ? "Please enter your email to receive a password reset link. It may take up to 10 minutes to deliver and may land in your spam folder."
+                : "Your password reset email has been sent to you. It may take up to minutes to deliver and may land in your spam folder."}
+            </p>
+            {!passwordResetEmailSent && (
+              <Input
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={passwordResetError}
+              />
+            )}
+            <div className="button-container">
+              <Button
+                filled_color
+                text={
+                  !passwordResetEmailSent ? "Send reset link" : "Resend link"
+                }
+                disabled={passwordResetEmailSent}
+                onClick={async () => {
+                  try {
+                    await sendPasswordResetEmail(auth, email);
+                    setPasswordResetEmailSent(true);
+
+                    setTimeout(() => {
+                      setPasswordResetEmailSent(false);
+                    }, 60000);
+                  } catch (error) {
+                    console.log(error);
+                    if (error.code === "auth/user-not-found") {
+                      setPasswordResetError("User not found!");
+                    }
+                  }
+                }}
+              />
+              {!passwordResetEmailSent && (
+                <Button
+                  outline
+                  text="Nevermind"
+                  onClick={() => setView("sign-in")}
+                />
+              )}
+            </div>
+            {passwordResetEmailSent && (
+              <p>
+                Please wait 1 minute before requesting another password reset
+                link
+              </p>
+            )}
           </div>
         )}
       </div>
