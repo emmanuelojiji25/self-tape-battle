@@ -35,7 +35,7 @@ const UserAuth = ({ setSignedIn }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [secretPin, setSecretPin] = useState("");
+
 
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [isEmailAvailable, setIsEmailAvailable] = useState(null);
@@ -44,7 +44,7 @@ const UserAuth = ({ setSignedIn }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [secretPinError, setSecretPinError] = useState("");
+
 
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyPolicyVisible, setPrivacyPolicyVisible] = useState(false);
@@ -122,10 +122,7 @@ const UserAuth = ({ setSignedIn }) => {
       hasError = true;
     }
 
-    if (secretPin !== "1826") {
-      setSecretPinError("Are you sure you're meant to be here?👀 Try again!");
-      hasError = true;
-    }
+    
 
     if (hasError) return; // Stop execution if any errors
 
@@ -294,14 +291,7 @@ const UserAuth = ({ setSignedIn }) => {
               }
               error={passwordError}
             />
-            <Input
-              type="text"
-              placeholder="Secret pin"
-              onChange={(e) =>
-                handleUserInput(e, setSecretPin, setSecretPinError)
-              }
-              error={secretPinError}
-            />
+           
 
             <p>
               By signing up, you agree to our{" "}
