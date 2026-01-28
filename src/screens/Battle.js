@@ -375,7 +375,7 @@ const Battle = () => {
           battleStatus === "open" && (
             <Button
               onClick={() => {
-                if (userVotes === 0 && entries.length > 5) {
+                if (userVotes === 0 && entries.length > 4) {
                   console.log("You must vote first!");
                   setErrorMessage(
                     "You must watch & vote for at least 1 entry before you can join this battle. You can still vote for other entries in this battle."
@@ -466,11 +466,11 @@ const Battle = () => {
         {entries.map((entry) => {
           return (
             <EntryCard
-              key={entry.uid} // Add key!
-              url={entry.url}
-              uid={entry.uid}
+              key={entry?.uid} // Add key!
+              url={entry?.url}
+              uid={entry?.uid}
               battleId={battleId}
-              voteButtonVisible={entry.uid != loggedInUser.uid}
+              voteButtonVisible={entry?.uid != loggedInUser.uid}
               battleStatus={battleStatus}
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
               userVotes={userVotes}
