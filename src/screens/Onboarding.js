@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useContext, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
@@ -83,8 +83,8 @@ const Onboarding = () => {
           ? webLink
           : `https://${webLink}`,
         isOnboardingComplete: true,
-        coins: 100,
-        totalCoinsEarned: 100,
+        coins: increment(100),
+        totalCoinsEarned: increment(100),
       });
 
       setIsOnboardingComplete(true);

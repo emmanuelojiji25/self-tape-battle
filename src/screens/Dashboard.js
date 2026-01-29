@@ -236,7 +236,7 @@ const Dashboard = () => {
       if (prizeObject.type === "coins") {
         await updateDoc(winnerRef, {
           coins: increment(prizeObject.value),
-          totalCoins: increment(prizeObject.value),
+          totalCoinsEarned: increment(prizeObject.value),
         });
 
         // Award coin to all voters of winning entry
@@ -258,6 +258,7 @@ const Dashboard = () => {
 
             updateDoc(voterRef, {
               coins: increment(1),
+              totalCoinsEarned: increment(1),
             });
 
             const voterSnapshot = await getDoc(voterRef);
