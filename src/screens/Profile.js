@@ -151,6 +151,7 @@ const Profile = () => {
     }
   };
 
+
   const getTotalVotes = async () => {
     try {
       const collectionRef = collectionGroup(db, "entries");

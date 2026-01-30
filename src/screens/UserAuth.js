@@ -5,6 +5,7 @@ import Input from "../components/Input";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import {
@@ -34,7 +35,7 @@ const UserAuth = ({ setSignedIn }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [secretPin, setSecretPin] = useState("");
+
 
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [isEmailAvailable, setIsEmailAvailable] = useState(null);
@@ -43,10 +44,13 @@ const UserAuth = ({ setSignedIn }) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [secretPinError, setSecretPinError] = useState("");
+
 
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyPolicyVisible, setPrivacyPolicyVisible] = useState(false);
+
+  const [passwordResetEmailSent, setPasswordResetEmailSent] = useState(false);
+  const [passwordResetError, setPasswordResetError] = useState("");
 
   const handleUsernameCheck = async () => {
     try {
@@ -118,10 +122,7 @@ const UserAuth = ({ setSignedIn }) => {
       hasError = true;
     }
 
-    if (secretPin !== "1826") {
-      setSecretPinError("Are you sure you're meant to be here?👀 Try again!");
-      hasError = true;
-    }
+    
 
     if (hasError) return; // Stop execution if any errors
 
@@ -154,7 +155,7 @@ const UserAuth = ({ setSignedIn }) => {
       });
 
       await sendEmailVerification(auth.currentUser);
-      navigate("/emailverification");
+      navigate("/onboarding");
     } catch (error) {
       console.log(error);
       if (error.code === "auth/invalid-email") {
@@ -290,14 +291,7 @@ const UserAuth = ({ setSignedIn }) => {
               }
               error={passwordError}
             />
-            <Input
-              type="text"
-              placeholder="Secret pin"
-              onChange={(e) =>
-                handleUserInput(e, setSecretPin, setSecretPinError)
-              }
-              error={secretPinError}
-            />
+           
 
             <p>
               By signing up, you agree to our{" "}
@@ -362,11 +356,71 @@ const UserAuth = ({ setSignedIn }) => {
               }
               error={passwordError}
             />
+            <p className="highlight" onClick={() => setView("forgot_password")}>
+              Forgot password
+            </p>
             {loginError && <span>{loginError}</span>}
             <Button onClick={handleSignIn} text="Sign In" filled_color />
+
             <p onClick={() => setView("sign-up")} className="auth-switch">
               Sign Up instead
             </p>
+          </div>
+        )}
+
+        {view === "forgot_password" && (
+          <div className="forgot_passwoord">
+            <h3>Forgot password</h3>
+            <p>
+              {!passwordResetEmailSent
+                ? "Please enter your email to receive a password reset link. It may take up to 10 minutes to deliver and may land in your spam folder."
+                : "Your password reset email has been sent to you. It may take up to minutes to deliver and may land in your spam folder."}
+            </p>
+            {!passwordResetEmailSent && (
+              <Input
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={passwordResetError}
+              />
+            )}
+            <div className="button-container">
+              <Button
+                filled_color
+                text={
+                  !passwordResetEmailSent ? "Send reset link" : "Resend link"
+                }
+                disabled={passwordResetEmailSent}
+                onClick={async () => {
+                  try {
+                    await sendPasswordResetEmail(auth, email);
+                    setPasswordResetEmailSent(true);
+
+                    setTimeout(() => {
+                      setPasswordResetEmailSent(false);
+                    }, 60000);
+                  } catch (error) {
+                    console.log(error);
+                    if (error.code === "auth/user-not-found") {
+                      setPasswordResetError("User not found!");
+                    }
+                  }
+                }}
+              />
+              {!passwordResetEmailSent && (
+                <Button
+                  outline
+                  text="Nevermind"
+                  onClick={() => setView("sign-in")}
+                />
+              )}
+            </div>
+            {passwordResetEmailSent && (
+              <p>
+                Please wait 1 minute before requesting another password reset
+                link
+              </p>
+            )}
           </div>
         )}
       </div>

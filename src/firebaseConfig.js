@@ -15,7 +15,7 @@ const firebaseConfig = {
   projectId: "self-tape-battle",
   storageBucket: "self-tape-battle.appspot.com",
   messagingSenderId: "746282940351",
-  appId: "1:746282940351:web:d117a1a8a7c94cd27e130a"
+  appId: "1:746282940351:web:d117a1a8a7c94cd27e130a",
 };
 
 // Initialize Firebase

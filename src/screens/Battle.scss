@@ -5,6 +5,7 @@
 
   .button-container{
     display: flex;
+    align-items: center;
     gap: 15px;
   }
 }
@@ -136,4 +137,8 @@
 .winner-right {
   display: flex;
   flex-direction: column;
+}
+
+.user-votes{
+  color:white;
 }

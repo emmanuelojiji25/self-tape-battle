@@ -15,10 +15,6 @@ const PrivateRoute = ({ children }) => {
     return <Navigate to="/userAuth" />;
   }
 
-  if (isEmailVerified === false) {
-    return <Navigate to="/emailverification" />;
-  }
-
   if (isOnboardingComplete === false) {
     return <Navigate to="/onboarding" />;
   }

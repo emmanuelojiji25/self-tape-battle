@@ -1,13 +1,16 @@
 import {
   arrayUnion,
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,
   increment,
   onSnapshot,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import {
   getDownloadURL,
@@ -63,15 +66,26 @@ const Battle = () => {
 
   const [usersCache, setUsersCache] = useState({});
 
+  const [userVotes, setUserVotes] = useState(0);
+
+  const [loggedInUserDoc, setLoggedInUserDoc] = useState({});
+
   useEffect(() => {
+    getUser();
     getBattle();
     getWinner();
     getUserEntry();
   }, []);
 
   useEffect(() => {
-    fetchUsersForEntries(entries);
-  }, [entries]);
+    console.log(usersCache);
+  }, [usersCache]);
+
+  const getUser = async () => {
+    const userRef = doc(db, "users", loggedInUser.uid);
+    const snapshot = await getDoc(userRef);
+    setLoggedInUserDoc(snapshot.data());
+  };
 
   const getBattle = async () => {
     const docRef = doc(db, "battles", battleId);
@@ -88,7 +102,6 @@ const Battle = () => {
       setBattleStatus(data.status);
       setBattleAttachment(data.file);
       setDeadline(data.deadline);
-      setUserHasVoted(data.voters.includes(loggedInUser.uid));
       setPrize(data.prize.value);
       setGenre(data.genre);
       setVoters(data.voters);
@@ -100,12 +113,27 @@ const Battle = () => {
       entries.push(doc.data());
     });
 
-    setEntries(entries.filter((entry) => entry.uid != loggedInUser.uid));
+    const filtered = entries.filter((e) => e.uid !== loggedInUser.uid);
+    setEntries(filtered);
+    await fetchUsersForEntries(filtered);
+
+    // Vote limit query
+    const votesRef = collectionGroup(db, "votes");
+
+    const votesQuery = query(
+      votesRef,
+      where("uid", "==", loggedInUser.uid),
+      where("battleId", "==", battleId)
+    );
+
+    onSnapshot(votesRef, async () => {
+      const votesQuerySnapshot = await getDocs(votesQuery);
+      setUserVotes(votesQuerySnapshot.docs.length);
+    });
 
     setTimeout(() => {
       setLoading(false);
     }, 300);
-
     try {
     } catch (error) {}
   };
@@ -198,7 +226,7 @@ const Battle = () => {
           await setDoc(docRef, {
             uid: `${loggedInUser.uid}`,
             url: `${url}`,
-            votes: [],
+            voteCount: 0,
             date: Date.now(),
             shareSetting: "private",
             battleId: battleId,
@@ -208,7 +236,8 @@ const Battle = () => {
 
           await updateDoc(userRef, {
             coins: increment(1),
-            battlesEntered: increment(1),
+            totalCoinsEarned: increment(5),
+            battlesEntered: increment(5),
           });
 
           await updateDoc(userRef, {
@@ -347,7 +376,7 @@ const Battle = () => {
           battleStatus === "open" && (
             <Button
               onClick={() => {
-                if (!userHasVoted && entries.length > 5) {
+                if (userVotes === 0 && entries.length > 4) {
                   console.log("You must vote first!");
                   setErrorMessage(
                     "You must watch & vote for at least 1 entry before you can join this battle. You can still vote for other entries in this battle."
@@ -362,6 +391,7 @@ const Battle = () => {
               filled_color
             />
           )}
+
         <a href={`${battleAttachment}`} download target="_blank">
           <Button text="Download Monologue" outline />
         </a>
@@ -371,6 +401,9 @@ const Battle = () => {
           onClick={() => setHowToPlayVisible(true)}
           outline
         />
+        <p className="user-votes">
+          Votes Remaining: <strong>{5 - userVotes}</strong>
+        </p>
       </div>
       {file && (
         <div className="file-container">
@@ -425,6 +458,8 @@ const Battle = () => {
             voteButtonVisible={userEntry.uid != loggedInUser.uid}
             battleStatus={battleStatus}
             isPillVisible={true}
+            userData={loggedInUserDoc} // Changed from userDocs to usersCache
+            userVotes={userVotes}
             menu
           />
         )}
@@ -432,13 +467,14 @@ const Battle = () => {
         {entries.map((entry) => {
           return (
             <EntryCard
-              key={entry.uid} // Add key!
-              url={entry.url}
-              uid={entry.uid}
+              key={entry?.uid} // Add key!
+              url={entry?.url}
+              uid={entry?.uid}
               battleId={battleId}
-              voteButtonVisible={entry.uid != loggedInUser.uid}
+              voteButtonVisible={entry?.uid != loggedInUser.uid}
               battleStatus={battleStatus}
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
+              userVotes={userVotes}
             />
           );
         })}

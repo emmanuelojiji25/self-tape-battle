@@ -57,9 +57,14 @@ const SideMenu = ({ slideIn, toggleMenu }) => {
       <span onClick={() => handleOutletToggle("contact")}>Contact</span>
       <span
         onClick={async () => {
-          await auth.signOut();
-          navigate("/userAuth");
-          localStorage.clear();
+          try {
+            await auth.signOut();
+            window.location.reload();
+            localStorage.clear();
+            console.log("signed out");
+          } catch (error) {
+            console.log(error);
+          }
         }}
       >
         Sign out

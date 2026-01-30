@@ -2,11 +2,13 @@ import {
   addDoc,
   collection,
   collectionGroup,
+  deleteField,
   doc,
   getDoc,
   getDocs,
   increment,
   onSnapshot,
+  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -203,52 +205,26 @@ const Dashboard = () => {
       const collectionRef = collection(db, "battles", battleId, "entries");
       const snapshot = await getDocs(collectionRef);
 
-      const entries = snapshot.docs.map((d) => d.data());
+      // Get Winner
 
-      if (!entries.length) {
-        console.warn("No entries found for this battle.");
-        setWinner(null);
-        return;
-      }
+      const entriesRef = collection(db, "battles", battleId, "entries");
 
-      // Helper function to normalize date types
-      const toMillis = (date) => {
-        if (!date) return 0;
-        if (typeof date === "number") return date; // from Date.now()
-        if (date.seconds) return date.seconds * 1000; // from Firestore Timestamp
-        if (typeof date.toMillis === "function") return date.toMillis();
-        return 0;
-      };
+      const q = query(
+        entriesRef,
+        orderBy("voteCount", "desc"),
+        orderBy("date", "asc")
+      );
 
-      // 🔥 Sort once by votes desc, then date asc (earliest wins tie)
-      entries.sort((a, b) => {
-        const votesA = a.votes?.length || 0;
-        const votesB = b.votes?.length || 0;
+      const querySnapshot = await getDocs(q);
+      const winnerEntry = querySnapshot.docs[0].data();
+      const winnerUid = winnerEntry.uid;
 
-        if (votesB !== votesA) return votesB - votesA; // Most votes first
-        return toMillis(a.date) - toMillis(b.date); // Earlier entry wins ties
-      });
+      const winnerRef = doc(db, "users", winnerUid);
 
-      const winnerEntry = entries[0];
-      if (!winnerEntry?.uid) {
-        console.warn("No valid winner UID found in entries.");
-        setWinner(null);
-        return;
-      }
+      const winnerSnapshot = await getDoc(winnerRef);
+      const winnerData = winnerSnapshot.data();
 
-      const winnerDoc = await getDoc(doc(db, "users", winnerEntry.uid));
-
-      if (!winnerDoc.exists()) {
-        console.warn("Winner user document not found:", winnerEntry.uid);
-        setWinner(null);
-        return;
-      }
-
-      const winnerData = winnerDoc.data();
-      setWinner(winnerData);
-
-      const winnerRef = doc(db, "users", winnerEntry.uid);
-
+      // Award Prize to winner
       const battleSnapshot = await getDoc(battleRef);
       const battleData = battleSnapshot.data();
 
@@ -261,22 +237,34 @@ const Dashboard = () => {
       if (prizeObject.type === "coins") {
         await updateDoc(winnerRef, {
           coins: increment(prizeObject.value),
-          totalCoins: increment(prizeObject.value),
+          totalCoinsEarned: increment(prizeObject.value),
         });
 
-        const voters = battleSnapshot.data().voters;
+        // Award coin to all voters of winning entry
+        const votesRef = collection(
+          db,
+          "battles",
+          battleId,
+          "entries",
+          winnerUid,
+          "votes"
+        );
+        const votesSnapshot = await getDocs(votesRef);
+
+        const voteDocs = votesSnapshot.docs.map((doc) => doc.data());
 
         await Promise.all(
-          winnerEntry.votes.map(async (voter) => {
-            const voterRef = doc(db, "users", voter);
+          voteDocs.map(async (voter) => {
+            const voterRef = doc(db, "users", voter.uid);
 
             updateDoc(voterRef, {
               coins: increment(1),
+              totalCoinsEarned: increment(1),
             });
 
-            const userSnapshot = await getDoc(voterRef);
+            const voterSnapshot = await getDoc(voterRef);
 
-            const { firstName, email } = userSnapshot.data();
+            const { firstName, email } = voterSnapshot.data();
 
             const userInfo = {
               name: firstName,
@@ -291,10 +279,11 @@ const Dashboard = () => {
       }
 
       await updateDoc(battleRef, {
-        winner: winnerEntry.uid,
+        winner: winnerUid,
         status: "closed",
       });
 
+      // Send email to winner
       const info = {
         name: winnerData.firstName,
         email: winnerData.email,
@@ -304,7 +293,6 @@ const Dashboard = () => {
         }`,
       };
 
-      // Send email to winner
       emailjs.send("service_v3a3sw5", "template_65k4u6r", info);
     } catch (error) {
       console.error("Error in getWinner:", error);
@@ -374,6 +362,47 @@ const Dashboard = () => {
     }
   };
 
+  const convertVotes = async () => {
+    const entriesRef = collection(db, "battles", "test-battle", "entries");
+    const entriesSnapshot = await getDocs(entriesRef);
+
+    entriesSnapshot.docs.map((entry) => {
+      if (entry.data().votes) {
+        try {
+          entry.data().votes.map(async (voter) => {
+            const docRef = doc(
+              db,
+              "battles",
+              "test-battle",
+              "entries",
+              entry.data().uid,
+              "votes",
+              voter
+            );
+            await setDoc(docRef, {
+              uid: voter,
+              battleId: "test-battle",
+            });
+
+            const entryRef = doc(
+              db,
+              "battles",
+              "test-battle",
+              "entries",
+              entry.data().uid
+            );
+            await updateDoc(entryRef, {
+              votes: deleteField(),
+            });
+            console.log("complete");
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+  };
+
   return (
     <div className="Dashboard">
       {locked ? (
@@ -392,6 +421,7 @@ const Dashboard = () => {
       ) : (
         <>
           <h1>Dashboard</h1>
+          <h1 onClick={() => convertVotes()}>Convert</h1>
 
           <div className="menu">
             <h3 onClick={() => handleChangeView("battles")}>Battles</h3>
