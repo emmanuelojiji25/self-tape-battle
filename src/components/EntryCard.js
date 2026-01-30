@@ -123,6 +123,11 @@ const EntryCard = ({
           battleId: battleId,
         });
 
+        const entryDoc = doc(db, "battles", battleId, "entries", uid);
+        await updateDoc(entryDoc, {
+          voteCount: increment(1),
+        });
+
         // Award User coin
         const userRef = doc(db, "users", loggedInUser.uid);
 

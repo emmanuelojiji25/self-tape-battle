@@ -226,7 +226,7 @@ const Battle = () => {
           await setDoc(docRef, {
             uid: `${loggedInUser.uid}`,
             url: `${url}`,
-            votes: [],
+            voteCount: 0,
             date: Date.now(),
             shareSetting: "private",
             battleId: battleId,
