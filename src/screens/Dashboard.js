@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   collectionGroup,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -361,6 +362,47 @@ const Dashboard = () => {
     }
   };
 
+  const convertVotes = async () => {
+    const entriesRef = collection(db, "battles", "test-battle", "entries");
+    const entriesSnapshot = await getDocs(entriesRef);
+
+    entriesSnapshot.docs.map((entry) => {
+      if (entry.data().votes) {
+        try {
+          entry.data().votes.map(async (voter) => {
+            const docRef = doc(
+              db,
+              "battles",
+              "test-battle",
+              "entries",
+              entry.data().uid,
+              "votes",
+              voter
+            );
+            await setDoc(docRef, {
+              uid: voter,
+              battleId: "test-battle",
+            });
+
+            const entryRef = doc(
+              db,
+              "battles",
+              "test-battle",
+              "entries",
+              entry.data().uid
+            );
+            await updateDoc(entryRef, {
+              votes: deleteField(),
+            });
+            console.log("complete");
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+  };
+
   return (
     <div className="Dashboard">
       {locked ? (
@@ -379,6 +421,7 @@ const Dashboard = () => {
       ) : (
         <>
           <h1>Dashboard</h1>
+          <h1 onClick={() => convertVotes()}>Convert</h1>
 
           <div className="menu">
             <h3 onClick={() => handleChangeView("battles")}>Battles</h3>
