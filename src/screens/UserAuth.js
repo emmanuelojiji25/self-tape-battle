@@ -10,9 +10,11 @@ import {
 } from "firebase/auth";
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   where,
@@ -36,7 +38,6 @@ const UserAuth = ({ setSignedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
   const [isEmailAvailable, setIsEmailAvailable] = useState(null);
 
@@ -45,12 +46,22 @@ const UserAuth = ({ setSignedIn }) => {
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
 
-
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyPolicyVisible, setPrivacyPolicyVisible] = useState(false);
 
   const [passwordResetEmailSent, setPasswordResetEmailSent] = useState(false);
   const [passwordResetError, setPasswordResetError] = useState("");
+
+  const [amountOfUsers, setAmountOfUsers] = useState(0);
+
+  useEffect(() => {
+    // Check amount of users for sign up incentive
+    const allUsersRef = collection(db, "users");
+    onSnapshot(allUsersRef, (snapshot) => {
+      setAmountOfUsers(snapshot.size);
+      console.log(amountOfUsers);
+    });
+  }, []);
 
   const handleUsernameCheck = async () => {
     try {
@@ -122,8 +133,6 @@ const UserAuth = ({ setSignedIn }) => {
       hasError = true;
     }
 
-    
-
     if (hasError) return; // Stop execution if any errors
 
     // Firebase signup
@@ -152,6 +161,7 @@ const UserAuth = ({ setSignedIn }) => {
         accountNumber: "",
         sortCode: "",
         battlesEntered: 0,
+        badges: amountOfUsers < 250 && ["founding_fighter"],
       });
 
       await sendEmailVerification(auth.currentUser);
@@ -291,7 +301,6 @@ const UserAuth = ({ setSignedIn }) => {
               }
               error={passwordError}
             />
-           
 
             <p>
               By signing up, you agree to our{" "}
@@ -342,6 +351,7 @@ const UserAuth = ({ setSignedIn }) => {
           <div className="sign-in">
             <img src={logo} />
             <h2>Sign In</h2>
+
             <Input
               type="email"
               placeholder="email"
