@@ -5,18 +5,14 @@ import Button from "./Button";
 import { AuthContext } from "../contexts/AuthContext";
 import { Coin, Chest } from "./Icon";
 
-const BattleCard = ({ name, prize, battleId, mostPopular, scheduled }) => {
-  const [voteComplete, setVoteComplete] = useState(false);
-  const [collapseCard, setCollapseCard] = useState(false);
-  const [removeCard, setRemoveCard] = useState(false);
-
-  const [selectedOption, setSelectedOption] = useState(0);
-
-  const PollCardRef = useRef(null);
-  const [height, setHeight] = useState();
-
-  const [username, setUsername] = useState();
-
+const BattleCard = ({
+  name,
+  prize,
+  battleId,
+  mostPopular,
+  scheduled,
+  status,
+}) => {
   const { authRole } = useContext(AuthContext);
 
   return (
@@ -33,14 +29,18 @@ const BattleCard = ({ name, prize, battleId, mostPopular, scheduled }) => {
         {typeof prize === "number" ? (
           <Coin width="25" coin />
         ) : (
-          <Chest width="30"/>
+          <Chest width="30" />
         )}
         <h5>{prize}</h5>
       </div>
       {!scheduled && (
         <Link to={`/arena/${battleId}`}>
           <Button
-            text={authRole === "actor" ? "Join Test Battle" : "View"}
+            text={
+              status === "closed" || authRole === "professional"
+                ? "View battle"
+                : "Join battle"
+            }
             filled_color
           />
         </Link>

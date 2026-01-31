@@ -69,6 +69,7 @@ const Feed = ({ user }) => {
               prize={battle?.prize?.value}
               battleId={battle.id}
               scheduled={battle.scheduled}
+              status={battle.status}
             />
           ))}
         </>
