@@ -126,7 +126,7 @@ const Dashboard = () => {
     fetchUsers();
   }, [requests]);
 
-  const id = title.replace(" ", "-").trim().toLowerCase();
+  const id = title.replaceAll(" ", "-").trim().toLowerCase();
 
   const handleCreateBattle = async () => {
     const collectionRef = doc(db, "battles", id);
