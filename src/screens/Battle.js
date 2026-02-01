@@ -408,7 +408,9 @@ const Battle = () => {
       {file && (
         <div className="file-container">
           {uploadStatus === "uploading" && (
-            <span className="uploading">Uploading..</span>
+            <span className="uploading">
+              Uploading..larger videos may take a while...
+            </span>
           )}
           {uploadStatus === "" && (
             <>
@@ -475,7 +477,6 @@ const Battle = () => {
               battleStatus={battleStatus}
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
               userVotes={userVotes}
-            
             />
           );
         })}
