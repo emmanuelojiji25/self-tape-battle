@@ -73,6 +73,7 @@ const Feed = ({ user }) => {
               battleId={battle.id}
               scheduled={battle.scheduled}
               status={battle.status}
+              additional_info={battle.additional_info}
             />
           ))}
         </>
