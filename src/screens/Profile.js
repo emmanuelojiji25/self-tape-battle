@@ -26,6 +26,7 @@ import ActorCard from "../components/ActorCard";
 import Loader from "../components/Loader";
 import BackButton from "../components/BackButton";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import ff from "../media/ff.svg";
 
 const Profile = () => {
   const params = useParams();
@@ -52,6 +53,8 @@ const Profile = () => {
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [sortCode, setSortCode] = useState("");
+
+  const [badges, setBadges] = useState([]);
 
   const [battles, setBattles] = useState([]);
 
@@ -99,6 +102,7 @@ const Profile = () => {
       setContactNumber(data.contactNumber);
       setContactEmail(data.contactEmail);
       setBattlesEntered(data.battlesEntered);
+      setBadges(data.badges);
 
       setOriginalUser({
         username: data.username,
@@ -150,7 +154,6 @@ const Profile = () => {
       console.log(error);
     }
   };
-
 
   const getTotalVotes = async () => {
     try {
@@ -361,13 +364,18 @@ const Profile = () => {
                   <img className="profile-headshot" src={headshot} />
                 </div>
                 <div className="profile-info">
-                  <h1>{name}</h1>
+                  <div className="name-badge-container">
+                    <h1>{name}</h1>{" "}
+                    {badges.includes("founding_fighter") && (
+                      <img src={ff} className="badge" />
+                    )}
+                  </div>
                   <span className="username">{username}</span>
+
                   <span>{bio}</span>
                   <a href={`${link}`} target="_" className="web-link">
                     {link}
                   </a>
-
                   <div class="profile-button-container">
                     {role === "actor" && (
                       <Button

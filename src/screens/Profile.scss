@@ -12,6 +12,7 @@
   gap: 20px;
   flex-direction: column;
 }
+
 .profile-info {
   display: flex;
   flex-direction: column;
@@ -34,6 +35,15 @@
     margin-top: 15px;
   }
 }
+.name-badge-container{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.badge{
+  width: 40px;
+}
+
 .profile-headshot-container {
   min-height: 150px;
   height: 150px;
