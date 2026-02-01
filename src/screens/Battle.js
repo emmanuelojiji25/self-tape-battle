@@ -409,7 +409,7 @@ const Battle = () => {
         <div className="file-container">
           {uploadStatus === "uploading" && (
             <span className="uploading">
-              Uploading..larger videos may take a while...
+              Uploading..larger videos may take a bit longer..
             </span>
           )}
           {uploadStatus === "" && (
