@@ -7,6 +7,7 @@ import {
   onSnapshot,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import BattleCard from "../components/BattleCard";
@@ -37,7 +38,9 @@ const Feed = ({ user }) => {
 
     const battlesRef = collection(db, "battles");
 
-    const unsubscribe = onSnapshot(battlesRef, (snapshot) => {
+    const q = query(battlesRef, where("visibility", "==", "published"));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

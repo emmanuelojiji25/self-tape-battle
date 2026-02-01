@@ -475,6 +475,7 @@ const Battle = () => {
               battleStatus={battleStatus}
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
               userVotes={userVotes}
+            
             />
           );
         })}

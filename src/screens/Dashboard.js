@@ -39,6 +39,8 @@ const Dashboard = () => {
   const [prize, setPrize] = useState(null);
   const [file, setFile] = useState("");
   const [deadline, setDeadline] = useState("");
+  const [visibility, setVisibility] = useState("");
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [requests, setRequests] = useState([]);
   const [reports, setReports] = useState([]);
@@ -143,6 +145,7 @@ const Dashboard = () => {
         genre: genre,
         file: "",
         deadline: deadline,
+        visibility: visibility,
       });
 
       uploadFile();
@@ -456,6 +459,7 @@ const Dashboard = () => {
                   value="custom"
                   onChange={(e) => setType("custom")}
                 ></input>
+
                 <input
                   type="text"
                   placeholder="prize"
@@ -471,6 +475,22 @@ const Dashboard = () => {
                   placeholder="Genre"
                   onChange={(e) => setGenre(e.target.value)}
                 ></input>
+                <p>Visibility</p>
+                <label>Published</label>
+                <input
+                  type="radio"
+                  name="type"
+                  value="coins"
+                  onChange={(e) => setVisibility("published")}
+                />
+                <label>Drafts</label>
+                <input
+                  type="radio"
+                  name="type"
+                  value="coins"
+                  onChange={(e) => setVisibility("draft")}
+                />
+
                 <Button
                   filled
                   text="Create Battle"
