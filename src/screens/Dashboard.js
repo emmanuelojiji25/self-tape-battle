@@ -479,14 +479,14 @@ const Dashboard = () => {
                 <label>Published</label>
                 <input
                   type="radio"
-                  name="type"
+                  name="visibility"
                   value="coins"
                   onChange={(e) => setVisibility("published")}
                 />
                 <label>Drafts</label>
                 <input
                   type="radio"
-                  name="type"
+                  name="visibility"
                   value="coins"
                   onChange={(e) => setVisibility("draft")}
                 />
