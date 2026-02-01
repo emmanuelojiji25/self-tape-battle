@@ -38,7 +38,7 @@ const Directory = () => {
   useEffect(() => {
     getUsers("actor", setActors);
     getUsers("professional", setCasting);
-  });
+  },[]);
 
   return (
     <div className="Directory screen-width">
