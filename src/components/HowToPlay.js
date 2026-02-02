@@ -85,7 +85,7 @@ const HowToPlay = () => {
       </section>
 
       <section>
-        <h3>Important Rules</h3>
+        <h3>Important Notes</h3>
         <p>
           • Votes are final and cannot be changed once submitted
           <br />
