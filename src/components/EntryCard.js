@@ -167,6 +167,14 @@ const EntryCard = ({
 
   const videoRef = useRef(null);
 
+  const [playing, setPlaying] = useState(false);
+
+  if (videoRef && videoRef.current) {
+    videoRef.current.onplay = () => {
+      setPlaying(true);
+    };
+  }
+
   return (
     <div className="EntryCard">
       {shareModalVisible && (
@@ -268,9 +276,10 @@ const EntryCard = ({
         <video
           ref={videoRef}
           poster={userData?.headshot}
-          preload="none" // loads only minimal info
+          preload="none"
           controls
           src={`${url}.mp4`}
+          style={{ objectFit: `${playing ? "contain" : "cover"}` }}
         />
       </div>
     </div>
