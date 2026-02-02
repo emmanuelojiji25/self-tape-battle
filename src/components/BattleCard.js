@@ -19,7 +19,7 @@ const BattleCard = ({
   return (
     <div className={`PollCard`}>
       <h3 className="title">{name}</h3>
-      <p className="additional-info">{additional_info}</p>
+     {additional_info && <p className="additional-info">{additional_info}</p>}
 
       <div className="prize">
         {typeof prize === "number" ? (
