@@ -89,56 +89,58 @@ const Battle = () => {
   };
 
   const getBattle = async () => {
-    const docRef = doc(db, "battles", battleId);
-    const entriesRef = collection(db, "battles", battleId, "entries");
-
-    const q = query(entriesRef, orderBy("date", "desc"));
-
-    const entriesDocs = await getDocs(q);
-
-    const battleSnapshot = await getDoc(docRef);
-
-    const data = battleSnapshot.data();
-
-    if (data) {
-      setTitle(data.title);
-      setBattleStatus(data.status);
-      setBattleAttachment(data.file);
-      setDeadline(data.deadline);
-      setPrize(data.prize.value);
-      setGenre(data.genre);
-      setVoters(data.voters);
-    }
-
-    let entries = [];
-
-    entriesDocs.forEach((doc) => {
-      entries.push(doc.data());
-    });
-
-    const filtered = entries.filter((e) => e.uid !== loggedInUser.uid);
-    setEntries(filtered);
-    await fetchUsersForEntries(filtered);
-
-    // Vote limit query
-    const votesRef = collectionGroup(db, "votes");
-
-    const votesQuery = query(
-      votesRef,
-      where("uid", "==", loggedInUser.uid),
-      where("battleId", "==", battleId)
-    );
-
-    onSnapshot(votesRef, async () => {
-      const votesQuerySnapshot = await getDocs(votesQuery);
-      setUserVotes(votesQuerySnapshot.docs.length);
-    });
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
     try {
-    } catch (error) {}
+      const docRef = doc(db, "battles", battleId);
+      const entriesRef = collection(db, "battles", battleId, "entries");
+
+      const q = query(entriesRef, orderBy("date", "asc"));
+
+      const entriesDocs = await getDocs(q);
+
+      const battleSnapshot = await getDoc(docRef);
+
+      const data = battleSnapshot.data();
+
+      if (data) {
+        setTitle(data.title);
+        setBattleStatus(data.status);
+        setBattleAttachment(data.file);
+        setDeadline(data.deadline);
+        setPrize(data.prize.value);
+        setGenre(data.genre);
+        setVoters(data.voters);
+      }
+
+      let entries = [];
+
+      entriesDocs.forEach((doc) => {
+        entries.push(doc.data());
+      });
+
+      const filtered = entries.filter((e) => e.uid !== loggedInUser.uid);
+      setEntries(filtered);
+      await fetchUsersForEntries(filtered);
+
+      // Vote limit query
+      const votesRef = collectionGroup(db, "votes");
+
+      const votesQuery = query(
+        votesRef,
+        where("uid", "==", loggedInUser.uid),
+        where("battleId", "==", battleId)
+      );
+
+      onSnapshot(votesRef, async () => {
+        const votesQuerySnapshot = await getDocs(votesQuery);
+        setUserVotes(votesQuerySnapshot.docs.length);
+      });
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchUsersForEntries = async (entriesData) => {
