@@ -7,6 +7,7 @@ import {
   getDocs,
   increment,
   onSnapshot,
+  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -91,7 +92,9 @@ const Battle = () => {
     const docRef = doc(db, "battles", battleId);
     const entriesRef = collection(db, "battles", battleId, "entries");
 
-    const entriesDocs = await getDocs(entriesRef);
+    const q = query(entriesRef, orderBy("date", "desc"));
+
+    const entriesDocs = await getDocs(q);
 
     const battleSnapshot = await getDoc(docRef);
 
