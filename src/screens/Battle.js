@@ -237,7 +237,7 @@ const Battle = () => {
           await updateDoc(userRef, {
             coins: increment(1),
             totalCoinsEarned: increment(5),
-            battlesEntered: increment(5),
+            battlesEntered: increment(1),
           });
 
           await updateDoc(userRef, {
