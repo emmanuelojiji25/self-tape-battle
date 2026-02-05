@@ -488,7 +488,7 @@ const Profile = () => {
                             username: username,
                             headshot: headshot,
                           }}
-                          preload="metadata"
+                          preload="auto"
                           page="profile"
                         />
                       }
