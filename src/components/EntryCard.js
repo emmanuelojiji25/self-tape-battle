@@ -300,7 +300,7 @@ const EntryCard = ({
           poster={poster}
           preload={preload}
           controls
-          src={`${url}.mp4`}
+          src={`${url}`}
           style={{ objectFit: `${playing ? "contain" : "cover"}` }}
         />
       </div>
