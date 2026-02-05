@@ -490,7 +490,7 @@ const Profile = () => {
                           }}
                           preload="auto"
                           page="profile"
-                          poster={headshot}
+                          //poster={headshot}
                         />
                       }
                     </>
