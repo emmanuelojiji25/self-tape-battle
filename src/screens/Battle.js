@@ -217,44 +217,46 @@ const Battle = () => {
     setUploadStatus("uploading");
 
     try {
-      await uploadBytes(storageRef, file).then(() => {
-        getDownloadURL(
-          ref(storage, `battles/${battleId}/${loggedInUser.uid}`)
-        ).then(async (url) => {
-          const docRef = doc(
-            db,
-            "battles",
-            battleId,
-            "entries",
-            loggedInUser.uid
-          );
-          await setDoc(docRef, {
-            uid: `${loggedInUser.uid}`,
-            url: `${url}`,
-            voteCount: 0,
-            date: Date.now(),
-            shareSetting: "private",
-            battleId: battleId,
-          });
+      await uploadBytes(storageRef, file, { contentType: file.type }).then(
+        () => {
+          getDownloadURL(
+            ref(storage, `battles/${battleId}/${loggedInUser.uid}`)
+          ).then(async (url) => {
+            const docRef = doc(
+              db,
+              "battles",
+              battleId,
+              "entries",
+              loggedInUser.uid
+            );
+            await setDoc(docRef, {
+              uid: `${loggedInUser.uid}`,
+              url: `${url}`,
+              voteCount: 0,
+              date: Date.now(),
+              shareSetting: "private",
+              battleId: battleId,
+            });
 
-          const userRef = doc(db, "users", loggedInUser.uid);
+            const userRef = doc(db, "users", loggedInUser.uid);
 
-          await updateDoc(userRef, {
-            coins: increment(1),
-            totalCoinsEarned: increment(5),
-            battlesEntered: increment(1),
-          });
+            await updateDoc(userRef, {
+              coins: increment(1),
+              totalCoinsEarned: increment(5),
+              battlesEntered: increment(1),
+            });
 
-          await updateDoc(userRef, {
-            withdrawals: arrayUnion({
-              amount: 1,
-              complete: true,
-              uid: loggedInUser.uid,
-              direction: "inbound",
-            }),
+            await updateDoc(userRef, {
+              withdrawals: arrayUnion({
+                amount: 1,
+                complete: true,
+                uid: loggedInUser.uid,
+                direction: "inbound",
+              }),
+            });
           });
-        });
-      });
+        }
+      );
       setUploadStatus("complete");
       setShowMessageModal(true);
     } catch (error) {
