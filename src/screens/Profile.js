@@ -358,7 +358,7 @@ const Profile = () => {
           text={`${firstName} was one of the first 250 fighters to join the arena!`}
           onClick={() => setShowMessageModal(false)}
           buttonText="Close"
-          icon={<img src={ff}/>}
+          icon={<img src={ff} />}
         />
       )}
 
@@ -488,6 +488,8 @@ const Profile = () => {
                             username: username,
                             headshot: headshot,
                           }}
+                          preload="metadata"
+                          page="profile"
                         />
                       }
                     </>

@@ -32,6 +32,9 @@ const EntryCard = ({
   battleStatus,
   isPillVisible,
   userVotes,
+  preload,
+  poster,
+  page,
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -175,6 +178,24 @@ const EntryCard = ({
     };
   }
 
+  const [battleTitle, setBattleTitle] = useState("");
+
+  useEffect(() => {
+    const getBattleTitle = async () => {
+      try {
+        const battleRef = doc(db, "battles", battleId);
+
+        const snapshot = await getDoc(battleRef);
+
+        setBattleTitle(snapshot.data().title);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getBattleTitle();
+  });
+
   return (
     <div className="EntryCard">
       {shareModalVisible && (
@@ -271,12 +292,13 @@ const EntryCard = ({
           </div>
         </div>
       </div>
+      {page === "profile" && <h4 className="battle-title">{battleTitle}</h4>}
 
       <div className="video-container">
         <video
           ref={videoRef}
-          poster={userData?.headshot}
-          preload="none"
+          poster={poster}
+          preload={preload}
           controls
           src={`${url}.mp4`}
           style={{ objectFit: `${playing ? "contain" : "cover"}` }}
