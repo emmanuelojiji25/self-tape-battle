@@ -467,6 +467,7 @@ const Battle = () => {
             isPillVisible={true}
             userData={loggedInUserDoc} // Changed from userDocs to usersCache
             userVotes={userVotes}
+            preload="auto"
             menu
           />
         )}
