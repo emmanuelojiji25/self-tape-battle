@@ -369,7 +369,6 @@ const Dashboard = () => {
 
   return (
     <div className="Dashboard">
-      <h1 onClick={() => addExtraCoins()}>Add extra coins</h1>
       {locked ? (
         <div className="dashboard-locked">
           <h2>Please enter password</h2>
