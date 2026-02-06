@@ -32,8 +32,10 @@
 
 .entries-container {
   margin-top: 50px;
-  display: grid;
-  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+gap: 20px;
+
 }
 
 .battle-header {
