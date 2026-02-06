@@ -168,7 +168,7 @@ const EntryCard = ({
     }
   };
 
-  const videoRef = useRef(null);
+  /*const videoRef = useRef(null);
 
   const [playing, setPlaying] = useState(false);
 
@@ -176,7 +176,7 @@ const EntryCard = ({
     videoRef.current.onplay = () => {
       setPlaying(true);
     };
-  }
+  }*/
 
   const [battleTitle, setBattleTitle] = useState("");
 
@@ -296,12 +296,12 @@ const EntryCard = ({
 
       <div className="video-container">
         <video
-          ref={videoRef}
           poster={poster}
-          preload={preload}
+          preload="metadata"
           controls
-          src={`${url}`}
-          style={{ objectFit: `${playing ? "contain" : "cover"}` }}
+          playsInline
+          src={url}
+       
         />
       </div>
     </div>
