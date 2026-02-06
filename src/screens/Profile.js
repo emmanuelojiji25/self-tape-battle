@@ -488,7 +488,6 @@ const Profile = () => {
                             username: username,
                             headshot: headshot,
                           }}
-                          preload="auto"
                           page="profile"
                           //poster={headshot}
                         />
