@@ -300,8 +300,7 @@ const EntryCard = ({
           preload="metadata"
           controls
           playsInline
-          src={url}
-     
+          src={`${url}${page === "profile" && "#t=1"}`}
         />
       </div>
     </div>

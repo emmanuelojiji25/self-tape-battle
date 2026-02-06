@@ -485,6 +485,7 @@ const Battle = () => {
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
               userVotes={userVotes}
               poster={usersCache[entry.uid]?.headshot}
+              
             />
           );
         })}
