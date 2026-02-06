@@ -26,6 +26,8 @@ import ActorCard from "../components/ActorCard";
 import Loader from "../components/Loader";
 import BackButton from "../components/BackButton";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import ff from "../media/ff.svg";
+import MessageModal from "../components/MessageModal";
 
 const Profile = () => {
   const params = useParams();
@@ -53,6 +55,8 @@ const Profile = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [sortCode, setSortCode] = useState("");
 
+  const [badges, setBadges] = useState([]);
+
   const [battles, setBattles] = useState([]);
 
   const [battlesEntered, setBattlesEntered] = useState(null);
@@ -71,6 +75,8 @@ const Profile = () => {
   const [bookmarks, setBookmarks] = useState([]);
 
   const [loading, setLoading] = useState(true);
+
+  const [showMessageModal, setShowMessageModal] = useState(false);
 
   const getUser = async () => {
     try {
@@ -99,6 +105,7 @@ const Profile = () => {
       setContactNumber(data.contactNumber);
       setContactEmail(data.contactEmail);
       setBattlesEntered(data.battlesEntered);
+      setBadges(data.badges);
 
       setOriginalUser({
         username: data.username,
@@ -150,7 +157,6 @@ const Profile = () => {
       console.log(error);
     }
   };
-
 
   const getTotalVotes = async () => {
     try {
@@ -346,6 +352,15 @@ const Profile = () => {
     <div className="Profile screen-width">
       {isInfoCopied && <div className="contact-tooltip">Copied!</div>}
       {walletVisible && <Wallet />}
+      {showMessageModal && (
+        <MessageModal
+          title="Founding Fighter"
+          text={`${firstName} was one of the first 250 fighters to join the arena!`}
+          onClick={() => setShowMessageModal(false)}
+          buttonText="Close"
+          icon={<img src={ff} />}
+        />
+      )}
 
       {loading ? (
         <Loader />
@@ -361,13 +376,22 @@ const Profile = () => {
                   <img className="profile-headshot" src={headshot} />
                 </div>
                 <div className="profile-info">
-                  <h1>{name}</h1>
+                  <div className="name-badge-container">
+                    <h1>{name}</h1>{" "}
+                    {badges.includes("founding_fighter") && (
+                      <img
+                        src={ff}
+                        className="badge"
+                        onClick={() => setShowMessageModal(true)}
+                      />
+                    )}
+                  </div>
                   <span className="username">{username}</span>
+
                   <span>{bio}</span>
                   <a href={`${link}`} target="_" className="web-link">
                     {link}
                   </a>
-
                   <div class="profile-button-container">
                     {role === "actor" && (
                       <Button
@@ -464,6 +488,7 @@ const Profile = () => {
                             username: username,
                             headshot: headshot,
                           }}
+                          page="profile"
                         />
                       }
                     </>

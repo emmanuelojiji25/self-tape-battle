@@ -39,6 +39,8 @@ const Dashboard = () => {
   const [prize, setPrize] = useState(null);
   const [file, setFile] = useState("");
   const [deadline, setDeadline] = useState("");
+  const [visibility, setVisibility] = useState("");
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [requests, setRequests] = useState([]);
   const [reports, setReports] = useState([]);
@@ -124,7 +126,7 @@ const Dashboard = () => {
     fetchUsers();
   }, [requests]);
 
-  const id = title.replace(" ", "-").trim().toLowerCase();
+  const id = title.replaceAll(" ", "-").trim().toLowerCase();
 
   const handleCreateBattle = async () => {
     const collectionRef = doc(db, "battles", id);
@@ -143,6 +145,7 @@ const Dashboard = () => {
         genre: genre,
         file: "",
         deadline: deadline,
+        visibility: visibility,
       });
 
       uploadFile();
@@ -362,49 +365,11 @@ const Dashboard = () => {
     }
   };
 
-  const convertVotes = async () => {
-    const entriesRef = collection(db, "battles", "test-battle", "entries");
-    const entriesSnapshot = await getDocs(entriesRef);
-
-    entriesSnapshot.docs.map((entry) => {
-      if (entry.data().votes) {
-        try {
-          entry.data().votes.map(async (voter) => {
-            const docRef = doc(
-              db,
-              "battles",
-              "test-battle",
-              "entries",
-              entry.data().uid,
-              "votes",
-              voter
-            );
-            await setDoc(docRef, {
-              uid: voter,
-              battleId: "test-battle",
-            });
-
-            const entryRef = doc(
-              db,
-              "battles",
-              "test-battle",
-              "entries",
-              entry.data().uid
-            );
-            await updateDoc(entryRef, {
-              votes: deleteField(),
-            });
-            console.log("complete");
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    });
-  };
+  
 
   return (
     <div className="Dashboard">
+      <h1 onClick={() => addExtraCoins()}>Add extra coins</h1>
       {locked ? (
         <div className="dashboard-locked">
           <h2>Please enter password</h2>
@@ -421,7 +386,6 @@ const Dashboard = () => {
       ) : (
         <>
           <h1>Dashboard</h1>
-          <h1 onClick={() => convertVotes()}>Convert</h1>
 
           <div className="menu">
             <h3 onClick={() => handleChangeView("battles")}>Battles</h3>
@@ -456,6 +420,7 @@ const Dashboard = () => {
                   value="custom"
                   onChange={(e) => setType("custom")}
                 ></input>
+
                 <input
                   type="text"
                   placeholder="prize"
@@ -471,6 +436,22 @@ const Dashboard = () => {
                   placeholder="Genre"
                   onChange={(e) => setGenre(e.target.value)}
                 ></input>
+                <p>Visibility</p>
+                <label>Published</label>
+                <input
+                  type="radio"
+                  name="visibility"
+                  value="coins"
+                  onChange={(e) => setVisibility("published")}
+                />
+                <label>Drafts</label>
+                <input
+                  type="radio"
+                  name="visibility"
+                  value="coins"
+                  onChange={(e) => setVisibility("draft")}
+                />
+
                 <Button
                   filled
                   text="Create Battle"

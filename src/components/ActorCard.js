@@ -5,10 +5,10 @@ import star from "../media/star_outline.svg";
 import star_filled from "../media/star.svg";
 import { db } from "../firebaseConfig";
 import { deleteDoc, doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
-const ActorCard = ({ uid }) => {
+const ActorCard = memo(({ uid }) => {
   const { loggedInUser, authRole } = useContext(AuthContext);
 
   const [userIsBookmarked, setUserIsBookmarked] = useState(false);
@@ -97,6 +97,6 @@ const ActorCard = ({ uid }) => {
       </div>
     </div>
   );
-};
+});
 
 export default ActorCard;

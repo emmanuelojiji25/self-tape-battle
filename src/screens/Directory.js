@@ -1,44 +1,98 @@
-import { collection, doc, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  getDocs,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import ActorCard from "../components/ActorCard";
+import Button from "../components/Button";
 import NavBar from "../components/NavBar";
 import { db } from "../firebaseConfig";
 import "./Directory.scss";
+
+const PAGE_SIZE = 20;
 
 const Directory = () => {
   const [actors, setActors] = useState([]);
   const [casting, setCasting] = useState([]);
 
+  const [actorsLastDoc, setActorsLastDoc] = useState(null);
+  const [castingLastDoc, setCastingLastDoc] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+  const [hasMoreActors, setHasMoreActors] = useState(true);
+  const [hasMoreCasting, setHasMoreCasting] = useState(true);
+
   const [view, setView] = useState("actors");
 
-  const getUsers = async (role, setter) => {
+  const getUsers = async (role, setter, lastDoc, setLast, setHasMore) => {
+    if (loading) return;
+    setLoading(true);
+
     try {
       const collectionRef = collection(db, "users");
 
-      const q = query(
+      let q = query(
         collectionRef,
         where("role", "==", role),
-        where("isOnboardingComplete", "==", true)
+        where("isOnboardingComplete", "==", true),
+        orderBy("uid"),
+        limit(PAGE_SIZE)
       );
 
+      if (lastDoc) q = query(q, startAfter(lastDoc));
+
       const snapshot = await getDocs(q);
+      const data = snapshot.docs.map((doc) => doc.data());
 
-      const data = [];
+      if (data.length < PAGE_SIZE) setHasMore(false);
 
-      snapshot.forEach((doc) => {
-        data.push(doc.data());
-      });
-
-      setter(data);
+      if (data.length > 0) {
+        setter((prev) => [...prev, ...data]);
+        setLast(snapshot.docs[snapshot.docs.length - 1]);
+      }
     } catch (error) {
       console.log(error);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
-    getUsers("actor", setActors);
-    getUsers("professional", setCasting);
-  });
+    getUsers("actor", setActors, null, setActorsLastDoc, setHasMoreActors);
+    getUsers(
+      "professional",
+      setCasting,
+      null,
+      setCastingLastDoc,
+      setHasMoreCasting
+    );
+  }, []);
+
+  const loadMore = () => {
+    if (view === "actors" && hasMoreActors) {
+      getUsers(
+        "actor",
+        setActors,
+        actorsLastDoc,
+        setActorsLastDoc,
+        setHasMoreActors
+      );
+    }
+    if (view === "casting" && hasMoreCasting) {
+      getUsers(
+        "professional",
+        setCasting,
+        castingLastDoc,
+        setCastingLastDoc,
+        setHasMoreCasting
+      );
+    }
+  };
 
   return (
     <div className="Directory screen-width">
@@ -60,19 +114,37 @@ const Directory = () => {
       {view === "actors" && (
         <div className="actors">
           {actors.map((actor) => (
-            <ActorCard uid={actor.uid} />
+            <ActorCard key={actor.uid} uid={actor.uid} />
           ))}
+          {hasMoreActors && (
+            <Button
+              filled_color
+              onClick={loadMore}
+              disabled={loading}
+              text="Load More"
+            >
+              {loading ? "Loading..." : "Load More"}
+            </Button>
+          )}
         </div>
       )}
 
       {view === "casting" && (
         <div className="actors">
-          <p>You'll see some familiar faces here, check back soon!</p>
-          {casting.map((casting) => (
-            <ActorCard uid={casting.uid} />
+          {casting.length === 0 && (
+            <p>You'll see some familiar faces here, check back soon!</p>
+          )}
+          {casting.map((c) => (
+            <ActorCard key={c.uid} uid={c.uid} />
           ))}
+          {hasMoreCasting && (
+            <Button filled_color onClick={loadMore} disabled={loading}>
+              {loading ? "Loading..." : "Load More"}
+            </Button>
+          )}
         </div>
       )}
+
       <NavBar />
     </div>
   );

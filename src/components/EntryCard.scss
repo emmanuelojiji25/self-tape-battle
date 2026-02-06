@@ -1,13 +1,16 @@
 .video-container {
   width: 100%;
   position: relative;
+  background: #121626;
+  border-radius: 12px;
+  margin-top: 15px;
 
   video {
     width: 100%;
     height: 500px;
-    object-fit: cover;
     border-radius: 12px;
     display: block;
+    object-fit: contain;
   }
 }
 
@@ -27,6 +30,12 @@
     color: white;
     white-space: nowrap;
     text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .battle-title {
+    
+    text-transform: capitalize;
   }
 }
 
@@ -34,13 +43,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
 }
 
 .entry-card-header-left {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 50%;
 }
 
 .pill {

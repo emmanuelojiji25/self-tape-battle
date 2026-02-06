@@ -17,11 +17,11 @@ const HowToPlay = () => {
       <section>
         <h3>2. Vote to Enter (If Required)</h3>
         <p>
-          If a battle has more than 5 entries, you must vote on one existing
-          performance before you can submit your own. You can still vote for
-          other entries in this battle. This ensures fair play and keeps the
-          community engaged. Remember: once you vote for an actor, that vote is
-          final and cannot be changed.
+          You have 5 votes for each battle. Use them wisely! When submitting
+          your entry - if a battle has more than 5 existing entries, you must
+          vote on one performance before you can submit yours. This ensures fair
+          play and keeps the community engaged. Remember: once you vote for an
+          actor, that vote is final and you can't unvote.
         </p>
       </section>
 
@@ -85,7 +85,7 @@ const HowToPlay = () => {
       </section>
 
       <section>
-        <h3>Important Rules</h3>
+        <h3>Important Notes</h3>
         <p>
           • Votes are final and cannot be changed once submitted
           <br />

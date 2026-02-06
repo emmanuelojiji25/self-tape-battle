@@ -32,6 +32,9 @@ const EntryCard = ({
   battleStatus,
   isPillVisible,
   userVotes,
+  preload,
+  poster,
+  page,
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -165,7 +168,33 @@ const EntryCard = ({
     }
   };
 
-  const videoRef = useRef(null);
+  /*const videoRef = useRef(null);
+
+  const [playing, setPlaying] = useState(false);
+
+  if (videoRef && videoRef.current) {
+    videoRef.current.onplay = () => {
+      setPlaying(true);
+    };
+  }*/
+
+  const [battleTitle, setBattleTitle] = useState("");
+
+  useEffect(() => {
+    const getBattleTitle = async () => {
+      try {
+        const battleRef = doc(db, "battles", battleId);
+
+        const snapshot = await getDoc(battleRef);
+
+        setBattleTitle(snapshot.data().title);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getBattleTitle();
+  });
 
   return (
     <div className="EntryCard">
@@ -263,14 +292,15 @@ const EntryCard = ({
           </div>
         </div>
       </div>
+      {page === "profile" && <h4 className="battle-title">{battleTitle}</h4>}
 
       <div className="video-container">
         <video
-          ref={videoRef}
-          poster={userData?.headshot}
-          preload="none" // loads only minimal info
+          poster={poster}
+          preload="metadata"
           controls
-          src={`${url}.mp4`}
+          playsInline
+          src={`${url}${page === "profile" && "#t=1"}`}
         />
       </div>
     </div>

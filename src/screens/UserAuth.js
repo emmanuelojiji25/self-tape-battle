@@ -328,7 +328,7 @@ const UserAuth = ({ setSignedIn }) => {
             <h2>Hey professional!</h2>
             <p>
               For safety and verification purposes. Please email{" "}
-              <span className="highlight">accounts@selftapebattle.com</span>{" "}
+              <span className="highlight">info@selftapebattle.com</span>{" "}
               with your company name, website if applicable, or any social
               media. Emails must come from your company email. <br />
               <br />

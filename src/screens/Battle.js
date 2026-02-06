@@ -7,6 +7,7 @@ import {
   getDocs,
   increment,
   onSnapshot,
+  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -88,54 +89,58 @@ const Battle = () => {
   };
 
   const getBattle = async () => {
-    const docRef = doc(db, "battles", battleId);
-    const entriesRef = collection(db, "battles", battleId, "entries");
-
-    const entriesDocs = await getDocs(entriesRef);
-
-    const battleSnapshot = await getDoc(docRef);
-
-    const data = battleSnapshot.data();
-
-    if (data) {
-      setTitle(data.title);
-      setBattleStatus(data.status);
-      setBattleAttachment(data.file);
-      setDeadline(data.deadline);
-      setPrize(data.prize.value);
-      setGenre(data.genre);
-      setVoters(data.voters);
-    }
-
-    let entries = [];
-
-    entriesDocs.forEach((doc) => {
-      entries.push(doc.data());
-    });
-
-    const filtered = entries.filter((e) => e.uid !== loggedInUser.uid);
-    setEntries(filtered);
-    await fetchUsersForEntries(filtered);
-
-    // Vote limit query
-    const votesRef = collectionGroup(db, "votes");
-
-    const votesQuery = query(
-      votesRef,
-      where("uid", "==", loggedInUser.uid),
-      where("battleId", "==", battleId)
-    );
-
-    onSnapshot(votesRef, async () => {
-      const votesQuerySnapshot = await getDocs(votesQuery);
-      setUserVotes(votesQuerySnapshot.docs.length);
-    });
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
     try {
-    } catch (error) {}
+      const docRef = doc(db, "battles", battleId);
+      const entriesRef = collection(db, "battles", battleId, "entries");
+
+      const q = query(entriesRef, orderBy("date", "asc"));
+
+      const entriesDocs = await getDocs(q);
+
+      const battleSnapshot = await getDoc(docRef);
+
+      const data = battleSnapshot.data();
+
+      if (data) {
+        setTitle(data.title);
+        setBattleStatus(data.status);
+        setBattleAttachment(data.file);
+        setDeadline(data.deadline);
+        setPrize(data.prize.value);
+        setGenre(data.genre);
+        setVoters(data.voters);
+      }
+
+      let entries = [];
+
+      entriesDocs.forEach((doc) => {
+        entries.push(doc.data());
+      });
+
+      const filtered = entries.filter((e) => e.uid !== loggedInUser.uid);
+      setEntries(filtered);
+      await fetchUsersForEntries(filtered);
+
+      // Vote limit query
+      const votesRef = collectionGroup(db, "votes");
+
+      const votesQuery = query(
+        votesRef,
+        where("uid", "==", loggedInUser.uid),
+        where("battleId", "==", battleId)
+      );
+
+      onSnapshot(votesRef, async () => {
+        const votesQuerySnapshot = await getDocs(votesQuery);
+        setUserVotes(votesQuerySnapshot.docs.length);
+      });
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchUsersForEntries = async (entriesData) => {
@@ -212,44 +217,46 @@ const Battle = () => {
     setUploadStatus("uploading");
 
     try {
-      await uploadBytes(storageRef, file).then(() => {
-        getDownloadURL(
-          ref(storage, `battles/${battleId}/${loggedInUser.uid}`)
-        ).then(async (url) => {
-          const docRef = doc(
-            db,
-            "battles",
-            battleId,
-            "entries",
-            loggedInUser.uid
-          );
-          await setDoc(docRef, {
-            uid: `${loggedInUser.uid}`,
-            url: `${url}`,
-            voteCount: 0,
-            date: Date.now(),
-            shareSetting: "private",
-            battleId: battleId,
-          });
+      await uploadBytes(storageRef, file, { contentType: file.type }).then(
+        () => {
+          getDownloadURL(
+            ref(storage, `battles/${battleId}/${loggedInUser.uid}`)
+          ).then(async (url) => {
+            const docRef = doc(
+              db,
+              "battles",
+              battleId,
+              "entries",
+              loggedInUser.uid
+            );
+            await setDoc(docRef, {
+              uid: `${loggedInUser.uid}`,
+              url: `${url}`,
+              voteCount: 0,
+              date: Date.now(),
+              shareSetting: "private",
+              battleId: battleId,
+            });
 
-          const userRef = doc(db, "users", loggedInUser.uid);
+            const userRef = doc(db, "users", loggedInUser.uid);
 
-          await updateDoc(userRef, {
-            coins: increment(1),
-            totalCoinsEarned: increment(5),
-            battlesEntered: increment(5),
-          });
+            await updateDoc(userRef, {
+              coins: increment(5),
+              totalCoinsEarned: increment(5),
+              battlesEntered: increment(1),
+            });
 
-          await updateDoc(userRef, {
-            withdrawals: arrayUnion({
-              amount: 1,
-              complete: true,
-              uid: loggedInUser.uid,
-              direction: "inbound",
-            }),
+            await updateDoc(userRef, {
+              withdrawals: arrayUnion({
+                amount: 1,
+                complete: true,
+                uid: loggedInUser.uid,
+                direction: "inbound",
+              }),
+            });
           });
-        });
-      });
+        }
+      );
       setUploadStatus("complete");
       setShowMessageModal(true);
     } catch (error) {
@@ -408,7 +415,9 @@ const Battle = () => {
       {file && (
         <div className="file-container">
           {uploadStatus === "uploading" && (
-            <span className="uploading">Uploading..</span>
+            <span className="uploading">
+              Uploading..larger videos may take a bit longer..
+            </span>
           )}
           {uploadStatus === "" && (
             <>
@@ -475,6 +484,8 @@ const Battle = () => {
               battleStatus={battleStatus}
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
               userVotes={userVotes}
+              poster={usersCache[entry.uid]?.headshot}
+
             />
           );
         })}
