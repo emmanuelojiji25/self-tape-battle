@@ -241,7 +241,7 @@ const Battle = () => {
             const userRef = doc(db, "users", loggedInUser.uid);
 
             await updateDoc(userRef, {
-              coins: increment(1),
+              coins: increment(5),
               totalCoinsEarned: increment(5),
               battlesEntered: increment(1),
             });
@@ -485,7 +485,7 @@ const Battle = () => {
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
               userVotes={userVotes}
               poster={usersCache[entry.uid]?.headshot}
-              
+
             />
           );
         })}
