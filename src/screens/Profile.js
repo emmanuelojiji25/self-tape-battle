@@ -489,7 +489,7 @@ const Profile = () => {
                             headshot: headshot,
                           }}
                           page="profile"
-                          //poster={headshot}
+                          poster={headshot}
                         />
                       }
                     </>

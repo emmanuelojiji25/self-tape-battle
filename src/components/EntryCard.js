@@ -301,7 +301,7 @@ const EntryCard = ({
           controls
           playsInline
           src={url}
-       
+     
         />
       </div>
     </div>
