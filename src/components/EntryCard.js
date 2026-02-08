@@ -249,8 +249,7 @@ const EntryCard = ({
                 </span>
               )}
             {(loggedInUser && uid === loggedInUser.uid) ||
-              battleStatus === "closed" ||
-              (loggedInUser.uid === "DXHnK2scHuTzkk7oD4KMorHhox52" && (
+              (battleStatus === "closed" && (
                 <span className="votes">
                   {votes > 0 ? votes : "No"} Vote
                   {votes > 1 && "s"}

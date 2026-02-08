@@ -366,8 +366,57 @@ const Dashboard = () => {
     }
   };
 
+  const emailWinners = async () => {
+    try {
+      const votesRef = collection(
+        db,
+        "battles",
+        "an-honest-review",
+        "entries",
+        "BXuZyd71FYMHE4lm1oLncaocbDo2",
+        "votes"
+      );
+      const votesSnapshot = await getDocs(votesRef);
+
+      const uids = votesSnapshot.docs.map((doc) => doc.data().uid);
+
+      emailjs.init({
+        publicKey: "vDAbvtQ-t4ao0CqWi",
+      });
+
+      for (const voter of uids) {
+        if (!voter || voter.startsWith("-")) continue;
+
+        const voterRef = doc(db, "users", voter);
+
+        await updateDoc(voterRef, {
+          coins: increment(1),
+          totalCoinsEarned: increment(1),
+        });
+
+        const voterSnapshot = await getDoc(voterRef);
+        const { firstName, email } = voterSnapshot.data();
+
+        const userInfo = {
+          name: firstName,
+          email,
+          link: "https://app.selftapebattle.com/arena/an-honest-review",
+        };
+
+        await emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
+
+        // optional safety delay (recommended)
+        await new Promise((res) => setTimeout(res, 400));
+      }
+      console.log("emailed");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="Dashboard">
+      <h1 onClick={() => emailWinners()}>Email winners</h1>
       {locked ? (
         <div className="dashboard-locked">
           <h2>Please enter password</h2>
