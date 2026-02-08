@@ -19,7 +19,7 @@ const BattleCard = ({
     <div
       className={`PollCard`}
       style={{ opacity: status === "closed" && "0.5" }}
-    >
+    > 
       <h3 className="title">{name}</h3>
       {additional_info && <p className="additional-info">{additional_info}</p>}
 

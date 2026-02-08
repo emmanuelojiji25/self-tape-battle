@@ -146,6 +146,7 @@ const Dashboard = () => {
         file: "",
         deadline: deadline,
         visibility: visibility,
+        createdAt: Date.now(),
       });
 
       uploadFile();
@@ -365,8 +366,6 @@ const Dashboard = () => {
     }
   };
 
-  
-
   return (
     <div className="Dashboard">
       {locked ? (
@@ -492,13 +491,13 @@ const Dashboard = () => {
                     <Button
                       filled
                       text={
-                        battle.status === "open"
+                        battle.status != "closed"
                           ? "Close Battle"
                           : "Open Battle"
                       }
                       onClick={async () => {
                         const docRef = doc(db, "battles", battle.id);
-                        if (battle.status === "open") {
+                        if (battle.status != "open") {
                           closeBattle(battle.id);
                         } else {
                           await updateDoc(docRef, {

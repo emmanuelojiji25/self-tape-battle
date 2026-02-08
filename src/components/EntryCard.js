@@ -248,13 +248,14 @@ const EntryCard = ({
                   {!userhasVoted ? "Vote" : "You voted!"}
                 </span>
               )}
-            {((loggedInUser && uid === loggedInUser.uid) ||
-              battleStatus === "closed") && (
-              <span className="votes">
-                {votes > 0 ? votes : "No"} Vote
-                {votes > 1 && "s"}
-              </span>
-            )}
+            {(loggedInUser && uid === loggedInUser.uid) ||
+              battleStatus === "closed" ||
+              (loggedInUser.uid === "DXHnK2scHuTzkk7oD4KMorHhox52" && (
+                <span className="votes">
+                  {votes > 0 ? votes : "No"} Vote
+                  {votes > 1 && "s"}
+                </span>
+              ))}
           </div>
 
           <div className="card-menu-container">

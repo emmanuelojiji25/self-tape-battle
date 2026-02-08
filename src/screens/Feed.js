@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -38,7 +39,11 @@ const Feed = ({ user }) => {
 
     const battlesRef = collection(db, "battles");
 
-    const q = query(battlesRef, where("visibility", "==", "published"));
+    const q = query(
+      battlesRef,
+      where("visibility", "==", "published"),
+      orderBy("createdAt", "desc")
+    );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
