@@ -376,7 +376,7 @@ const Battle = () => {
         </div>
       </div>
 
-      <div className="button-container">
+     {battleStatus === "open" && <div className="button-container">
         {!userEntry &&
           !file &&
           loading === false &&
@@ -411,7 +411,7 @@ const Battle = () => {
         <p className="user-votes">
           Votes Remaining: <strong>{5 - userVotes}</strong>
         </p>
-      </div>
+      </div>}
       {file && (
         <div className="file-container">
           {uploadStatus === "uploading" && (
