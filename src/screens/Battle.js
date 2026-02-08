@@ -376,42 +376,48 @@ const Battle = () => {
         </div>
       </div>
 
-     {battleStatus === "open" && <div className="button-container">
-        {!userEntry &&
-          !file &&
-          loading === false &&
-          battleStatus === "open" && (
-            <Button
-              onClick={() => {
-                if (userVotes === 0 && entries.length > 4) {
-                  console.log("You must vote first!");
-                  setErrorMessage(
-                    "You must watch & vote for at least 1 entry before you can join this battle. You can still vote for other entries in this battle."
-                  );
-                  return;
-                } else {
-                  inputRef.current.click();
-                }
-              }}
-              text="Upload Tape"
-              className="upload-tape"
-              filled_color
-            />
-          )}
+      {battleStatus === "winner_pending" && (
+        <h4 className="winner-pending">Winner announced soon..</h4>
+      )}
 
-        <a href={`${battleAttachment}`} download target="_blank">
-          <Button text="Download Monologue" outline />
-        </a>
-        <Button
-          text="How to play"
-          icon={<i class="fa-solid fa-circle-info"></i>}
-          onClick={() => setHowToPlayVisible(true)}
-          outline
-        />
-        <p className="user-votes">
-          Votes Remaining: <strong>{5 - userVotes}</strong>
-        </p>
-      </div>}
+      {battleStatus === "open" && (
+        <div className="button-container">
+          {!userEntry &&
+            !file &&
+            loading === false &&
+            battleStatus === "open" && (
+              <Button
+                onClick={() => {
+                  if (userVotes === 0 && entries.length > 4) {
+                    console.log("You must vote first!");
+                    setErrorMessage(
+                      "You must watch & vote for at least 1 entry before you can join this battle. You can still vote for other entries in this battle."
+                    );
+                    return;
+                  } else {
+                    inputRef.current.click();
+                  }
+                }}
+                text="Upload Tape"
+                className="upload-tape"
+                filled_color
+              />
+            )}
+
+          <a href={`${battleAttachment}`} download target="_blank">
+            <Button text="Download Monologue" outline />
+          </a>
+          <Button
+            text="How to play"
+            icon={<i class="fa-solid fa-circle-info"></i>}
+            onClick={() => setHowToPlayVisible(true)}
+            outline
+          />
+          <p className="user-votes">
+            Votes Remaining: <strong>{5 - userVotes}</strong>
+          </p>
+        </div>
+      )}
       {file && (
         <div className="file-container">
           {uploadStatus === "uploading" && (
@@ -485,7 +491,6 @@ const Battle = () => {
               userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
               userVotes={userVotes}
               poster={usersCache[entry.uid]?.headshot}
-
             />
           );
         })}
