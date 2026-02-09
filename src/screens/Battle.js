@@ -212,57 +212,62 @@ const Battle = () => {
   const [uploadStatus, setUploadStatus] = useState("");
 
   const handleUploadBattle = async () => {
-    const storageRef = ref(storage, `battles/${battleId}/${loggedInUser.uid}`);
-
-    setUploadStatus("uploading");
-
+    if (!file || !loggedInUser) return;
+  
     try {
-      await uploadBytes(storageRef, file, { contentType: file.type }).then(
-        () => {
-          getDownloadURL(
-            ref(storage, `battles/${battleId}/${loggedInUser.uid}`)
-          ).then(async (url) => {
-            const docRef = doc(
-              db,
-              "battles",
-              battleId,
-              "entries",
-              loggedInUser.uid
-            );
-            await setDoc(docRef, {
-              uid: `${loggedInUser.uid}`,
-              url: `${url}`,
-              voteCount: 0,
-              date: Date.now(),
-              shareSetting: "private",
-              battleId: battleId,
-            });
-
-            const userRef = doc(db, "users", loggedInUser.uid);
-
-            await updateDoc(userRef, {
-              coins: increment(5),
-              totalCoinsEarned: increment(5),
-              battlesEntered: increment(1),
-            });
-
-            await updateDoc(userRef, {
-              withdrawals: arrayUnion({
-                amount: 1,
-                complete: true,
-                uid: loggedInUser.uid,
-                direction: "inbound",
-              }),
-            });
-          });
-        }
+      setUploadStatus("uploading");
+  
+      const storageRef = ref(
+        storage,
+        `battles/${battleId}/${loggedInUser.uid}`
       );
+  
+      await uploadBytes(storageRef, file, {
+        contentType: file.type,
+      });
+  
+      const url = await getDownloadURL(storageRef);
+  
+      const entryRef = doc(
+        db,
+        "battles",
+        battleId,
+        "entries",
+        loggedInUser.uid
+      );
+  
+      await setDoc(entryRef, {
+        uid: loggedInUser.uid,
+        url,
+        voteCount: 0,
+        date: Date.now(),
+        shareSetting: "private",
+        battleId,
+      });
+  
+      const userRef = doc(db, "users", loggedInUser.uid);
+  
+      await updateDoc(userRef, {
+        coins: increment(5),
+        totalCoinsEarned: increment(5),
+        battlesEntered: increment(1),
+        withdrawals: arrayUnion({
+          amount: 1,
+          complete: true,
+          uid: loggedInUser.uid,
+          direction: "inbound",
+        }),
+      });
+  
       setUploadStatus("complete");
       setShowMessageModal(true);
+  
     } catch (error) {
-      console.log(error);
+      console.error("Upload failed:", error);
+      setUploadStatus("error");
     }
   };
+  
 
   /*useEffect(() => {
     const checkWinner = async () => {

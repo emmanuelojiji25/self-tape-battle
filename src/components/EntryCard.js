@@ -60,6 +60,8 @@ const EntryCard = ({
 
   const [feedbackVisible, setFeedbackVisible] = useState(false);
 
+  const [amountOfFeedback, setAmountOfFeedback] = useState(null);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -102,6 +104,19 @@ const EntryCard = ({
         const querySnapshot = await getDocs(q);
 
         setUserHasVoted(querySnapshot.size > 0);
+
+        // Fetch feedback amount
+        const feedbackRef = collection(
+          db,
+          "battles",
+          battleId,
+          "entries",
+          uid,
+          "comments"
+        );
+
+        const feedbackSnapshot = await getDocs(feedbackRef);
+        setAmountOfFeedback(feedbackSnapshot.size);
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -170,16 +185,6 @@ const EntryCard = ({
       console.log(error);
     }
   };
-
-  /*const videoRef = useRef(null);
-
-  const [playing, setPlaying] = useState(false);
-
-  if (videoRef && videoRef.current) {
-    videoRef.current.onplay = () => {
-      setPlaying(true);
-    };
-  }*/
 
   const [battleTitle, setBattleTitle] = useState("");
 
@@ -315,7 +320,7 @@ const EntryCard = ({
         />
       </div>
       <p className="comment-button" onClick={() => setFeedbackVisible(true)}>
-        Feedback(2)
+        Feedback ({amountOfFeedback})
       </p>
     </div>
   );

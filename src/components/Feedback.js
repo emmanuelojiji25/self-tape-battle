@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   onSnapshot,
   setDoc,
 } from "firebase/firestore";
@@ -20,6 +21,27 @@ const Feedback = ({ close, battleId, uid }) => {
   const [commentPosted, setCommentPosted] = useState(false);
 
   const [feedback, setFeedback] = useState([]);
+
+  const [user, setUser] = useState({});
+
+  const [battle, setBattle] = useState({});
+
+  useEffect(() => {
+    const getEntry = async () => {
+      const userRef = doc(db, "users", uid);
+
+      const userSnapshot = await getDoc(userRef);
+
+      setUser(userSnapshot.data());
+
+      const battleRef = doc(db, "battles", battleId);
+
+      const battleSnapshot = await getDoc(battleRef);
+
+      setBattle(battleSnapshot.data());
+    };
+    getEntry();
+  });
 
   useEffect(() => {
     const getFeedback = () => {
@@ -76,8 +98,18 @@ const Feedback = ({ close, battleId, uid }) => {
       <div className="screen-width">
         <h3 onClick={close}>Close</h3>
 
-        <h2>Actor name</h2>
+        <div className="user-info">
+          <div
+            className="headshot"
+            style={{ backgroundImage: `url(${user.headshot})` }}
+          ></div>
+          <div>
+            <h2>{`${user.firstName} ${user.lastName}`}</h2>
+            <h3>{battle.title}</h3>
+          </div>
+        </div>
         <textarea
+          placeholder="Enter your feedback"
           onChange={(e) => {
             setComment(e.target.value);
             setCommentPosted(false);
