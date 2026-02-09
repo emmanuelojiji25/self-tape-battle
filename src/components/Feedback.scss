@@ -1,0 +1,21 @@
+.Feedback {
+  height: 100svh;
+  inset: 0;
+  width: 100%;
+  position: fixed;
+  background: #080b13;
+  z-index: 1;
+  color: white !important;
+
+  a {
+    color: white;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  .feedback-container {
+    margin-top: 50px;
+  }
+}

@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import ShareModal from "./ShareModal";
 import DeleteModal from "./DeleteModal";
 import ReportModal from "./ReportModal";
+import Feedback from "./Feedback";
 
 const EntryCard = ({
   userData,
@@ -56,6 +57,8 @@ const EntryCard = ({
   const [videoClicked, setVideoClicked] = useState(false);
 
   const [voteLimitedReached, setVoteLimitReached] = useState(false);
+
+  const [feedbackVisible, setFeedbackVisible] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -225,6 +228,14 @@ const EntryCard = ({
 
       {isExploding && <ConfettiExplosion />}
 
+      {feedbackVisible && (
+        <Feedback
+          close={() => setFeedbackVisible(false)}
+          battleId={battleId}
+          uid={uid}
+        />
+      )}
+
       <div className="entry-card-header">
         <div className="entry-card-header-left">
           <Link to={`/profile/${username}`} className="name">
@@ -303,6 +314,9 @@ const EntryCard = ({
           src={`${url}${page === "profile" && "#t=1"}`}
         />
       </div>
+      <p className="comment-button" onClick={() => setFeedbackVisible(true)}>
+        Feedback(2)
+      </p>
     </div>
   );
 };

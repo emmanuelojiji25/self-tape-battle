@@ -255,31 +255,38 @@ const Dashboard = () => {
         );
         const votesSnapshot = await getDocs(votesRef);
 
+        const uids = votesSnapshot.docs.map((doc) => doc.data().uid);
+
+        emailjs.init({
+          publicKey: "vDAbvtQ-t4ao0CqWi",
+        });
+
         const voteDocs = votesSnapshot.docs.map((doc) => doc.data());
 
-        await Promise.all(
-          voteDocs.map(async (voter) => {
-            const voterRef = doc(db, "users", voter.uid);
+        for (const voter of uids) {
+          if (!voter || voter.startsWith("-")) continue;
 
-            updateDoc(voterRef, {
-              coins: increment(1),
-              totalCoinsEarned: increment(1),
-            });
+          const voterRef = doc(db, "users", voter);
 
-            const voterSnapshot = await getDoc(voterRef);
+          await updateDoc(voterRef, {
+            coins: increment(1),
+            totalCoinsEarned: increment(1),
+          });
 
-            const { firstName, email } = voterSnapshot.data();
+          const voterSnapshot = await getDoc(voterRef);
+          const { firstName, email } = voterSnapshot.data();
 
-            const userInfo = {
-              name: firstName,
-              email: email,
-              link: `https://app.selftapebattle.com/arena/${battleId}`,
-            };
+          const userInfo = {
+            name: firstName,
+            email,
+            link: "https://app.selftapebattle.com/arena/an-honest-review",
+          };
 
-            // Send email to voters who voted for winning entry
-            emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
-          })
-        );
+          await emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
+
+          // optional safety delay (recommended)
+          await new Promise((res) => setTimeout(res, 400));
+        }
       }
 
       await updateDoc(battleRef, {
@@ -416,7 +423,7 @@ const Dashboard = () => {
 
   return (
     <div className="Dashboard">
-      <h1 onClick={() => addExtraCoins()}>Add extra coins</h1>
+      
       {locked ? (
         <div className="dashboard-locked">
           <h2>Please enter password</h2>

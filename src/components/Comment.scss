@@ -1,0 +1,18 @@
+.Comment {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  background-color: #0f1422;
+  padding: 15px;
+  border-radius: 10px;
+
+
+  .headshot {
+    height: 30px;
+    width: 30px;
+    border-radius: 5px;
+    background-size: cover;
+    background-position: center;
+  }
+}
