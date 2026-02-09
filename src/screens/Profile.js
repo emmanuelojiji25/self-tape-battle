@@ -570,6 +570,7 @@ const Profile = () => {
                         type="text"
                         onChange={(e) => setLink(e.target.value)}
                         value={link}
+                        placeholder="Enter link"
                       />
                     </div>
 
