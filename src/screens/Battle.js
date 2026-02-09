@@ -432,6 +432,7 @@ const Battle = () => {
             userData={loggedInUserDoc} // Changed from userDocs to usersCache
             userVotes={userVotes}
             menu
+            feedbackOn={userEntry.feedbackOn}
           />
         )}
 

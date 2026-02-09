@@ -60,9 +60,9 @@ const EntryCard = ({
 
   const [feedbackVisible, setFeedbackVisible] = useState(false);
 
-  const [amountOfFeedback, setAmountOfFeedback] = useState(null);
+  const [amountOfFeedback, setAmountOfFeedback] = useState(0);
 
-  const [feedbackOn, setFeedbackOn] = useState(true);
+  const [feedbackOn, setFeedbackOn] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -126,6 +126,18 @@ const EntryCard = ({
 
     fetchData();
   }, [uid, battleId, loggedInUser]);
+
+  useEffect(() => {
+    const getFeedbackStatus = () => {
+      const entryRef = doc(db, "battles", battleId, "entries", uid);
+
+      onSnapshot(entryRef, (snapshot) => {
+        setFeedbackOn(snapshot.data().feedbackOn);
+      });
+    };
+
+    getFeedbackStatus();
+  }, []);
 
   const handleVote = async () => {
     if (!userhasVoted) {
@@ -205,6 +217,14 @@ const EntryCard = ({
 
     getBattleTitle();
   });
+
+  const feedbackOnToggle = async () => {
+    const entryRef = doc(db, "battles", battleId, "entries", loggedInUser.uid);
+
+    await updateDoc(entryRef, {
+      feedbackOn: !feedbackOn,
+    });
+  };
 
   return (
     <div className="EntryCard">
@@ -287,10 +307,7 @@ const EntryCard = ({
               <div className="card-menu" ref={menuRef}>
                 {uid === loggedInUser?.uid && (
                   <>
-                    <p
-                      onClick={() => setDeleteModalVisible(true)}
-                      className="delete"
-                    >
+                    <p className="delete" onClick={feedbackOnToggle}>
                       Turn {feedbackOn ? "off" : "on"} feedback
                     </p>
                     <span
@@ -327,9 +344,11 @@ const EntryCard = ({
           src={`${url}${page === "profile" && "#t=1"}`}
         />
       </div>
-      <p className="comment-button" onClick={() => setFeedbackVisible(true)}>
-        Feedback ({amountOfFeedback})
-      </p>
+      {feedbackOn && (
+        <p className="comment-button" onClick={() => setFeedbackVisible(true)}>
+          Feedback ({amountOfFeedback})
+        </p>
+      )}
     </div>
   );
 };
