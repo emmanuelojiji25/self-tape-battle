@@ -131,7 +131,7 @@ const Feedback = ({ close, battleId, uid }) => {
         </div>}
 
         <div className="feedback-container">
-          <h3>Your feedback</h3>
+          <h3>{uid === loggedInUser.uid && "Your"} feedback</h3>
           {feedback.map((feedback) => (
             <Comment comment={feedback.comment} uid={feedback.uid} />
           ))}
