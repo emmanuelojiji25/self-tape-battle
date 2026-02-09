@@ -9,17 +9,19 @@ const BattleCard = ({
   name,
   prize,
   battleId,
-  mostPopular,
   scheduled,
   status,
-  additional_info
+  additional_info,
 }) => {
   const { authRole } = useContext(AuthContext);
 
   return (
-    <div className={`PollCard`}>
+    <div
+      className={`PollCard`}
+      style={{ opacity: status === "closed" && "0.5" }}
+    > 
       <h3 className="title">{name}</h3>
-     {additional_info && <p className="additional-info">{additional_info}</p>}
+      {additional_info && <p className="additional-info">{additional_info}</p>}
 
       <div className="prize">
         {typeof prize === "number" ? (
