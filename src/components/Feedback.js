@@ -113,7 +113,7 @@ const Feedback = ({ close, battleId, uid }) => {
             <p>{battle.title}</p>
           </div>
         </div>
-        <div className="create-post-container">
+        {uid != loggedInUser.uid && <div className="create-post-container">
           <textarea
             placeholder="Enter your feedback"
             onChange={(e) => {
@@ -128,9 +128,10 @@ const Feedback = ({ close, battleId, uid }) => {
               <p className="post-confirmation">Feedback posted</p>
             )}
           </div>
-        </div>
+        </div>}
 
         <div className="feedback-container">
+          <h3>Your feedback</h3>
           {feedback.map((feedback) => (
             <Comment comment={feedback.comment} uid={feedback.uid} />
           ))}
