@@ -117,8 +117,10 @@ const EntryCard = ({
           "comments"
         );
 
-        const feedbackSnapshot = await getDocs(feedbackRef);
-        setAmountOfFeedback(feedbackSnapshot.size);
+        onSnapshot(feedbackRef, (snapshot) => {
+          setAmountOfFeedback(snapshot.size);
+        });
+        
       } catch (err) {
         console.error("Error fetching data:", err);
       }
