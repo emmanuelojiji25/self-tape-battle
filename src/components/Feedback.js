@@ -4,6 +4,8 @@ import {
   doc,
   getDoc,
   onSnapshot,
+  orderBy,
+  query,
   setDoc,
 } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
@@ -11,6 +13,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
 import Button from "./Button";
 import Comment from "./Comment";
+import BackButton from "./BackButton";
 import "./Feedback.scss";
 
 const Feedback = ({ close, battleId, uid }) => {
@@ -55,7 +58,9 @@ const Feedback = ({ close, battleId, uid }) => {
           "comments"
         );
 
-        onSnapshot(collectionRef, (snapshot) => {
+        const q = query(collectionRef, orderBy("date", "desc"));
+
+        onSnapshot(q, (snapshot) => {
           const data = snapshot.docs.map((doc) => doc.data());
           if (data) {
             setFeedback(data);
@@ -96,7 +101,7 @@ const Feedback = ({ close, battleId, uid }) => {
   return (
     <div className="Feedback">
       <div className="screen-width">
-        <h3 onClick={close}>Close</h3>
+        <BackButton onClick={close} />
 
         <div className="user-info">
           <div
@@ -104,21 +109,25 @@ const Feedback = ({ close, battleId, uid }) => {
             style={{ backgroundImage: `url(${user.headshot})` }}
           ></div>
           <div>
-            <h2>{`${user.firstName} ${user.lastName}`}</h2>
-            <h3>{battle.title}</h3>
+            <h4>{`${user.firstName} ${user.lastName}`}</h4>
+            <p>{battle.title}</p>
           </div>
         </div>
-        <textarea
-          placeholder="Enter your feedback"
-          onChange={(e) => {
-            setComment(e.target.value);
-            setCommentPosted(false);
-          }}
-          value={comment}
-        ></textarea>
-        <div className="button-container">
-          <Button filled_color text="post" onClick={postComment} />
-          {commentPosted && <p>Feedback posted</p>}
+        <div className="create-post-container">
+          <textarea
+            placeholder="Enter your feedback"
+            onChange={(e) => {
+              setComment(e.target.value);
+              setCommentPosted(false);
+            }}
+            value={comment}
+          ></textarea>
+          <div className="button-container">
+            <Button filled_color text="post" onClick={postComment} />
+            {commentPosted && (
+              <p className="post-confirmation">Feedback posted</p>
+            )}
+          </div>
         </div>
 
         <div className="feedback-container">

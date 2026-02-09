@@ -62,6 +62,8 @@ const EntryCard = ({
 
   const [amountOfFeedback, setAmountOfFeedback] = useState(null);
 
+  const [feedbackOn, setFeedbackOn] = useState(true);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -285,6 +287,12 @@ const EntryCard = ({
               <div className="card-menu" ref={menuRef}>
                 {uid === loggedInUser?.uid && (
                   <>
+                    <p
+                      onClick={() => setDeleteModalVisible(true)}
+                      className="delete"
+                    >
+                      Turn {feedbackOn ? "off" : "on"} feedback
+                    </p>
                     <span
                       className="share"
                       onClick={() => {

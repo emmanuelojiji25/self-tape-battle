@@ -213,21 +213,21 @@ const Battle = () => {
 
   const handleUploadBattle = async () => {
     if (!file || !loggedInUser) return;
-  
+
     try {
       setUploadStatus("uploading");
-  
+
       const storageRef = ref(
         storage,
         `battles/${battleId}/${loggedInUser.uid}`
       );
-  
+
       await uploadBytes(storageRef, file, {
         contentType: file.type,
       });
-  
+
       const url = await getDownloadURL(storageRef);
-  
+
       const entryRef = doc(
         db,
         "battles",
@@ -235,7 +235,7 @@ const Battle = () => {
         "entries",
         loggedInUser.uid
       );
-  
+
       await setDoc(entryRef, {
         uid: loggedInUser.uid,
         url,
@@ -243,10 +243,11 @@ const Battle = () => {
         date: Date.now(),
         shareSetting: "private",
         battleId,
+        feedbackOn: true,
       });
-  
+
       const userRef = doc(db, "users", loggedInUser.uid);
-  
+
       await updateDoc(userRef, {
         coins: increment(5),
         totalCoinsEarned: increment(5),
@@ -258,64 +259,14 @@ const Battle = () => {
           direction: "inbound",
         }),
       });
-  
+
       setUploadStatus("complete");
       setShowMessageModal(true);
-  
     } catch (error) {
       console.error("Upload failed:", error);
       setUploadStatus("error");
     }
   };
-  
-
-  /*useEffect(() => {
-    const checkWinner = async () => {
-      const battleRef = doc(db, "battles", battleId);
-      try {
-        const collectionRef = collection(db, "battles", battleId, "entries");
-        const snapshot = await getDocs(collectionRef);
-
-        const entries = snapshot.docs.map((d) => d.data());
-
-        if (!entries.length) {
-          console.warn("No entries found for this battle.");
-          setWinner(null);
-          return;
-        }
-
-        // Helper function to normalize date types
-        const toMillis = (date) => {
-          if (!date) return 0;
-          if (typeof date === "number") return date; // from Date.now()
-          if (date.seconds) return date.seconds * 1000; // from Firestore Timestamp
-          if (typeof date.toMillis === "function") return date.toMillis();
-          return 0;
-        };
-
-        // 🔥 Sort once by votes desc, then date asc (earliest wins tie)
-        entries.sort((a, b) => {
-          const votesA = a.votes?.length || 0;
-          const votesB = b.votes?.length || 0;
-
-          if (votesB !== votesA) return votesB - votesA; // Most votes first
-          return toMillis(a.date) - toMillis(b.date); // Earlier entry wins ties
-        });
-
-        const winnerEntry = entries[0];
-
-        console.log(winnerEntry);
-        if (!winnerEntry?.uid) {
-          console.warn("No valid winner UID found in entries.");
-          setWinner(null);
-          return;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    checkWinner();
-  });*/
 
   return (
     <div className="Battle screen-width">
