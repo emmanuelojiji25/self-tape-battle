@@ -19,12 +19,11 @@ import Loader from "./components/Loader";
 import Button from "./components/Button";
 
 function App() {
-  //const [countryCode, setCountryCode] = useState("gb");
-  const countryCode = "gb";
+  const [countryCode, setCountryCode] = useState("")
 
   const [loading, setLoading] = useState(false);
 
-  /*useEffect(() => {
+  useEffect(() => {
     const getCountry = async () => {
       if (localStorage.getItem("country_code")) {
         setCountryCode(localStorage.getItem("country_code"));
@@ -45,7 +44,9 @@ function App() {
       }
     };
     getCountry();
-  }, []);*/
+  }, []);
+
+  
 
   useEffect(() => {
     if (localStorage.getItem("country_code")) {
