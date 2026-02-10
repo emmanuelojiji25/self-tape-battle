@@ -21,7 +21,7 @@ import Button from "./components/Button";
 function App() {
   const [countryCode, setCountryCode] = useState("")
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getCountry = async () => {
