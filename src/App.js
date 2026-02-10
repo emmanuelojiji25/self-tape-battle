@@ -65,7 +65,7 @@ function App() {
               <div className="location-denied">
                 <h2>There's no arena in your location yet.</h2>
                 <p>We hope to be available in your country soon!</p>
-                <Link to="/">
+                <Link to="https://selftapebattle.com">
                   {" "}
                   <Button text="Go to homepage" filled_color />
                 </Link>
