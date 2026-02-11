@@ -1,0 +1,22 @@
+.EditProfile {
+  width: 100%;
+  position: fixed;
+  background: rgba(0, 0, 0);
+  overflow-y: auto;
+  z-index: 1;
+  padding: 5%;
+  inset: 0; // sets top, left, bottom, right to 0. This creates a fixed height which allows scrolling.
+}
+
+.edit-profile-inner {
+  overflow: scroll;
+}
+
+.edit-profile-section {
+  margin-bottom: 50px;
+}
+
+.tab-container {
+  display: flex;
+  gap: 20px;
+}

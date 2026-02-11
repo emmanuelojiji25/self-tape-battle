@@ -13,21 +13,19 @@ import {
 } from "firebase/firestore";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import BattleCard from "../components/BattleCard";
 import { auth, db, storage } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
 import EntryCard from "../components/EntryCard";
 import Button from "../components/Button";
-import Input from "../components/Input";
 import NavBar from "../components/NavBar";
 import LockedProfile from "../components/LockedProfile";
 import Wallet from "../components/Wallet";
 import ActorCard from "../components/ActorCard";
 import Loader from "../components/Loader";
-import BackButton from "../components/BackButton";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import ff from "../media/ff.svg";
 import MessageModal from "../components/MessageModal";
+import EditProfile from "../components/EditProfile";
 
 const Profile = () => {
   const params = useParams();
@@ -36,15 +34,7 @@ const Profile = () => {
 
   const { loggedInUser, authRole } = useContext(AuthContext);
 
-  const [originalUser, setOriginalUser] = useState({});
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [userId, setUserId] = useState("");
-  const [publicProfile, setPublicProfile] = useState(false);
-  const [role, setRole] = useState("");
+  const [user, setUser] = useState({});
 
   const [contactEmail, setContactEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
@@ -78,6 +68,8 @@ const Profile = () => {
 
   const [showMessageModal, setShowMessageModal] = useState(false);
 
+  let originalUser = {};
+
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
@@ -90,24 +82,29 @@ const Profile = () => {
       }
 
       const docSnap = querySnapshot.docs[0];
+
       const data = docSnap.data();
 
-      setUsername(data.username || "");
-      setUserId(data.uid || docSnap.id);
-      setName(`${data.firstName || ""} ${data.lastName || ""}`.trim());
-      setFirstName(data.firstName || "");
-      setLastName(data.lastName || "");
-      setHeadshot(data.headshot || "");
-      setBio(data.bio || "");
-      setLink(data.webLink || "");
-      setPublicProfile(data.settings.publicProfile || false);
-      setRole(data.role || "");
-      setContactNumber(data.contactNumber);
-      setContactEmail(data.contactEmail);
-      setBattlesEntered(data.battlesEntered);
-      setBadges(data.badges);
+      setUser(data);
 
-      setOriginalUser({
+      /*setUser({
+        username: data.username || "",
+        userId: data.uid || docSnap.id,
+        name: `${data.firstName || ""} ${data.lastName || ""}`.trim(),
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        headshot: data.headshot || "",
+        bio: data.bio || "",
+        link: data.webLink || "",
+        publicProfile: data.settings.publicProfile || false,
+        role: data.role || "",
+        contactNumber: data.contactNumber,
+        contactEmail: data.contactEmail,
+        battlesEntered: data.battlesEntered,
+        badges: data.badgesl,
+      });*/
+
+      let originalUser = {
         username: data.username,
         lastName: data.firstName,
         bio: data.bio,
@@ -119,7 +116,7 @@ const Profile = () => {
         accountName: data.accountName,
         accountNumber: data.accountNumber,
         sortCode: data.sortCode,
-      });
+      };
 
       setTimeout(() => {
         setLoading(false);
@@ -134,7 +131,7 @@ const Profile = () => {
   const getUserBattles = async () => {
     try {
       const battlesCollection = collectionGroup(db, "entries");
-      const q = query(battlesCollection, where("uid", "==", userId));
+      const q = query(battlesCollection, where("uid", "==", user.userId));
       onSnapshot(q, (snapshot) => {
         let data = [];
         snapshot.forEach((doc) => {
@@ -150,7 +147,7 @@ const Profile = () => {
   const getBattlesWon = async () => {
     try {
       const collectionRef = collection(db, "battles");
-      const q = query(collectionRef, where("winner", "==", userId));
+      const q = query(collectionRef, where("winner", "==", user.userId));
       const docs = await getDocs(q);
       setBattlesWon(docs.size);
     } catch (error) {
@@ -192,28 +189,28 @@ const Profile = () => {
     getUserBattles();
     getBattlesWon();
     getTotalVotes();
-  }, [userId]);
+  }, [user.userId]);
 
   const [usernameInput, setUsernameInput] = useState("");
   const [bioInput, setBioInput] = useState("");
 
   useEffect(() => {
-    setUsernameInput(username);
-  }, [username]);
+    setUsernameInput(user.username);
+  }, [user.username]);
 
   const [showUsernameMessage, setShowUsernameMessage] = useState(false);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
 
   useEffect(() => {
     handleUsernameCheck();
-  }, [username]);
+  }, [user.username]);
 
   const handleUsernameCheck = async () => {
     try {
       const collectionRef = collection(db, "users");
       const q = query(
         collectionRef,
-        where("username", "==", username.toLowerCase().trim())
+        where("username", "==", user.username.toLowerCase().trim())
       );
 
       const querySnapshot = await getDocs(q);
@@ -245,68 +242,6 @@ const Profile = () => {
     }, 2000);
   };
 
-  const handleUpdateUser = async () => {
-    const updates = {};
-    try {
-      const docRef = doc(db, "users", userId);
-
-      if (username.trim().toLowerCase() !== originalUser.username) {
-        updates.username = username.trim().toLowerCase();
-      }
-
-      if (bio.trim() !== originalUser.bio) {
-        updates.bio = bio.trim();
-      }
-
-      if (link.trim() !== originalUser.link) {
-        updates.webLink =
-          link.includes("https://") || link.includes("http://")
-            ? link.trim()
-            : `https://${link}`;
-      }
-
-      if (publicProfile !== originalUser.PublicProfile) {
-        updates.settings = { publicProfile: publicProfile };
-      }
-
-      if (contactEmail != originalUser.contactEmail) {
-        updates.contactEmail = contactEmail.trim();
-      }
-
-      if (contactNumber != originalUser.contactNumber) {
-        updates.contactNumber = contactNumber.trim();
-      }
-
-      if (accountName != originalUser.accountName) {
-        updates.accountName = accountName.trim();
-      }
-
-      if (accountNumber != originalUser.accountNumber) {
-        updates.accountNumber = accountNumber.trim();
-      }
-
-      if (sortCode != originalUser.sortCode) {
-        updates.sortCode = accountNumber.trim();
-      }
-
-      if (updates.length === 0) {
-        console.log("no changes");
-      } else {
-        try {
-          await updateDoc(docRef, updates);
-          await updateHeadshot();
-          window.location.reload();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
-      console.log("complete!");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (!loggedInUser?.uid) return;
 
@@ -323,31 +258,6 @@ const Profile = () => {
     return () => unsubscribe();
   }, [loggedInUser?.uid]);
 
-  // Edit headshot
-
-  const inputRef = useRef(null);
-
-  const [file, setFile] = useState([]);
-  const [previewFile, setPreviewfile] = useState();
-
-  const updateHeadshot = async () => {
-    const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
-
-    if (previewFile) {
-      await uploadBytes(storageRef, file).then(() => {
-        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
-          async (url) => {
-            const docRef = doc(db, "users", loggedInUser.uid);
-            await updateDoc(docRef, {
-              headshot: `${url}`,
-            });
-            console.log("complete!");
-          }
-        );
-      });
-    }
-  };
-
   return (
     <div className="Profile screen-width">
       {isInfoCopied && <div className="contact-tooltip">Copied!</div>}
@@ -355,7 +265,7 @@ const Profile = () => {
       {showMessageModal && (
         <MessageModal
           title="Founding Fighter"
-          text={`${firstName} was one of the first 250 fighters to join the arena!`}
+          text={`${user.firstName} was one of the first 250 fighters to join the arena!`}
           onClick={() => setShowMessageModal(false)}
           buttonText="Close"
           icon={<img src={ff} />}
@@ -366,19 +276,19 @@ const Profile = () => {
         <Loader />
       ) : (
         <>
-          {!publicProfile && !loggedInUser ? (
-            <LockedProfile firstName={firstName} />
+          {!user.settings.publicProfile && !loggedInUser ? (
+            <LockedProfile firstName={user.firstName} />
           ) : (
             <>
-              {!userId && <h1>User doesn't exist</h1>}
+              {!user.uid && <h1>User doesn't exist</h1>}
               <div className="profile-header">
                 <div className="profile-headshot-container">
-                  <img className="profile-headshot" src={headshot} />
+                  <img className="profile-headshot" src={user.headshot} />
                 </div>
                 <div className="profile-info">
                   <div className="name-badge-container">
-                    <h1>{name}</h1>{" "}
-                    {badges.includes("founding_fighter") && (
+                    <h1>{user.firstName}</h1>
+                    {user.badges.includes("founding_fighter") && (
                       <img
                         src={ff}
                         className="badge"
@@ -386,14 +296,14 @@ const Profile = () => {
                       />
                     )}
                   </div>
-                  <span className="username">{username}</span>
+                  <span className="username">{user.username}</span>
 
-                  <span>{bio}</span>
+                  <span>{user.bio}</span>
                   <a href={`${link}`} target="_" className="web-link">
                     {link}
                   </a>
                   <div class="profile-button-container">
-                    {role === "actor" && (
+                    {user.role === "actor" && (
                       <Button
                         filled
                         text="Share Card"
@@ -404,8 +314,8 @@ const Profile = () => {
                         }
                       ></Button>
                     )}
-                    {userId === loggedInUser?.uid &&
-                      role === "professional" && (
+                    {user.userId === loggedInUser?.uid &&
+                      user.role === "professional" && (
                         <Button
                           filled
                           text="My bookmarks"
@@ -413,7 +323,7 @@ const Profile = () => {
                         ></Button>
                       )}
 
-                    {authRole === "professional" && role === "actor" && (
+                    {authRole === "professional" && user.role === "actor" && (
                       <>
                         <Button
                           filled
@@ -443,7 +353,7 @@ const Profile = () => {
                       </>
                     )}
 
-                    {userId === loggedInUser?.uid && (
+                    {user.uid === loggedInUser?.uid && (
                       <>
                         <Button
                           outline
@@ -456,7 +366,7 @@ const Profile = () => {
                 </div>
               </div>
 
-              {role === "actor" && (
+              {user.role === "actor" && (
                 <div className="stat-card-container">
                   <div className="stat-card">
                     <h2 className="number">{battlesEntered}</h2>
@@ -473,7 +383,7 @@ const Profile = () => {
                 </div>
               )}
 
-              {role === "actor" && (
+              {user.role === "actor" && (
                 <div className="entries-container">
                   {battles.map((battle) => (
                     <>
@@ -483,10 +393,10 @@ const Profile = () => {
                           uid={battle.uid}
                           battleId={battle.battleId}
                           userData={{
-                            firstName: firstName,
-                            lastName: lastName,
-                            username: username,
-                            headshot: headshot,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            username: user.username,
+                            headshot: user.headshot,
                           }}
                           page="profile"
                         />
@@ -506,151 +416,11 @@ const Profile = () => {
               )}
 
               {isEditProfileVisible && (
-                <div className="edit-profile">
-                  <div className="edit-profile-inner screen-width">
-                    <BackButton onClick={() => setEditProfileVisible(false)} />
-                    <div className="edit-profile-section">
-                      <h2>Your details</h2>
-                      <div className="headshot-container">
-                        <div
-                          className="headshot"
-                          style={{
-                            backgroundImage: `url(${
-                              previewFile ? previewFile : headshot
-                            })`,
-                          }}
-                        ></div>
-
-                        <p
-                          onClick={() => inputRef.current.click()}
-                          className="highlight"
-                        >
-                          Change headshot
-                        </p>
-                      </div>
-                      <input
-                        type="file"
-                        style={{ display: "none" }}
-                        ref={inputRef}
-                        onChange={(e) => {
-                          const newFile = e.target.files;
-                          if (newFile && newFile[0]) {
-                            setFile(newFile[0]);
-                            const preview = window.URL.createObjectURL(
-                              newFile[0]
-                            );
-                            setPreviewfile(preview);
-                          }
-                        }}
-                        accept="image/jpeg, image/png"
-                      ></input>
-                      <Input type="text" value={firstName} disabled />
-                      <Input type="text" value={lastName} disabled />
-                      <Input
-                        type="text"
-                        onChange={(e) => {
-                          setUsername(e.target.value);
-                          setShowUsernameMessage(true);
-                        }}
-                        value={username}
-                      />
-                      {showUsernameMessage && (
-                        <span style={{ color: "white" }}>
-                          {isUsernameAvailable ? "Available" : "Not available"}
-                        </span>
-                      )}
-
-                      <Input
-                        type="text"
-                        onChange={(e) => setBio(e.target.value)}
-                        value={bio}
-                        placeholder="Enter bio"
-                      />
-                      <Input
-                        type="text"
-                        onChange={(e) => setLink(e.target.value)}
-                        value={link}
-                        placeholder="Enter link"
-                      />
-                    </div>
-
-                    <div className="edit-profile-section">
-                      <h2>Professional contact</h2>
-                      <p>
-                        This information will only be visible to casting
-                        directors. You can put your agent's details here too. If
-                        you do not complete this, casting directors may not be
-                        able to contact you.
-                      </p>
-                      <Input
-                        type="text"
-                        value={contactEmail}
-                        placeholder="Email"
-                        onChange={(e) => {
-                          setContactEmail(e.target.value);
-                        }}
-                      />
-                      <Input
-                        type="text"
-                        value={contactNumber}
-                        placeholder="Phone number"
-                        onChange={(e) => {
-                          setContactNumber(e.target.value);
-                        }}
-                      />
-                    </div>
-
-                    <div className="edit-profile-section">
-                      <h2>Bank details</h2>
-                      <Input
-                        type="text"
-                        placeholder="Account name"
-                        value={accountName}
-                        onChange={(e) => setAccountName(e.target.value)}
-                      />
-                      <Input
-                        type="text"
-                        placeholder="Account number"
-                        value={accountNumber}
-                        onChange={(e) => setAccountNumber(e.target.value)}
-                      />
-                      <Input
-                        type="text"
-                        placeholder="Sort code"
-                        value={sortCode}
-                        onChange={(e) => setSortCode(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="edit-profile-section">
-                      <input
-                        type="checkbox"
-                        onChange={(e) =>
-                          e.target.checked
-                            ? setPublicProfile(true)
-                            : setPublicProfile(false)
-                        }
-                        checked={publicProfile}
-                      ></input>
-                      <span>Public Profile</span>
-                      {/*publicProfile && <p>Share your profile: </p>*/}
-                    </div>
-
-                    <div className="button-container">
-                      <Button
-                        filled
-                        text="Save"
-                        onClick={() => handleUpdateUser()}
-                      />
-
-                      <Button
-                        outline
-                        text="Cancel"
-                        onClick={() => setEditProfileVisible(false)}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <EditProfile
+                  originalUser={originalUser}
+                  user={user}
+                  setEditProfileVisible={setEditProfileVisible}
+                />
               )}
               {loggedInUser && <NavBar />}
             </>
