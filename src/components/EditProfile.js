@@ -25,7 +25,7 @@ const EditProfile = ({
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
-  const [view, setView] = useState("bank_info");
+  const [view, setView] = useState("personal_info");
 
   const registry = {
     personal_info: (
