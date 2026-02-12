@@ -2,7 +2,15 @@ import BackButton from "./BackButton";
 import Button from "./Button";
 import Input from "./Input";
 
-const ContactInfo = ({ user, setEditProfileVisible }) => {
+const ContactInfo = ({ user, setUser, setEditProfileVisible }) => {
+  const updateField = (e, field) => {
+    setUser({
+      ...user,
+      [field]: e.target.value,
+    });
+    console.log();
+  };
+
   const handleUpdateUser = () => {
     const updates = {};
     try {
@@ -32,7 +40,7 @@ const ContactInfo = ({ user, setEditProfileVisible }) => {
           value={user.contactEmail}
           placeholder="Email"
           onChange={(e) => {
-            //setContactEmail(e.target.value);
+            updateField(e, "contactEmail");
           }}
         />
         <Input
@@ -40,12 +48,10 @@ const ContactInfo = ({ user, setEditProfileVisible }) => {
           value={user.contactNumber}
           placeholder="Phone number"
           onChange={(e) => {
-            //setContactNumber(e.target.value);
+            updateField(e, "contactNumber");
           }}
         />
       </div>
-
-      
 
       <div className="button-container">
         <Button filled text="Save" onClick={() => handleUpdateUser()} />

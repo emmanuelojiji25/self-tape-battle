@@ -5,47 +5,43 @@ import Button from "./Button";
 import Input from "./Input";
 import "./PersonalInfo.scss";
 
-
 const PersonalInfo = ({ user, setUser, originalUser }) => {
   const [showUsernameMessage, setShowUsernameMessage] = useState(false);
 
   const updateField = (e, field) => {
-    console.log("typings")
     setUser({
       ...user,
       [field]: e.target.value,
     });
+    console.log();
   };
 
   const handleUpdateUser = async () => {
+    if (!originalUser) return; // early return if originalUser not loaded
+
     const updates = {};
-    try {
-      const docRef = doc(db, "users", user.uid);
+    const username = user.username?.trim().toLowerCase() || "";
+    const bio = user.bio?.trim() || "";
+    const link = user.link?.trim() || "";
 
-      if (user.username.trim().toLowerCase() !== originalUser.username) {
-        updates.username = user.username.trim().toLowerCase();
-      }
+    const formattedLink =
+      link.includes("https://") || link.includes("http://")
+        ? link
+        : `https://${link}`;
 
-      if (user.bio.trim() !== originalUser.bio) {
-        updates.bio = user.bio.trim();
-      }
-      
-      if (user.link.trim() !== originalUser.link) {
-        updates.webLink =
-          user.link.includes("https://") || user.link.includes("http://")
-            ? user.link.trim()
-            : `https://${user.link}`;
-      }
+    if (username && username !== originalUser.username)
+      updates.username = username;
+    if (bio && bio !== originalUser.bio) updates.bio = bio;
+    if (link && link !== originalUser.link) updates.webLink = formattedLink;
 
-      if (updates.length != 0){
-        try{
-          await updateDoc(docRef, updates)
-        } catch(error){
-          console.log(error)
-        }
+    if (updates !== originalUser) {
+      try {
+        const docRef = doc(db, "users", user.uid);
+        await updateDoc(docRef, updates);
+        console.log("User updated!");
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 

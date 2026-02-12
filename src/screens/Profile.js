@@ -123,6 +123,7 @@ const Profile = () => {
       const collectionRef = collection(db, "battles");
       const q = query(collectionRef, where("winner", "==", user.uid));
       const docs = await getDocs(q);
+      console.log(docs.docs[0])
       setBattlesWon(docs.size);
     } catch (error) {
       console.log(error);
@@ -141,8 +142,6 @@ const Profile = () => {
       );
 
       const sum = votes.reduce((total, current) => total + current, 0);
-
-      console.log("Votes" + sum);
 
       setTotalVotes(sum);
     } catch (error) {
