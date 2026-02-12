@@ -1,17 +1,23 @@
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 import BackButton from "./BackButton";
 import Button from "./Button";
 import Input from "./Input";
 
-const ContactInfo = ({ user, setUser, setEditProfileVisible }) => {
+const ContactInfo = ({
+  user,
+  setUser,
+  setEditProfileVisible,
+  originalUser,
+}) => {
   const updateField = (e, field) => {
     setUser({
       ...user,
       [field]: e.target.value,
     });
-    console.log();
   };
 
-  const handleUpdateUser = () => {
+  const handleUpdateUser = async () => {
     const updates = {};
     try {
       if (user.contactEmail != originalUser.contactEmail) {
@@ -20,6 +26,16 @@ const ContactInfo = ({ user, setUser, setEditProfileVisible }) => {
 
       if (user.contactNumber != originalUser.contactNumber) {
         updates.contactNumber = user.contactNumber.trim();
+      }
+
+      if (updates !== originalUser) {
+        try {
+          const docRef = doc(db, "users", user.uid);
+          await updateDoc(docRef, updates);
+          console.log("User updated!");
+        } catch (error) {
+          console.log(error);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -54,13 +70,7 @@ const ContactInfo = ({ user, setUser, setEditProfileVisible }) => {
       </div>
 
       <div className="button-container">
-        <Button filled text="Save" onClick={() => handleUpdateUser()} />
-
-        <Button
-          outline
-          text="Cancel"
-          onClick={() => setEditProfileVisible(false)}
-        />
+        <Button filled_color text="Save" onClick={() => handleUpdateUser()} />
       </div>
     </div>
   );
