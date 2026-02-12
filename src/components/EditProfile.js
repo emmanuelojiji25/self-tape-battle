@@ -17,14 +17,14 @@ import PersonalInfo from "./PersonalInfo";
 import ContactInfo from "./ContactInfo";
 import BankInfo from "./BankInfo";
 
-const EditProfile = ({ setEditProfileVisible, originalUser, user }) => {
+const EditProfile = ({ setEditProfileVisible, originalUser, user, setUser }) => {
   const { loggedInUser } = useContext(AuthContext);
 
   const [view, setView] = useState("bank_info");
 
   const registry = {
     personal_info: (
-      <PersonalInfo user={user} setEditProfileVisible={setEditProfileVisible} />
+      <PersonalInfo user={user} setUser={setUser} setEditProfileVisible={setEditProfileVisible} />
     ),
     contact_info: (
       <ContactInfo user={user} setEditProfileVisible={setEditProfileVisible} />

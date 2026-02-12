@@ -30,20 +30,13 @@ import EditProfile from "../components/EditProfile";
 const Profile = () => {
   const params = useParams();
 
-  const navigate = useNavigate();
-
   const { loggedInUser, authRole } = useContext(AuthContext);
 
   const [user, setUser] = useState({});
+  const [originalUser, setOriginalUser] = useState(null);
 
   const [contactEmail, setContactEmail] = useState("");
   const [contactNumber, setContactNumber] = useState("");
-
-  const [headshot, setHeadshot] = useState("");
-
-  const [accountName, setAccountName] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [sortCode, setSortCode] = useState("");
 
   const [badges, setBadges] = useState([]);
 
@@ -68,8 +61,6 @@ const Profile = () => {
 
   const [showMessageModal, setShowMessageModal] = useState(false);
 
-  let originalUser = {};
-
   const getUser = async () => {
     try {
       const usersRef = collection(db, "users");
@@ -87,36 +78,19 @@ const Profile = () => {
 
       setUser(data);
 
-      /*setUser({
-        username: data.username || "",
-        userId: data.uid || docSnap.id,
-        name: `${data.firstName || ""} ${data.lastName || ""}`.trim(),
-        firstName: data.firstName || "",
-        lastName: data.lastName || "",
-        headshot: data.headshot || "",
-        bio: data.bio || "",
-        link: data.webLink || "",
-        publicProfile: data.settings.publicProfile || false,
-        role: data.role || "",
-        contactNumber: data.contactNumber,
-        contactEmail: data.contactEmail,
-        battlesEntered: data.battlesEntered,
-        badges: data.badgesl,
-      });*/
-
-      let originalUser = {
+      setOriginalUser({
         username: data.username,
         lastName: data.firstName,
         bio: data.bio,
         link: data.webLink,
-        headhsot: data.headshot,
+        headshot: data.headshot,
         publicProfile: data.settings.publicProfile,
         contactNumber: data.contactNumber,
         contactEmail: data.contactEmail,
         accountName: data.accountName,
         accountNumber: data.accountNumber,
         sortCode: data.sortCode,
-      };
+      });
 
       setTimeout(() => {
         setLoading(false);
@@ -131,7 +105,7 @@ const Profile = () => {
   const getUserBattles = async () => {
     try {
       const battlesCollection = collectionGroup(db, "entries");
-      const q = query(battlesCollection, where("uid", "==", user.userId));
+      const q = query(battlesCollection, where("uid", "==", user.uid));
       onSnapshot(q, (snapshot) => {
         let data = [];
         snapshot.forEach((doc) => {
@@ -147,7 +121,7 @@ const Profile = () => {
   const getBattlesWon = async () => {
     try {
       const collectionRef = collection(db, "battles");
-      const q = query(collectionRef, where("winner", "==", user.userId));
+      const q = query(collectionRef, where("winner", "==", user.uid));
       const docs = await getDocs(q);
       setBattlesWon(docs.size);
     } catch (error) {
@@ -158,24 +132,19 @@ const Profile = () => {
   const getTotalVotes = async () => {
     try {
       const collectionRef = collectionGroup(db, "entries");
-      const q = query(
-        collectionRef,
-        where("uid", "==", "3sfGK3I6anY1trjMnan8lbGdGag1")
+      const q = query(collectionRef, where("uid", "==", user.uid));
+
+      const snapshot = await getDocs(q);
+
+      const votes = snapshot.docs.map(
+        (doc) => Number(doc.data().voteCount) || 0
       );
 
-      const docs = await getDocs(q);
+      const sum = votes.reduce((total, current) => total + current, 0);
 
-      const votes = [];
+      console.log("Votes" + sum);
 
-      docs.forEach((doc) => {
-        votes.push(doc.data().votes.length);
-      });
-
-      const calculation = votes.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue;
-      }, 0);
-
-      setTotalVotes(calculation);
+      setTotalVotes(sum);
     } catch (error) {
       console.log(error);
     }
@@ -186,48 +155,12 @@ const Profile = () => {
   }, [params.username]);
 
   useEffect(() => {
-    getUserBattles();
-    getBattlesWon();
-    getTotalVotes();
-  }, [user.userId]);
-
-  const [usernameInput, setUsernameInput] = useState("");
-  const [bioInput, setBioInput] = useState("");
-
-  useEffect(() => {
-    setUsernameInput(user.username);
-  }, [user.username]);
-
-  const [showUsernameMessage, setShowUsernameMessage] = useState(false);
-  const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
-
-  useEffect(() => {
-    handleUsernameCheck();
-  }, [user.username]);
-
-  const handleUsernameCheck = async () => {
-    try {
-      const collectionRef = collection(db, "users");
-      const q = query(
-        collectionRef,
-        where("username", "==", user.username.toLowerCase().trim())
-      );
-
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.docs.length === 0) {
-        console.log("Available!");
-        setIsUsernameAvailable(true);
-      }
-
-      if (querySnapshot.docs.length === 1) {
-        console.log("Unavailable!");
-        setIsUsernameAvailable(false);
-      }
-    } catch (error) {
-      console.log(error);
+    if (user.uid) {
+      getUserBattles();
+      getBattlesWon();
+      getTotalVotes();
     }
-  };
+  }, [user.uid]);
 
   const [isEditProfileVisible, setEditProfileVisible] = useState(false);
 
@@ -299,7 +232,7 @@ const Profile = () => {
                   <span className="username">{user.username}</span>
 
                   <span>{user.bio}</span>
-                  <a href={`${link}`} target="_" className="web-link">
+                  <a href={`${user.link}`} target="_" className="web-link">
                     {link}
                   </a>
                   <div class="profile-button-container">
@@ -314,7 +247,7 @@ const Profile = () => {
                         }
                       ></Button>
                     )}
-                    {user.userId === loggedInUser?.uid &&
+                    {user.uid === loggedInUser?.uid &&
                       user.role === "professional" && (
                         <Button
                           filled
@@ -419,6 +352,7 @@ const Profile = () => {
                 <EditProfile
                   originalUser={originalUser}
                   user={user}
+                  setUser={setUser}
                   setEditProfileVisible={setEditProfileVisible}
                 />
               )}
