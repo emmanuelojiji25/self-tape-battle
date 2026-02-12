@@ -16,6 +16,7 @@ import Input from "../components/Input.js";
 import PersonalInfo from "./PersonalInfo";
 import ContactInfo from "./ContactInfo";
 import BankInfo from "./BankInfo";
+import StatsInfo from "./StatsInfo";
 
 const EditProfile = ({
   setEditProfileVisible,
@@ -27,32 +28,56 @@ const EditProfile = ({
 
   const [view, setView] = useState("personal_info");
 
-  const registry = {
-    personal_info: (
-      <PersonalInfo
-        user={user}
-        setUser={setUser}
-        setEditProfileVisible={setEditProfileVisible}
-        originalUser={originalUser}
-      />
-    ),
-    contact_info: (
-      <ContactInfo
-        user={user}
-        setUser={setUser}
-        setEditProfileVisible={setEditProfileVisible}
-        originalUser={originalUser}
-      />
-    ),
-    bank_info: (
-      <BankInfo
-        user={user}
-        setUser={setUser}
-        setEditProfileVisible={setEditProfileVisible}
-        originalUser={originalUser}
-      />
-    ),
-  };
+  const sections = [
+    {
+      id: "personal_info",
+      label: "Personal",
+      component: (
+        <PersonalInfo
+          user={user}
+          setUser={setUser}
+          setEditProfileVisible={setEditProfileVisible}
+          originalUser={originalUser}
+        />
+      ),
+    },
+    {
+      id: "contact_info",
+      label: "Contact",
+      component: (
+        <ContactInfo
+          user={user}
+          setUser={setUser}
+          setEditProfileVisible={setEditProfileVisible}
+          originalUser={originalUser}
+        />
+      ),
+    },
+    {
+      id: "stats_info",
+      label: "Stats",
+      component: (
+        <StatsInfo
+          user={user}
+          setUser={setUser}
+          setEditProfileVisible={setEditProfileVisible}
+          originalUser={originalUser}
+        />
+      ),
+    },
+    {
+      id: "bank_info",
+      label: "Bank",
+      component: (
+        <BankInfo
+          user={user}
+          setUser={setUser}
+          setEditProfileVisible={setEditProfileVisible}
+          originalUser={originalUser}
+        />
+      ),
+    },
+  ];
 
   const changeView = (view) => {
     setView(view);
@@ -63,12 +88,18 @@ const EditProfile = ({
       <div className="edit-profile-inner">
         <BackButton onClick={() => setEditProfileVisible(false)} />
         <h1>Edit profile</h1>
+
         <div className="tab-container">
-          <h4 onClick={() => changeView("personal_info")}>Personal</h4>
-          <h4 onClick={() => changeView("contact_info")}>Contact</h4>
-          <h4 onClick={() => changeView("bank_info")}>Bank</h4>
+          {sections.map((section) => (
+            <h4
+              onClick={() => changeView(section.id)}
+              className={section.id === view && "focus"}
+            >
+              {section.label}
+            </h4>
+          ))}
         </div>
-        {registry[view]}
+        {sections.find((section) => section.id === view).component}
       </div>
     </div>
   );
