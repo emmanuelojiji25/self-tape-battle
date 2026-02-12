@@ -21,8 +21,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app, "default-clone-new");
+export const db = getFirestore(app, "default-clone-new");
+export const storage = getStorage(app);
 // 👇 Guard Analytics properly
 let analytics;
 isSupported().then((supported) => {

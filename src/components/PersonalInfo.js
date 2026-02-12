@@ -1,6 +1,15 @@
+import { doc } from "firebase/firestore";
+import { useRef, useState } from "react";
+import Input from "./Input";
 import "./PersonalInfo.scss";
 
-const PersonalInfo = () => {
+
+
+
+const PersonalInfo = ({user}) => {
+
+  const [showUsernameMessage, setShowUsernameMessage] = useState(false)
+
   const handleUpdateUser = async () => {
     const updates = {};
     try {
@@ -25,6 +34,31 @@ const PersonalInfo = () => {
     }
   };
 
+   // Edit headshot
+
+   const inputRef = useRef(null);
+
+   const [file, setFile] = useState([]);
+   const [previewFile, setPreviewfile] = useState();
+ 
+   const updateHeadshot = async () => {
+     const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
+ 
+     if (previewFile) {
+       await uploadBytes(storageRef, file).then(() => {
+         getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
+           async (url) => {
+             const docRef = doc(db, "users", loggedInUser.uid);
+             await updateDoc(docRef, {
+               headshot: `${url}`,
+             });
+             console.log("complete!");
+           }
+         );
+       });
+     }
+    }
+
   return (
     <div className="edit-profile-section">
       <h2>Your details</h2>
@@ -32,7 +66,7 @@ const PersonalInfo = () => {
         <div
           className="headshot"
           style={{
-            backgroundImage: `url(${previewFile ? previewFile : headshot})`,
+            backgroundImage: `url(${previewFile ? previewFile : user.headshot})`,
           }}
         ></div>
 
@@ -54,15 +88,15 @@ const PersonalInfo = () => {
         }}
         accept="image/jpeg, image/png"
       ></input>
-      <Input type="text" value={firstName} disabled />
-      <Input type="text" value={lastName} disabled />
+      <Input type="text" value={user.firstName} disabled />
+      <Input type="text" value={user.lastName} disabled />
       <Input
         type="text"
         onChange={(e) => {
           setUsername(e.target.value);
           setShowUsernameMessage(true);
         }}
-        value={username}
+        value={user.username}
       />
       {showUsernameMessage && (
         <span style={{ color: "white" }}>
@@ -73,13 +107,13 @@ const PersonalInfo = () => {
       <Input
         type="text"
         onChange={(e) => setBio(e.target.value)}
-        value={bio}
+        value={user.bio}
         placeholder="Enter bio"
       />
       <Input
         type="text"
         onChange={(e) => setLink(e.target.value)}
-        value={link}
+        value={user.link}
         placeholder="Enter link"
       />
     </div>

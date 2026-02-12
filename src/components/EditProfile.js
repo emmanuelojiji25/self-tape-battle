@@ -23,79 +23,15 @@ const EditProfile = ({ setEditProfileVisible, originalUser, user }) => {
   const [view, setView] = useState("bank_info");
 
   const registry = {
-    personal_info: <PersonalInfo user={user} />,
-    contact_info: <ContactInfo user={user} />,
-    bank_info: <BankInfo user={user} />,
-  };
-
-  const handleUpdateUser = async () => {
-    const updates = {};
-    try {
-      if (user.settings.publicProfile !== originalUser.PublicProfile) {
-        updates.settings = { publicProfile: user.settings.publicProfile };
-      }
-
-      if (user.contactEmail != originalUser.contactEmail) {
-        updates.contactEmail = user.contactEmail.trim();
-      }
-
-      if (user.contactNumber != originalUser.contactNumber) {
-        updates.contactNumber = user.contactNumber.trim();
-      }
-
-      if (user.accountName != originalUser.accountName) {
-        updates.accountName = user.accountName.trim();
-      }
-
-      if (user.accountNumber != originalUser.accountNumber) {
-        updates.accountNumber = user.accountNumber.trim();
-      }
-
-      if (user.sortCode != originalUser.sortCode) {
-        updates.sortCode = user.accountNumber.trim();
-      }
-
-      if (updates.length === 0) {
-        console.log("no changes");
-      } else {
-        try {
-          await updateDoc(docRef, updates);
-          await updateHeadshot();
-          window.location.reload();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
-      console.log("complete!");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // Edit headshot
-
-  const inputRef = useRef(null);
-
-  const [file, setFile] = useState([]);
-  const [previewFile, setPreviewfile] = useState();
-
-  const updateHeadshot = async () => {
-    const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
-
-    if (previewFile) {
-      await uploadBytes(storageRef, file).then(() => {
-        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
-          async (url) => {
-            const docRef = doc(db, "users", loggedInUser.uid);
-            await updateDoc(docRef, {
-              headshot: `${url}`,
-            });
-            console.log("complete!");
-          }
-        );
-      });
-    }
+    personal_info: (
+      <PersonalInfo user={user} setEditProfileVisible={setEditProfileVisible} />
+    ),
+    contact_info: (
+      <ContactInfo user={user} setEditProfileVisible={setEditProfileVisible} />
+    ),
+    bank_info: (
+      <BankInfo user={user} setEditProfileVisible={setEditProfileVisible} />
+    ),
   };
 
   const changeView = (view) => {
