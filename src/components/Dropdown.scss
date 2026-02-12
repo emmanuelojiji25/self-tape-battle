@@ -1,0 +1,15 @@
+.Dropdown {
+  .select {
+    height: 40px;
+    background: brown;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    padding-right: 12px;
+    justify-content: space-between;
+  }
+
+  .open-container{
+    background: grey;
+  }
+}

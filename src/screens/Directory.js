@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import ActorCard from "../components/ActorCard";
 import Button from "../components/Button";
+import Dropdown from "../components/Dropdown";
 import NavBar from "../components/NavBar";
 import { db } from "../firebaseConfig";
 import "./Directory.scss";
@@ -94,6 +95,26 @@ const Directory = () => {
     }
   };
 
+  const [filtersVisible, setFiltersVisible] = useState(false);
+
+  const [cities, setCities] = useState([
+    { name: "birmingham", selected: false },
+    { name: "london", selected: false },
+    { name: "liverpool", selected: false },
+    { name: "manchester", selected: false },
+  ]);
+
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  const filterCity = (e) => {
+    const filtered = cities.filter((city) =>
+      city.name.includes(e.target.value.trim().toLowerCase())
+    );
+    setFilteredCities(filtered);
+  };
+
+  let chosenArray = filteredCities ? filteredCities : cities;
+
   return (
     <div className="Directory screen-width">
       <h1>Residents</h1>
@@ -113,6 +134,23 @@ const Directory = () => {
 
       {view === "actors" && (
         <div className="actors">
+          <h4
+            onClick={() => {
+              setFiltersVisible(!filtersVisible);
+            }}
+          >
+            {filtersVisible ? "Hide" : "Show"} filters
+          </h4>
+
+          {filtersVisible && (
+            <Dropdown
+              options={chosenArray.map((city) => (
+                <h4>{city.name}</h4>
+              ))}
+              onChange={(e) => filterCity(e)}
+            />
+          )}
+
           {actors.map((actor) => (
             <ActorCard key={actor.uid} uid={actor.uid} />
           ))}
