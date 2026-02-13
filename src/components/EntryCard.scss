@@ -34,7 +34,6 @@
   }
 
   .battle-title {
-    
     text-transform: capitalize;
   }
 }
@@ -133,6 +132,15 @@
   align-items: center;
 }
 
-.comment-button{
+.comment-button {
   color: white;
+}
+
+.feedback-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.fa-comment {
+  color: #4b7cff;
 }

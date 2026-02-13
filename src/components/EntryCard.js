@@ -36,7 +36,7 @@ const EntryCard = ({
   preload,
   poster,
   page,
-  feedbackOn
+  feedbackOn,
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -62,7 +62,6 @@ const EntryCard = ({
   const [feedbackVisible, setFeedbackVisible] = useState(false);
 
   const [amountOfFeedback, setAmountOfFeedback] = useState(0);
-
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -120,7 +119,6 @@ const EntryCard = ({
         onSnapshot(feedbackRef, (snapshot) => {
           setAmountOfFeedback(snapshot.size);
         });
-        
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -347,9 +345,15 @@ const EntryCard = ({
         />
       </div>
       {feedbackOn && (
-        <p className="comment-button" onClick={() => setFeedbackVisible(true)}>
-          Feedback ({amountOfFeedback})
-        </p>
+        <div className="feedback-button">
+          <i class="fa-solid fa-comment"></i>
+          <h4
+            className="comment-button"
+            onClick={() => setFeedbackVisible(true)}
+          >
+            Feedback ( {amountOfFeedback} )
+          </h4>
+        </div>
       )}
     </div>
   );

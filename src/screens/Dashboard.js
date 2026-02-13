@@ -56,6 +56,30 @@ const Dashboard = () => {
 
   const code = "stb_26121999";
 
+  const addFeedback = async () => {
+    try {
+      const entriesRef = collectionGroup(db, "entries");
+
+      const snapshot = await getDocs(entriesRef);
+
+      snapshot.docs.map(async (entry) => {
+        const entryRef = doc(
+          db,
+          "battles",
+          entry.data().battleId,
+          "entries",
+          entry.data().uid
+        );
+
+        await updateDoc(entryRef, {
+          feedbackOn: true,
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getBattles = () => {
     try {
       const collectionRef = collection(db, "battles");
@@ -423,7 +447,7 @@ const Dashboard = () => {
 
   return (
     <div className="Dashboard">
-      
+      <h1 onClick={() => addFeedback()}>Add feedback</h1>
       {locked ? (
         <div className="dashboard-locked">
           <h2>Please enter password</h2>
