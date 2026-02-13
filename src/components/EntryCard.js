@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 import ShareModal from "./ShareModal";
 import DeleteModal from "./DeleteModal";
 import ReportModal from "./ReportModal";
+import Feedback from "./Feedback";
 
 const EntryCard = ({
   userData,
@@ -35,6 +36,7 @@ const EntryCard = ({
   preload,
   poster,
   page,
+  feedbackOn,
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -56,6 +58,10 @@ const EntryCard = ({
   const [videoClicked, setVideoClicked] = useState(false);
 
   const [voteLimitedReached, setVoteLimitReached] = useState(false);
+
+  const [feedbackVisible, setFeedbackVisible] = useState(false);
+
+  const [amountOfFeedback, setAmountOfFeedback] = useState(0);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -99,6 +105,20 @@ const EntryCard = ({
         const querySnapshot = await getDocs(q);
 
         setUserHasVoted(querySnapshot.size > 0);
+
+        // Fetch feedback amount
+        const feedbackRef = collection(
+          db,
+          "battles",
+          battleId,
+          "entries",
+          uid,
+          "comments"
+        );
+
+        onSnapshot(feedbackRef, (snapshot) => {
+          setAmountOfFeedback(snapshot.size);
+        });
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -106,6 +126,18 @@ const EntryCard = ({
 
     fetchData();
   }, [uid, battleId, loggedInUser]);
+
+  /*useEffect(() => {
+    const getFeedbackStatus = () => {
+      const entryRef = doc(db, "battles", battleId, "entries", uid);
+
+      onSnapshot(entryRef, (snapshot) => {
+        setFeedbackOn(snapshot.data().feedbackOn);
+      });
+    };
+
+    getFeedbackStatus();
+  }, []);*/
 
   const handleVote = async () => {
     if (!userhasVoted) {
@@ -168,16 +200,6 @@ const EntryCard = ({
     }
   };
 
-  /*const videoRef = useRef(null);
-
-  const [playing, setPlaying] = useState(false);
-
-  if (videoRef && videoRef.current) {
-    videoRef.current.onplay = () => {
-      setPlaying(true);
-    };
-  }*/
-
   const [battleTitle, setBattleTitle] = useState("");
 
   useEffect(() => {
@@ -195,6 +217,14 @@ const EntryCard = ({
 
     getBattleTitle();
   });
+
+  const feedbackOnToggle = async () => {
+    const entryRef = doc(db, "battles", battleId, "entries", loggedInUser.uid);
+
+    await updateDoc(entryRef, {
+      feedbackOn: !feedbackOn,
+    });
+  };
 
   return (
     <div className="EntryCard">
@@ -224,6 +254,14 @@ const EntryCard = ({
       )}
 
       {isExploding && <ConfettiExplosion />}
+
+      {feedbackVisible && (
+        <Feedback
+          close={() => setFeedbackVisible(false)}
+          battleId={battleId}
+          uid={uid}
+        />
+      )}
 
       <div className="entry-card-header">
         <div className="entry-card-header-left">
@@ -269,6 +307,9 @@ const EntryCard = ({
               <div className="card-menu" ref={menuRef}>
                 {uid === loggedInUser?.uid && (
                   <>
+                    <p className="delete" onClick={feedbackOnToggle}>
+                      Turn {feedbackOn ? "off" : "on"} feedback
+                    </p>
                     <span
                       className="share"
                       onClick={() => {
@@ -303,6 +344,17 @@ const EntryCard = ({
           src={`${url}${page === "profile" && "#t=1"}`}
         />
       </div>
+      {feedbackOn && (
+        <div className="feedback-button">
+          <i class="fa-solid fa-comment"></i>
+          <h4
+            className="comment-button"
+            onClick={() => setFeedbackVisible(true)}
+          >
+            Feedback ( {amountOfFeedback} )
+          </h4>
+        </div>
+      )}
     </div>
   );
 };
