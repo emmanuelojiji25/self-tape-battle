@@ -434,6 +434,7 @@ const Battle = () => {
             userVotes={userVotes}
             menu
             feedbackOn={userEntry.feedbackOn}
+            title={title}
           />
         )}
 
@@ -450,6 +451,7 @@ const Battle = () => {
               userVotes={userVotes}
               poster={usersCache[entry.uid]?.headshot}
               feedbackOn={entry.feedbackOn}
+              title={title}
             />
           );
         })}

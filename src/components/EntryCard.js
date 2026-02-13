@@ -28,6 +28,7 @@ const EntryCard = ({
   userData,
   url,
   uid,
+  title,
   battleId,
   voteButtonVisible,
   battleStatus,
@@ -260,6 +261,8 @@ const EntryCard = ({
           close={() => setFeedbackVisible(false)}
           battleId={battleId}
           uid={uid}
+          title={title}
+          userData={userData}
         />
       )}
 
