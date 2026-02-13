@@ -1,15 +1,14 @@
 .Feedback {
-  padding-top: 30px;
-  height: 100svh;
-  min-height: 100svh;
-  inset: 0;
-  overflow-y: auto;
-  width: 100%;
+  padding: 3%;
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
+  overflow: auto;
+  width: 100%;
+  z-index: 1;
   background: #080b13;
-  z-index: 1000;
+  color: white;
+
+
   color: white !important;
 
   .screen-width{
