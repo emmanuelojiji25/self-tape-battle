@@ -110,7 +110,7 @@ const Feedback = ({ close, battleId, uid }) => {
           ></div>
           <div>
             <h4>{`${user.firstName} ${user.lastName}`}</h4>
-            <p>{battle.title}</p>
+            <p className="feedback-battle-title">{battle.title}</p>
           </div>
         </div>
         {uid != loggedInUser.uid && <div className="create-post-container">
