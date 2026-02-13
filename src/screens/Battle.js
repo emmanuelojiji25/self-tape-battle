@@ -17,6 +17,7 @@ import {
   getDownloadURL,
   ref,
   uploadBytes,
+  uploadBytesResumable,
   uploadString,
 } from "firebase/storage";
 import { useContext, useEffect, useRef, useState } from "react";

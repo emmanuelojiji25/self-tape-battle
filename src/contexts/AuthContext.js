@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { createContext, useEffect, useRef, useState } from "react";
 import { auth, db } from "../firebaseConfig";
 
@@ -48,6 +48,10 @@ const AuthProvider = ({ children }) => {
               console.error("Error fetching user coins:", error);
             }
           );
+
+          await updateDoc(userRef, {
+            lastLogin: new Date(),
+          });
         } catch (error) {
           console.log(error);
         }

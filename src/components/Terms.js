@@ -1,7 +1,7 @@
 import BackButton from "./BackButton";
 import "./Terms.scss";
 
-const Terms = ({toggleTerms}) => {
+const Terms = ({ toggleTerms }) => {
   return (
     <div className="Terms">
       <div className="screen-width">
@@ -65,11 +65,12 @@ const Terms = ({toggleTerms}) => {
             any third parties without your express permission.
           </p>
           <p>
-            By submitting content, you warrant that you have the right to
-            perform the material, that your submission does not infringe upon
-            any copyright, trademark, or other intellectual property rights of
-            any third party, and that your content does not violate any
-            applicable laws or third-party rights.
+            For content (Monologues, scripts, performance material) not provided
+            by us, you warrant that you have the right to perform the material,
+            that your submission does not infringe upon any copyright,
+            trademark, or other intellectual property rights of any third party,
+            and that your content does not violate any applicable laws or
+            third-party rights.
           </p>
         </section>
         <section>
