@@ -36,6 +36,7 @@ const EntryCard = ({
   preload,
   poster,
   page,
+  feedbackOn
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -62,7 +63,6 @@ const EntryCard = ({
 
   const [amountOfFeedback, setAmountOfFeedback] = useState(0);
 
-  const [feedbackOn, setFeedbackOn] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -129,7 +129,7 @@ const EntryCard = ({
     fetchData();
   }, [uid, battleId, loggedInUser]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const getFeedbackStatus = () => {
       const entryRef = doc(db, "battles", battleId, "entries", uid);
 
@@ -139,7 +139,7 @@ const EntryCard = ({
     };
 
     getFeedbackStatus();
-  }, []);
+  }, []);*/
 
   const handleVote = async () => {
     if (!userhasVoted) {
