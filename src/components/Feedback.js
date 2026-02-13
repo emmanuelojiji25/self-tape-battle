@@ -123,7 +123,7 @@ const Feedback = ({ close, battleId, uid }) => {
             value={comment}
           ></textarea>
           <div className="button-container">
-            <Button filled_color text="post" onClick={postComment} />
+            <Button filled_color text="Post" onClick={postComment} />
             {commentPosted && (
               <p className="post-confirmation">Feedback posted</p>
             )}
