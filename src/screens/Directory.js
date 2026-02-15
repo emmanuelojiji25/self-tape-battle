@@ -95,8 +95,6 @@ const Directory = () => {
     }
   };
 
-  const [filtersVisible, setFiltersVisible] = useState(false);
-
   const [cities, setCities] = useState([
     { name: "birmingham", selected: false },
     { name: "london", selected: false },
@@ -104,16 +102,21 @@ const Directory = () => {
     { name: "manchester", selected: false },
   ]);
 
-  const [filteredCities, setFilteredCities] = useState([]);
+  const [filtersVisible, setFiltersVisible] = useState(false);
+  const [filteredCities, setFilteredCities] = useState(null);
+  let chosenArray = filteredCities ? filteredCities : cities;
 
   const filterCity = (e) => {
     const filtered = cities.filter((city) =>
       city.name.includes(e.target.value.trim().toLowerCase())
     );
     setFilteredCities(filtered);
+    console.log(filteredCities);
   };
 
-  let chosenArray = filteredCities ? filteredCities : cities;
+  const selectCity = () => {
+    
+  }
 
   return (
     <div className="Directory screen-width">
@@ -145,14 +148,17 @@ const Directory = () => {
           {filtersVisible && (
             <Dropdown
               options={chosenArray.map((city) => (
-                <h4>{city.name}</h4>
+                <div className="option">
+                  <h4>{city.name}</h4>
+                  <div className="checkbox"></div>
+                </div>
               ))}
               onChange={(e) => filterCity(e)}
             />
           )}
 
-          {actors.map((actor) => (
-            <ActorCard key={actor.uid} uid={actor.uid} />
+          {actors.map((actor, i) => (
+            <ActorCard key={i} uid={actor.uid} />
           ))}
           {hasMoreActors && (
             <Button
