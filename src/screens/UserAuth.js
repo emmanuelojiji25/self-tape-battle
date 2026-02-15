@@ -164,7 +164,7 @@ const UserAuth = ({ setSignedIn }) => {
         badges: amountOfUsers < 250 && ["founding_fighter"],
       });
 
-      await sendEmailVerification(auth.currentUser);
+      //await sendEmailVerification(auth.currentUser);
       navigate("/onboarding");
     } catch (error) {
       console.log(error);
