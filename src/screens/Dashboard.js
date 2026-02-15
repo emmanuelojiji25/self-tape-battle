@@ -324,7 +324,7 @@ const Dashboard = () => {
         email: winnerData.email,
         battleName: battleData.title,
         prize: `${prizeObject.value} ${
-          typeof prizeObject.value === "number" && "coins"
+          typeof prizeObject.value === "number" ? "coins" : ""
         }`,
       };
 
