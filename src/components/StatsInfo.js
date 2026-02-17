@@ -1,6 +1,7 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import Button from "./Button";
+import Dropdown from "./Dropdown";
 import Input from "./Input";
 
 const StatsInfo = ({ user, setUser, originalUser }) => {
@@ -21,7 +22,6 @@ const StatsInfo = ({ user, setUser, originalUser }) => {
       updates.accountName = user.accountName.trim();
     }
 
-
     if (updates.length === 0) {
       console.log("no changes");
     } else {
@@ -38,18 +38,8 @@ const StatsInfo = ({ user, setUser, originalUser }) => {
     <div className="edit-profile-section">
       <h2>Stats</h2>
       <p>Casting directors will be able to find you using these details.</p>
-      <Input
-        type="text"
-        placeholder="Gender"
-        // value={user.accountName}
-        onChange={(e) => updateField(e, "accountName")}
-      />
-      <Input
-        type="text"
-        placeholder="Location"
-        // value={user.accountName}
-        onChange={(e) => updateField(e, "accountName")}
-      />
+      <Dropdown label="Gender" />
+      <Dropdown label="Location" />
 
       <Button text="Save" filled_color onClick={handleUpdateUser} />
     </div>
