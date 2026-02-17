@@ -33,7 +33,7 @@ const BattleCard = ({
         )}
         <h5>{prize}</h5>
       </div>
-      {status != "coming_soon" && (
+  
         <Link to={`/arena/${battleId}`}>
           <Button
             text={
@@ -42,9 +42,10 @@ const BattleCard = ({
                 : "Join battle"
             }
             filled_color
+            disabled={status === "coming_soon"}
           />
         </Link>
-      )}
+      
     </div>
   );
 };
