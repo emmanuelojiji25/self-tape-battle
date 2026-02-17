@@ -2,14 +2,14 @@ import { useState } from "react";
 import Input from "./Input";
 import "./Dropdown.scss";
 
-const Dropdown = ({ options, onChange}) => {
+const Dropdown = ({ options, onChange, label}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   
   return (
     <div className="Dropdown">
       <div className="select">
-        Location
+        {label}
         <h4 onClick={() => setIsOpen(!isOpen)}>Arrow</h4>
       </div>
 

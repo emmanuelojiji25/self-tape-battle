@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import ActorCard from "../components/ActorCard";
 import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
+import Input from "../components/Input";
 import NavBar from "../components/NavBar";
 import { db } from "../firebaseConfig";
 import "./Directory.scss";
@@ -127,18 +128,36 @@ const Directory = () => {
           </h4>
 
           {filtersVisible && (
-            <Dropdown
-              options={chosenArray.map((city) => (
-                <div className="option">
-                  <h4>{city.name}</h4>
-                  <div
-                    className={`checkbox ${city.selected && "selected"}`}
-                    onClick={() => selectCity(city.name)}
-                  ></div>
-                </div>
-              ))}
-              onChange={(e) => handleInputChange(e)}
-            />
+            <>
+              <Dropdown
+                label="Gender"
+                options={chosenArray.map((city) => (
+                  <div className="option">
+                    <h4>{city.name}</h4>
+                    <div
+                      className={`checkbox ${city.selected && "selected"}`}
+                      onClick={() => selectCity(city.name)}
+                    ></div>
+                  </div>
+                ))}
+                onChange={(e) => handleInputChange(e)}
+              />
+              <Dropdown
+                label="Location"
+                options={chosenArray.map((city) => (
+                  <div className="option">
+                    <h4>{city.name}</h4>
+                    <div
+                      className={`checkbox ${city.selected && "selected"}`}
+                      onClick={() => selectCity(city.name)}
+                    ></div>
+                  </div>
+                ))}
+                onChange={(e) => handleInputChange(e)}
+              />
+              <Input type="text" placeholder="Min age" />
+              <Input type="text" placeholder="Max age" />
+            </>
           )}
 
           {actors.map((actor, i) => (
