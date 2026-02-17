@@ -21,12 +21,7 @@ const Directory = () => {
   const [actors, setActors] = useState([]);
   const [casting, setCasting] = useState([]);
 
-  const [actorsLastDoc, setActorsLastDoc] = useState(null);
-  const [castingLastDoc, setCastingLastDoc] = useState(null);
-
   const [loading, setLoading] = useState(false);
-  const [hasMoreActors, setHasMoreActors] = useState(true);
-  const [hasMoreCasting, setHasMoreCasting] = useState(true);
 
   const [view, setView] = useState("actors");
 
@@ -37,33 +32,28 @@ const Directory = () => {
     { name: "manchester", selected: false },
   ]);
 
-  const getUsers = async (role, setter, lastDoc, setLast, setHasMore) => {
+  const getUsers = async (role, setter) => {
     if (loading) return;
     setLoading(true);
 
     try {
       const collectionRef = collection(db, "users");
 
-      let q = query(
+      const q = query(
         collectionRef,
         where("role", "==", role),
         where("isOnboardingComplete", "==", true),
-        selectedCities.length > 0 && where("location", "in", selectedCities),
+        ...(selectedCities.length > 0
+          ? [where("location", "in", selectedCities)]
+          : []),
         orderBy("uid"),
         limit(PAGE_SIZE)
       );
 
-      if (lastDoc) q = query(q, startAfter(lastDoc));
-
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map((doc) => doc.data());
 
-      if (data.length < PAGE_SIZE) setHasMore(false);
-
-      if (data.length > 0) {
-        setter((prev) => [...prev, ...data]);
-        setLast(snapshot.docs[snapshot.docs.length - 1]);
-      }
+      setter(data);
     } catch (error) {
       console.log(error);
     }
@@ -72,36 +62,9 @@ const Directory = () => {
   };
 
   useEffect(() => {
-    getUsers("actor", setActors, null, setActorsLastDoc, setHasMoreActors);
-    getUsers(
-      "professional",
-      setCasting,
-      null,
-      setCastingLastDoc,
-      setHasMoreCasting
-    );
+    getUsers("actor", setActors);
+    getUsers("professional", setCasting);
   }, [cities]);
-
-  const loadMore = () => {
-    if (view === "actors" && hasMoreActors) {
-      getUsers(
-        "actor",
-        setActors,
-        actorsLastDoc,
-        setActorsLastDoc,
-        setHasMoreActors
-      );
-    }
-    if (view === "casting" && hasMoreCasting) {
-      getUsers(
-        "professional",
-        setCasting,
-        castingLastDoc,
-        setCastingLastDoc,
-        setHasMoreCasting
-      );
-    }
-  };
 
   const [filtersVisible, setFiltersVisible] = useState(false);
 
@@ -178,16 +141,6 @@ const Directory = () => {
           {actors.map((actor, i) => (
             <ActorCard key={i} uid={actor.uid} />
           ))}
-          {hasMoreActors && (
-            <Button
-              filled_color
-              onClick={loadMore}
-              disabled={loading}
-              text="Load More"
-            >
-              {loading ? "Loading..." : "Load More"}
-            </Button>
-          )}
         </div>
       )}
 
@@ -199,11 +152,6 @@ const Directory = () => {
           {casting.map((c) => (
             <ActorCard key={c.uid} uid={c.uid} />
           ))}
-          {hasMoreCasting && (
-            <Button filled_color onClick={loadMore} disabled={loading}>
-              {loading ? "Loading..." : "Load More"}
-            </Button>
-          )}
         </div>
       )}
 
