@@ -103,20 +103,26 @@ const Directory = () => {
   ]);
 
   const [filtersVisible, setFiltersVisible] = useState(false);
-  const [filteredCities, setFilteredCities] = useState(null);
-  let chosenArray = filteredCities ? filteredCities : cities;
 
-  const filterCity = (e) => {
-    const filtered = cities.filter((city) =>
-      city.name.includes(e.target.value.trim().toLowerCase())
-    );
-    setFilteredCities(filtered);
-    console.log(filteredCities);
+  const [search, setSearch] = useState("");
+
+  const filteredCities = cities.filter((city) =>
+    city.name.includes(search.trim().toLowerCase())
+  );
+
+  const chosenArray = search ? filteredCities : cities;
+
+  const handleInputChange = (e) => {
+    setSearch(e.target.value);
   };
 
-  const selectCity = () => {
-    
-  }
+  const selectCity = (name) => {
+    setCities((prev) =>
+      prev.map((city) =>
+        city.name === name ? { ...city, selected: !city.selected } : city
+      )
+    );
+  };
 
   return (
     <div className="Directory screen-width">
@@ -150,10 +156,13 @@ const Directory = () => {
               options={chosenArray.map((city) => (
                 <div className="option">
                   <h4>{city.name}</h4>
-                  <div className="checkbox"></div>
+                  <div
+                    className={`checkbox ${city.selected && "selected"}`}
+                    onClick={() => selectCity(city.name)}
+                  ></div>
                 </div>
               ))}
-              onChange={(e) => filterCity(e)}
+              onChange={(e) => handleInputChange(e)}
             />
           )}
 
