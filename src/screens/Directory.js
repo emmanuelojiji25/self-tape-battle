@@ -115,6 +115,9 @@ const Directory = () => {
 
       {view === "actors" && (
         <div className="actors">
+          {selectedCities.map((city) => (
+            <p>{city}</p>
+          ))}
           <h4
             onClick={() => {
               setFiltersVisible(!filtersVisible);
