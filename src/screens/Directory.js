@@ -30,6 +30,13 @@ const Directory = () => {
 
   const [view, setView] = useState("actors");
 
+  const [cities, setCities] = useState([
+    { name: "birmingham", selected: false },
+    { name: "london", selected: false },
+    { name: "liverpool", selected: false },
+    { name: "manchester", selected: false },
+  ]);
+
   const getUsers = async (role, setter, lastDoc, setLast, setHasMore) => {
     if (loading) return;
     setLoading(true);
@@ -41,6 +48,7 @@ const Directory = () => {
         collectionRef,
         where("role", "==", role),
         where("isOnboardingComplete", "==", true),
+        selectedCities.length > 0 && where("location", "in", selectedCities),
         orderBy("uid"),
         limit(PAGE_SIZE)
       );
@@ -72,7 +80,7 @@ const Directory = () => {
       setCastingLastDoc,
       setHasMoreCasting
     );
-  }, []);
+  }, [cities]);
 
   const loadMore = () => {
     if (view === "actors" && hasMoreActors) {
@@ -95,13 +103,6 @@ const Directory = () => {
     }
   };
 
-  const [cities, setCities] = useState([
-    { name: "birmingham", selected: false },
-    { name: "london", selected: false },
-    { name: "liverpool", selected: false },
-    { name: "manchester", selected: false },
-  ]);
-
   const [filtersVisible, setFiltersVisible] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -123,6 +124,14 @@ const Directory = () => {
       )
     );
   };
+
+  const selectedCities = cities
+    .filter((city) => city.selected)
+    .map((city) => city.name);
+
+  useEffect(() => {
+    console.log(selectedCities);
+  }, [cities]);
 
   return (
     <div className="Directory screen-width">
