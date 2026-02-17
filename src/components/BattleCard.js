@@ -19,8 +19,10 @@ const BattleCard = ({
     <div
       className={`PollCard`}
       style={{ opacity: status === "closed" && "0.5" }}
-    > 
-      <h3 className="title">{name}</h3>
+    >
+      <h3 className="title">
+        {status === "coming_soon" ? "Coming soon" : name}
+      </h3>
       {additional_info && <p className="additional-info">{additional_info}</p>}
 
       <div className="prize">
@@ -31,7 +33,7 @@ const BattleCard = ({
         )}
         <h5>{prize}</h5>
       </div>
-      {!scheduled && (
+      {status != "coming_soon" && (
         <Link to={`/arena/${battleId}`}>
           <Button
             text={
