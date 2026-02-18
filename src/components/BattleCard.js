@@ -33,19 +33,18 @@ const BattleCard = ({
         )}
         <h5>{prize}</h5>
       </div>
-  
-        <Link to={`/arena/${battleId}`}>
-          <Button
-            text={
-              status === "closed" || authRole === "professional"
-                ? "View battle"
-                : "Join battle"
-            }
-            filled_color
-            disabled={status === "coming_soon"}
-          />
-        </Link>
-      
+
+      <Link to={`/arena/${battleId}`}>
+        <Button
+          text={
+            status === "closed" || authRole === "professional"
+              ? "View battle"
+              : "Join battle"
+          }
+          filled_color
+          disabled={status === "coming_soon"}
+        />
+      </Link>
     </div>
   );
 };
