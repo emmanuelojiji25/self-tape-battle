@@ -227,6 +227,10 @@ const EntryCard = ({
     });
   };
 
+  useEffect(() => {
+    console.log(loggedInUser);
+  });
+
   return (
     <div className="EntryCard">
       {shareModalVisible && (
@@ -298,42 +302,44 @@ const EntryCard = ({
             )}
           </div>
 
-          <div className="card-menu-container">
-            <div
-              className="card-menu-icon"
-              onClick={() => setMenuVisible(!menuVisible)}
-              ref={menuButtonRef}
-            >
-              <i class="fa-solid fa-ellipsis"></i>
-            </div>
-            {menuVisible && (
-              <div className="card-menu" ref={menuRef}>
-                {uid === loggedInUser?.uid && (
-                  <>
-                    <p className="delete" onClick={feedbackOnToggle}>
-                      Turn {feedbackOn ? "off" : "on"} feedback
-                    </p>
-                    <span
-                      className="share"
-                      onClick={() => {
-                        setShareModalVisible(true);
-                      }}
-                    >
-                      Share
-                    </span>
-
-                    <p
-                      onClick={() => setDeleteModalVisible(true)}
-                      className="delete"
-                    >
-                      Delete
-                    </p>
-                  </>
-                )}
-                <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+          {loggedInUser?.uid && (
+            <div className="card-menu-container">
+              <div
+                className="card-menu-icon"
+                onClick={() => setMenuVisible(!menuVisible)}
+                ref={menuButtonRef}
+              >
+                <i class="fa-solid fa-ellipsis"></i>
               </div>
-            )}
-          </div>
+              {menuVisible && (
+                <div className="card-menu" ref={menuRef}>
+                  {uid === loggedInUser?.uid && (
+                    <>
+                      <p className="delete" onClick={feedbackOnToggle}>
+                        Turn {feedbackOn ? "off" : "on"} feedback
+                      </p>
+                      <span
+                        className="share"
+                        onClick={() => {
+                          setShareModalVisible(true);
+                        }}
+                      >
+                        Share
+                      </span>
+
+                      <p
+                        onClick={() => setDeleteModalVisible(true)}
+                        className="delete"
+                      >
+                        Delete
+                      </p>
+                    </>
+                  )}
+                  <p onClick={() => setIsReportModalVisible(true)}>Report</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
       {page === "profile" && <h4 className="battle-title">{battleTitle}</h4>}

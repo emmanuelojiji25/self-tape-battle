@@ -23,6 +23,8 @@ const SharedVideo = () => {
   const [battleName, setBattleName] = useState("");
   const [prize, setPrize] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
   const { loggedInUser } = useContext(AuthContext);
 
   const getVideo = async () => {
@@ -50,6 +52,8 @@ const SharedVideo = () => {
 
       setBattleName(battleSnapshot.data().title);
       setPrize(battleSnapshot.data().prize.value);
+
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -70,10 +74,24 @@ const SharedVideo = () => {
       ) : (
         <>
           <header>
-            <img src={logo} />
-          </header>
+            <Link to="https://selftapebattle.com" target="_blank">
+              <img src={logo} />
+            </Link>
 
-          <EntryCard url={entry.url} uid={user.uid} />
+            <Button filled_color text="Enter the Arena" />
+          </header>
+          <Link to={`/arena/${battleId}`}>
+            <h4>'{battleName}'</h4>
+          </Link>
+
+          {!loading && (
+            <EntryCard
+              url={entry.url}
+              uid={entry.uid}
+              battleId={battleId}
+              userData={user}
+            />
+          )}
         </>
       )}
     </div>

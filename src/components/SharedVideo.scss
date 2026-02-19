@@ -5,6 +5,14 @@
 
   header {
     margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h4 {
+    text-transform: capitalize;
+    color: white !important;
   }
 }
 
