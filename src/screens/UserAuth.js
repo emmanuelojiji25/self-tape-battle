@@ -161,7 +161,7 @@ const UserAuth = ({ setSignedIn }) => {
         accountNumber: "",
         sortCode: "",
         battlesEntered: 0,
-        badges: amountOfUsers < 252 && ["founding_fighter"],
+        badges: [],
       });
 
       //await sendEmailVerification(auth.currentUser);
