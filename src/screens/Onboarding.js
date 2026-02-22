@@ -62,7 +62,9 @@ const Onboarding = () => {
 
     setLoading(true);
     try {
-      await uploadBytes(storageRef, file).then(() => {
+      await uploadBytes(storageRef, file, {
+        contentType: file.type,
+      }).then(() => {
         getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
           async (url) => {
             const docRef = doc(db, "users", loggedInUser.uid);

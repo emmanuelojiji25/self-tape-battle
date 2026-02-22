@@ -160,9 +160,11 @@ const Directory = () => {
             </>
           )}
 
-          {actors.map((actor, i) => (
-            <ActorCard key={i} uid={actor.uid} />
-          ))}
+          <div className="actors-grid">
+            {actors.map((actor, i) => (
+              <ActorCard key={i} uid={actor.uid} thumbnail />
+            ))}
+          </div>
         </div>
       )}
 

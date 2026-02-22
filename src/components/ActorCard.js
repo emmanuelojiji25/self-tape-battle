@@ -8,7 +8,7 @@ import { deleteDoc, doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { memo, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
-const ActorCard = memo(({ uid }) => {
+const ActorCard = memo(({ uid, thumbnail }) => {
   const { loggedInUser, authRole } = useContext(AuthContext);
 
   const [userIsBookmarked, setUserIsBookmarked] = useState(false);
@@ -87,14 +87,16 @@ const ActorCard = memo(({ uid }) => {
         className="actor-card-headshot"
         style={{ backgroundImage: `url(${headshot})` }}
       />
-      <div>
-        <Link to={`/profile/${username}`} className="actor-card-name">
-          {name}
-        </Link>
-        <Link to={`/profile/${username}`}>
-          <Button filled_color text="View Profile" />
-        </Link>
-      </div>
+      {!thumbnail && (
+        <div>
+          <Link to={`/profile/${username}`} className="actor-card-name">
+            {name}
+          </Link>
+          <Link to={`/profile/${username}`}>
+            <Button filled_color text="View Profile" />
+          </Link>
+        </div>
+      )}
     </div>
   );
 });
