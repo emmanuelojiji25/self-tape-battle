@@ -69,26 +69,6 @@ const Directory = () => {
 
   const [filtersVisible, setFiltersVisible] = useState(false);
 
-  const [search, setSearch] = useState("");
-
-  const filteredCities = cities.filter((city) =>
-    city.name.includes(search.trim().toLowerCase())
-  );
-
-  const chosenArray = search ? filteredCities : cities;
-
-  const handleInputChange = (e) => {
-    setSearch(e.target.value);
-  };
-
-  const selectCity = (name) => {
-    setCities((prev) =>
-      prev.map((city) =>
-        city.name === name ? { ...city, selected: !city.selected } : city
-      )
-    );
-  };
-
   const selectedCities = cities
     .filter((city) => city.selected)
     .map((city) => city.name);
@@ -131,28 +111,14 @@ const Directory = () => {
             <>
               <Dropdown
                 label="Gender"
-                options={chosenArray.map((city) => (
-                  <div className="option">
-                    <h4>{city.name}</h4>
-                    <div
-                      className={`checkbox ${city.selected && "selected"}`}
-                      onClick={() => selectCity(city.name)}
-                    ></div>
-                  </div>
-                ))}
+                data={cities}
+                setData={setCities}
                 onChange={(e) => handleInputChange(e)}
               />
               <Dropdown
                 label="Location"
-                options={chosenArray.map((city) => (
-                  <div className="option">
-                    <h4>{city.name}</h4>
-                    <div
-                      className={`checkbox ${city.selected && "selected"}`}
-                      onClick={() => selectCity(city.name)}
-                    ></div>
-                  </div>
-                ))}
+                data={cities}
+                setData={setCities}
                 onChange={(e) => handleInputChange(e)}
               />
               <Input type="text" placeholder="Min age" />
