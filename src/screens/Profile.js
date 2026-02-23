@@ -78,19 +78,7 @@ const Profile = () => {
 
       setUser(data);
 
-      setOriginalUser({
-        username: data.username,
-        lastName: data.firstName,
-        bio: data.bio,
-        link: data.webLink,
-        headshot: data.headshot,
-        publicProfile: data.settings.publicProfile,
-        contactNumber: data.contactNumber,
-        contactEmail: data.contactEmail,
-        accountName: data.accountName,
-        accountNumber: data.accountNumber,
-        sortCode: data.sortCode,
-      });
+      setOriginalUser(data);
 
       setTimeout(() => {
         setLoading(false);

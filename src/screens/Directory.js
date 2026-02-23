@@ -113,13 +113,13 @@ const Directory = () => {
                 label="Gender"
                 data={cities}
                 setData={setCities}
-                onChange={(e) => handleInputChange(e)}
+               
               />
               <Dropdown
                 label="Location"
                 data={cities}
                 setData={setCities}
-                onChange={(e) => handleInputChange(e)}
+               
               />
               <Input type="text" placeholder="Min age" />
               <Input type="text" placeholder="Max age" />

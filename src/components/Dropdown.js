@@ -7,7 +7,7 @@ const Dropdown = ({ label, data, setData }) => {
 
   const [search, setSearch] = useState("");
 
-  const filteredData = data.filter((item) =>
+  const filteredData = data?.filter((item) =>
     item.name.includes(search.trim().toLowerCase())
   );
 
@@ -19,16 +19,18 @@ const Dropdown = ({ label, data, setData }) => {
 
   const selectOption = (name) => {
     setData((prev) =>
-      prev.map((item) =>
+      prev?.map((item) =>
         item.name === name ? { ...item, selected: !item.selected } : item
       )
     );
+
+    console.log(data.filter((data) => data.selected))
   };
 
   return (
     <div className="Dropdown">
       <div className="select">
-        {label}
+        <div className="select-left">{label}</div>
         <h4 onClick={() => setIsOpen(!isOpen)}>Arrow</h4>
       </div>
 
@@ -42,7 +44,7 @@ const Dropdown = ({ label, data, setData }) => {
           />
           <div className="selections"></div>
           <div className="options">
-            {chosenArray.map((item) => (
+            {chosenArray?.map((item) => (
               <div className="option">
                 <h4>{item.name}</h4>
                 <div
