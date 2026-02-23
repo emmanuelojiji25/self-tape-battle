@@ -2,7 +2,7 @@ import { useState } from "react";
 import Input from "./Input";
 import "./Dropdown.scss";
 
-const Dropdown = ({ label, data, setData }) => {
+const Dropdown = ({ label, data, setData, type }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -18,13 +18,26 @@ const Dropdown = ({ label, data, setData }) => {
   };
 
   const selectOption = (name) => {
-    setData((prev) =>
-      prev?.map((item) =>
-        item.name === name ? { ...item, selected: !item.selected } : item
-      )
-    );
+    if (type === "multi") {
+      setData((prev) =>
+        prev?.map((item) =>
+          item.name === name ? { ...item, selected: !item.selected } : item
+        )
+      );
+    }
 
-    console.log(data.filter((data) => data.selected))
+    if (type === "single") {
+      setData((prev) =>
+        prev?.map(
+          (item) =>
+            item.name === name
+              ? { ...item, selected: !item.selected }
+              : { ...item, selected: false } // deselect everything else
+        )
+      );
+    }
+
+   
   };
 
   return (
