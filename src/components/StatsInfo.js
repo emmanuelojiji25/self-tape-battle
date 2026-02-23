@@ -27,7 +27,8 @@ const StatsInfo = ({ user, setUser, originalUser }) => {
   }, [user]);
 
   const selectedCities = cities.filter((c) => c.selected).map((c) => c.name);
-  const selectedGender = gender.find((g) => g.selected)?.name ?? "Choose gender";
+  const selectedGender =
+    gender.find((g) => g.selected)?.name ?? "Choose gender";
 
   const handleUpdateUser = async () => {
     const updates = {
@@ -64,9 +65,16 @@ const StatsInfo = ({ user, setUser, originalUser }) => {
         value={maxPlayingAge}
         onChange={(e) => setMaxPlayingAge(Number(e.target.value))}
       />
-      <Dropdown label={selectedGender} data={gender} setData={setGender} type="single" />
       <Dropdown
-        label={originalUser.stats.location.map((loc) => <p key={loc}>{loc}</p>)}
+        label={selectedGender}
+        data={gender}
+        setData={setGender}
+        type="single"
+      />
+      <Dropdown
+        label={originalUser.stats.location.map((loc) => (
+          <p key={loc}>{loc}</p>
+        ))}
         data={cities}
         setData={setCities}
         type="multi"

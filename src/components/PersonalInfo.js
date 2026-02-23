@@ -1,5 +1,13 @@
-import { doc, updateDoc } from "firebase/firestore";
-import { useRef, useState } from "react";
+import {
+  collection,
+  doc,
+  getDocs,
+  getDocsFromServer,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { useEffect, useRef, useState } from "react";
 import { db } from "../firebaseConfig";
 import Button from "./Button";
 import Input from "./Input";
@@ -7,6 +15,7 @@ import "./PersonalInfo.scss";
 
 const PersonalInfo = ({ user, setUser, originalUser }) => {
   const [showUsernameMessage, setShowUsernameMessage] = useState(false);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
 
   const updateField = (e, field) => {
     setUser({
@@ -70,22 +79,25 @@ const PersonalInfo = ({ user, setUser, originalUser }) => {
     }
   };
 
-  const handleUsernameCheck = async () => {
+  useEffect(() => {
+    console.log(isUsernameAvailable);
+    console.log(user.username)
+  },[user.username]);
+
+  const handleUsernameCheck = async (username) => {
     try {
       const collectionRef = collection(db, "users");
       const q = query(
         collectionRef,
-        where("username", "==", user.username.toLowerCase().trim())
+        where("username", "==", username.toLowerCase().trim())
       );
-
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.docs.length === 0) {
+  
+      const querySnapshot = await getDocsFromServer(q);
+  
+      if (querySnapshot.size === 0) {
         console.log("Available!");
         setIsUsernameAvailable(true);
-      }
-
-      if (querySnapshot.docs.length === 1) {
+      } else {
         console.log("Unavailable!");
         setIsUsernameAvailable(false);
       }
@@ -129,7 +141,8 @@ const PersonalInfo = ({ user, setUser, originalUser }) => {
       <Input
         type="text"
         onChange={(e) => {
-          setUsername(e.target.value);
+          updateField(e, "username");
+          handleUsernameCheck(e.target.value);
           setShowUsernameMessage(true);
         }}
         value={user.username}
