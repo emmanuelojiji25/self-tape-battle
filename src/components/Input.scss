@@ -25,18 +25,19 @@
   position: relative;
   display: flex;
   flex-direction: column;
-
   margin-bottom: 10px;
 }
 
 .input-container-inner {
   display: flex;
+  
+
 }
 
 .input-container .input-icon-container {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 12px;
+  top: 25%;
 }
 
 .fa-circle-check {

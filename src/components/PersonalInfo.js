@@ -81,8 +81,8 @@ const PersonalInfo = ({ user, setUser, originalUser }) => {
 
   useEffect(() => {
     console.log(isUsernameAvailable);
-    console.log(user.username)
-  },[user.username]);
+    console.log(user.username);
+  }, [user.username]);
 
   const handleUsernameCheck = async (username) => {
     try {
@@ -91,9 +91,9 @@ const PersonalInfo = ({ user, setUser, originalUser }) => {
         collectionRef,
         where("username", "==", username.toLowerCase().trim())
       );
-  
+
       const querySnapshot = await getDocsFromServer(q);
-  
+
       if (querySnapshot.size === 0) {
         console.log("Available!");
         setIsUsernameAvailable(true);
@@ -146,12 +146,10 @@ const PersonalInfo = ({ user, setUser, originalUser }) => {
           setShowUsernameMessage(true);
         }}
         value={user.username}
+        displayIcon={user.username != originalUser.username && user.username}
+        available={isUsernameAvailable}
+        placeholder="Username"
       />
-      {showUsernameMessage && (
-        <span style={{ color: "white" }}>
-          {isUsernameAvailable ? "Available" : "Not available"}
-        </span>
-      )}
 
       <Input
         name="bio"
@@ -162,7 +160,7 @@ const PersonalInfo = ({ user, setUser, originalUser }) => {
       />
       <Input
         type="text"
-        onChange={(e) => setLink(e.target.value)}
+        onChange={(e) => updateField(e, "webLink")}
         value={user.link}
         placeholder="Enter link"
       />
