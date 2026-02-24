@@ -8,14 +8,22 @@ import {
   where,
 } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import Button from "./Button";
 import Input from "./Input";
 import "./PersonalInfo.scss";
 
-const PersonalInfo = ({ user, setUser, originalUser }) => {
+const PersonalInfo = ({
+  user,
+  setUser,
+  originalUser,
+  setEditProfileVisible,
+}) => {
   const [showUsernameMessage, setShowUsernameMessage] = useState(false);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(null);
+
+  const nav = useNavigate();
 
   const updateField = (e, field) => {
     setUser({
@@ -38,16 +46,18 @@ const PersonalInfo = ({ user, setUser, originalUser }) => {
         ? link
         : `https://${link}`;
 
-    if (username && username !== originalUser.username)
+    if (username && username != originalUser.username)
       updates.username = username;
-    if (bio && bio !== originalUser.bio) updates.bio = bio;
-    if (link && link !== originalUser.link) updates.webLink = formattedLink;
+    if (bio && bio != originalUser.bio) updates.bio = bio;
+    if (link && link != originalUser.link) updates.webLink = formattedLink;
 
     if (updates !== originalUser) {
       try {
         const docRef = doc(db, "users", user.uid);
         await updateDoc(docRef, updates);
         console.log("User updated!");
+        nav(`/profile/${user.username}`);
+        
       } catch (error) {
         console.log(error);
       }

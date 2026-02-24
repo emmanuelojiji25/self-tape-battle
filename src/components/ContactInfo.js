@@ -33,6 +33,7 @@ const ContactInfo = ({
           const docRef = doc(db, "users", user.uid);
           await updateDoc(docRef, updates);
           console.log("User updated!");
+        
         } catch (error) {
           console.log(error);
         }

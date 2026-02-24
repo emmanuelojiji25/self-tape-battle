@@ -86,7 +86,7 @@ const EditProfile = ({
   return (
     <div className="EditProfile">
       <div className="edit-profile-inner">
-        <BackButton onClick={() => setEditProfileVisible(false)} />
+        <BackButton onClick={() => window.location.reload()} />
         <h1>Edit profile</h1>
 
         <div className="tab-container">

@@ -14,7 +14,7 @@ const toOptions = (names, selectedValues, multi = false) =>
     selected: multi ? selectedValues.includes(name) : selectedValues === name,
   }));
 
-const StatsInfo = ({ user, setUser, originalUser }) => {
+const StatsInfo = ({ user, setUser, originalUser, setEditProfileVisible }) => {
   const [cities, setCities] = useState(toOptions(CITIES, [], true));
   const [gender, setGender] = useState(toOptions(GENDERS, ""));
   const [minPlayingAge, setMinPlayingAge] = useState(user.stats.minPlayingAge);
@@ -42,7 +42,7 @@ const StatsInfo = ({ user, setUser, originalUser }) => {
 
     try {
       await updateDoc(doc(db, "users", user.uid), updates);
-      window.location.reload();
+   
     } catch (error) {
       console.error(error);
     }

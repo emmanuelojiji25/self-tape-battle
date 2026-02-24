@@ -3,19 +3,19 @@ import { db } from "../firebaseConfig";
 import Button from "./Button";
 import Input from "./Input";
 
-const BankInfo = ({ user, setUser, originalUser }) => {
+const BankInfo = ({ user, setUser, originalUser, setEditProfileVisible }) => {
   const updateField = (e, field) => {
     setUser({
       ...user,
       [field]: e.target.value,
     });
-    console.log(); 
+    console.log();
   };
 
   const handleUpdateUser = async () => {
-    const updates = {}
+    const updates = {};
 
-    const docRef = doc(db, "users", user.uid)
+    const docRef = doc(db, "users", user.uid);
 
     if (user.accountName != originalUser.accountName) {
       updates.accountName = user.accountName.trim();
@@ -34,7 +34,6 @@ const BankInfo = ({ user, setUser, originalUser }) => {
     } else {
       try {
         await updateDoc(docRef, updates);
-        window.location.reload();
       } catch (error) {
         console.log(error);
       }
