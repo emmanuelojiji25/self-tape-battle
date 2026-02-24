@@ -78,7 +78,7 @@ const SharedVideo = () => {
               <img src={logo} />
             </Link>
 
-            <Button filled_color text="Enter the Arena" />
+            <Link to="/"><Button filled_color text="Enter the Arena" /></Link>
           </header>
           <Link to={`/arena/${battleId}`}>
             <h4>'{battleName}'</h4>
