@@ -78,7 +78,9 @@ const SharedVideo = () => {
               <img src={logo} />
             </Link>
 
-            <Link to="/"><Button filled_color text="Enter the Arena" /></Link>
+            <Link to="/">
+              <Button filled_color text="Enter the Arena" />
+            </Link>
           </header>
           <Link to={`/arena/${battleId}`}>
             <h4>'{battleName}'</h4>
@@ -90,6 +92,7 @@ const SharedVideo = () => {
               uid={entry.uid}
               battleId={battleId}
               userData={user}
+              poster={user.headshot}
             />
           )}
         </>
