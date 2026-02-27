@@ -130,7 +130,7 @@ const Dashboard = () => {
         data.push(doc.data());
         setReports(data);
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   useEffect(() => {
@@ -252,15 +252,27 @@ const Dashboard = () => {
       const winnerSnapshot = await getDoc(winnerRef);
       const winnerData = winnerSnapshot.data();
 
+      emailjs.init({
+        publicKey: "vDAbvtQ-t4ao0CqWi",
+      });
+
       // Award Prize to winner
       const battleSnapshot = await getDoc(battleRef);
       const battleData = battleSnapshot.data();
 
       const prizeObject = battleData.prize;
 
-      emailjs.init({
-        publicKey: "vDAbvtQ-t4ao0CqWi",
-      });
+
+      // Send email to winner
+      const info = {
+        name: winnerData.firstName,
+        email: winnerData.email,
+        battleName: battleData.title,
+        prize: `${prizeObject.value} ${typeof prizeObject.value === "number" ? "coins" : ""
+          }`,
+      };
+
+      emailjs.send("service_v3a3sw5", "template_65k4u6r", info);
 
       if (prizeObject.type === "coins") {
         await updateDoc(winnerRef, {
@@ -288,7 +300,6 @@ const Dashboard = () => {
         const voteDocs = votesSnapshot.docs.map((doc) => doc.data());
 
         for (const voter of uids) {
-          if (!voter || voter.startsWith("-")) continue;
 
           const voterRef = doc(db, "users", voter);
 
@@ -303,7 +314,7 @@ const Dashboard = () => {
           const userInfo = {
             name: firstName,
             email,
-            link: "https://app.selftapebattle.com/arena/an-honest-review",
+            link: `https://app.selftapebattle.com/arena/${battleId}`,
           };
 
           await emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
@@ -318,17 +329,7 @@ const Dashboard = () => {
         status: "closed",
       });
 
-      // Send email to winner
-      const info = {
-        name: winnerData.firstName,
-        email: winnerData.email,
-        battleName: battleData.title,
-        prize: `${prizeObject.value} ${
-          typeof prizeObject.value === "number" ? "coins" : ""
-        }`,
-      };
 
-      emailjs.send("service_v3a3sw5", "template_65k4u6r", info);
     } catch (error) {
       console.error("Error in getWinner:", error);
     }
@@ -568,21 +569,22 @@ const Dashboard = () => {
                     <p>{battle.prize.value}</p>
 
                     <p>{battle.status}</p>
+
                     <Button
                       filled
                       text={
-                        battle.status != "closed"
-                          ? "Close Battle"
-                          : "Open Battle"
+                        battle.status != "open"
+                          ? "Open Battle"
+                          : "Close Battle"
                       }
                       onClick={async () => {
                         const docRef = doc(db, "battles", battle.id);
                         if (battle.status != "open") {
-                          closeBattle(battle.id);
-                        } else {
                           await updateDoc(docRef, {
                             status: "open",
                           });
+                        } else {
+                          closeBattle(battle.id);
                         }
                       }}
                     />
