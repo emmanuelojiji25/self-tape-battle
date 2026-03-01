@@ -8,6 +8,7 @@ import { db, storage } from "../firebaseConfig";
 import Confetti from "react-confetti-boom";
 import emailjs from "@emailjs/browser";
 import icon_arena from "../media/icon_arena.svg";
+  import imageCompression from "browser-image-compression";
 
 import "./Onboarding.scss";
 import { useNavigate } from "react-router-dom";
@@ -57,13 +58,27 @@ const Onboarding = () => {
     } catch (error) {}
   };
 
+
+
   const handleCompleteOnboarding = async () => {
-    const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
+    const extension = file.type.split("/")[1];
+    const storageRef = ref(storage, `headshots/${loggedInUser.uid}.${extension}`);
 
     setLoading(true);
     try {
-      await uploadBytes(storageRef, file).then(() => {
-        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
+
+      const compressionOptions = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 600,
+        useWebWorker: true,
+      };
+
+      const compressedImage = await imageCompression(file, compressionOptions);
+
+      await uploadBytes(storageRef, compressedImage, {
+        contentType: file.type,
+      }).then(() => {
+        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}.${extension}`)).then(
           async (url) => {
             const docRef = doc(db, "users", loggedInUser.uid);
             await updateDoc(docRef, {
@@ -80,8 +95,8 @@ const Onboarding = () => {
         webLink: !webLink
           ? ""
           : webLink.includes("https://") || webLink.includes("http://")
-          ? webLink
-          : `https://${webLink}`,
+            ? webLink
+            : `https://${webLink}`,
         isOnboardingComplete: true,
         coins: increment(100),
         totalCoinsEarned: increment(100),
