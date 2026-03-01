@@ -13,6 +13,9 @@ import { db } from "../firebaseConfig";
 import Button from "./Button";
 import Input from "./Input";
 import "./PersonalInfo.scss";
+import { ref } from "firebase/storage";
+
+
 
 const PersonalInfo = ({
   user,
