@@ -8,7 +8,7 @@ import { db, storage } from "../firebaseConfig";
 import Confetti from "react-confetti-boom";
 import emailjs from "@emailjs/browser";
 import icon_arena from "../media/icon_arena.svg";
-  import imageCompression from "browser-image-compression";
+import imageCompression from "browser-image-compression";
 
 import "./Onboarding.scss";
 import { useNavigate } from "react-router-dom";
@@ -55,7 +55,7 @@ const Onboarding = () => {
       const docSnapshot = await getDoc(docRef);
 
       setUsername(docSnapshot.data().username);
-    } catch (error) {}
+    } catch (error) { }
   };
 
 
@@ -71,6 +71,7 @@ const Onboarding = () => {
         maxSizeMB: 1,
         maxWidthOrHeight: 600,
         useWebWorker: true,
+        fileType: "image/webp"
       };
 
       const compressedImage = await imageCompression(file, compressionOptions);
