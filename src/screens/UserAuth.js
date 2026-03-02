@@ -216,7 +216,8 @@ const UserAuth = ({ setSignedIn }) => {
     const getUsers = async () => {
       try {
         const usersCollection = collection(db, "users");
-        const snapshot = await getDocs(usersCollection);
+        const q = query(usersCollection, where("role", "==", "actor"))
+        const snapshot = await getDocs(q);
 
         const users = [];
 
