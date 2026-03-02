@@ -68,8 +68,8 @@ const Onboarding = () => {
     try {
 
       const compressionOptions = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 800,
+        maxSizeMB: 1.5,
+        maxWidthOrHeight: 1200,
         useWebWorker: true,
         fileType: "image/webp"
       };
