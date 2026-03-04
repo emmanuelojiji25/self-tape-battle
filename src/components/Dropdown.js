@@ -37,14 +37,14 @@ const Dropdown = ({ label, data, setData, type }) => {
       );
     }
 
-   
+
   };
 
   return (
     <div className="Dropdown">
       <div className="select">
         <div className="select-left">{label}</div>
-        <h4 onClick={() => setIsOpen(!isOpen)}>Arrow</h4>
+        <i class={`fa-solid fa-chevron-down ${isOpen && "open"}`} onClick={() => setIsOpen(!isOpen)}></i>
       </div>
 
       {isOpen && (

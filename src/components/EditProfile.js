@@ -99,6 +99,8 @@ const EditProfile = ({
           ))}
         </div>
         {sections.find((section) => section.id === view).component}
+
+
       </div>
     </div>
   );

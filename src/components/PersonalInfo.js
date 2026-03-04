@@ -53,7 +53,6 @@ const PersonalInfo = ({
   };
 
 
-
   const handleUpdateUser = async () => {
     if (!originalUser) return; // early return if originalUser not loaded
 

@@ -18,6 +18,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   .checkbox {
     height: 30px;
     width: 30px;
@@ -32,4 +33,12 @@
 .select-left {
   display: flex;
   gap: 10px;
+}
+
+.open {
+  transform: rotate(180deg);
+}
+
+.fa-chevron-down {
+  transition: 0.2s ease-in-out;
 }
