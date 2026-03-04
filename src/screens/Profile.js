@@ -26,6 +26,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import ff from "../media/ff.svg";
 import MessageModal from "../components/MessageModal";
 import EditProfile from "../components/EditProfile";
+import TooltipOverlay from "../components/TooltipOverlay";
 
 const Profile = () => {
   const params = useParams();
@@ -180,7 +181,7 @@ const Profile = () => {
 
   return (
     <div className="Profile screen-width">
-      {isInfoCopied && <div className="contact-tooltip">Copied!</div>}
+      {isInfoCopied && <TooltipOverlay text="Copied!" />}
       {walletVisible && <Wallet />}
       {showMessageModal && (
         <MessageModal

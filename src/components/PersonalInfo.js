@@ -17,6 +17,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { AuthContext } from "../contexts/AuthContext";
 
 import imageCompression from "browser-image-compression";
+import TooltipOverlay from "./TooltipOverlay";
 
 
 const PersonalInfo = ({
@@ -33,6 +34,16 @@ const PersonalInfo = ({
   const { loggedInUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
+  const [tooltipVisible, setTooltipVisible] = useState(false)
+
+  const showTooltipOverlay = () => {
+    setTooltipVisible(true)
+
+    setTimeout(() => {
+      setTooltipVisible(false)
+    }, 3000)
+  }
+
   const updateField = (e, field) => {
     setUser({
       ...user,
@@ -40,6 +51,8 @@ const PersonalInfo = ({
     });
     console.log(user);
   };
+
+
 
   const handleUpdateUser = async () => {
     if (!originalUser) return; // early return if originalUser not loaded
@@ -68,6 +81,7 @@ const PersonalInfo = ({
         await updateHeadshot();
         console.log("User updated!");
         nav(`/profile/${user.username}`);
+        showTooltipOverlay()
 
       } catch (error) {
         console.log(error);
@@ -85,7 +99,7 @@ const PersonalInfo = ({
 
   const updateHeadshot = async () => {
 
-    if (!file) return;
+    if (!file || file.length === 0) return;
 
     const extension = file.type.split("/")[1];
     const storageRef = ref(storage, `headshots/${loggedInUser.uid}.${extension}`);
@@ -150,6 +164,7 @@ const PersonalInfo = ({
 
   return (
     <div className="PersonalInfo">
+      {tooltipVisible && <TooltipOverlay text="saved" />}
       <div className="headshot-container">
         <div
           className="headshot"

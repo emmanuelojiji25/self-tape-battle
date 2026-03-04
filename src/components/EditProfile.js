@@ -24,7 +24,6 @@ const EditProfile = ({
   user,
   setUser,
 }) => {
-  const { loggedInUser } = useContext(AuthContext);
 
   const [view, setView] = useState("personal_info");
 
