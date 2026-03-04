@@ -45,7 +45,7 @@ const Profile = () => {
   const [battlesEntered, setBattlesEntered] = useState(null);
 
   const [bio, setBio] = useState("");
-  const [link, setLink] = useState("");
+  const [webLink, setLink] = useState("");
 
   const [battlesWon, setBattlesWon] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
@@ -219,8 +219,8 @@ const Profile = () => {
                   <span className="username">{user.username}</span>
 
                   <span>{user.bio}</span>
-                  <a href={`${user.link}`} target="_" className="web-link">
-                    {link}
+                  <a href={`${user.webLink}`} target="_" className="web-link">
+                    {user.webLink}
                   </a>
                   <div class="profile-button-container">
                     {user.role === "actor" && (

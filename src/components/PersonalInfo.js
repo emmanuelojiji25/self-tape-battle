@@ -28,21 +28,24 @@ const PersonalInfo = ({
 
   const nav = useNavigate();
 
+
+
   const updateField = (e, field) => {
     setUser({
       ...user,
       [field]: e.target.value,
     });
-    console.log();
+    console.log(user);
   };
 
   const handleUpdateUser = async () => {
     if (!originalUser) return; // early return if originalUser not loaded
 
-    const updates = {};
+      const updates = {};
+
     const username = user.username?.trim().toLowerCase() || "";
     const bio = user.bio?.trim() || "";
-    const link = user.link?.trim() || "";
+    const link = user.webLink?.trim() || "";
 
     const formattedLink =
       link.includes("https://") || link.includes("http://")
@@ -52,15 +55,16 @@ const PersonalInfo = ({
     if (username && username != originalUser.username)
       updates.username = username;
     if (bio && bio != originalUser.bio) updates.bio = bio;
-    if (link && link != originalUser.link) updates.webLink = formattedLink;
+    if (link && link != originalUser.webLink) updates.webLink = formattedLink;
 
-    if (updates !== originalUser) {
+
+    if (updates != originalUser) {
       try {
         const docRef = doc(db, "users", user.uid);
         await updateDoc(docRef, updates);
         console.log("User updated!");
         nav(`/profile/${user.username}`);
-        
+
       } catch (error) {
         console.log(error);
       }
@@ -125,9 +129,8 @@ const PersonalInfo = ({
         <div
           className="headshot"
           style={{
-            backgroundImage: `url(${
-              previewFile ? previewFile : user.headshot
-            })`,
+            backgroundImage: `url(${previewFile ? previewFile : user.headshot
+              })`,
           }}
         ></div>
 
@@ -172,9 +175,10 @@ const PersonalInfo = ({
         placeholder="Enter bio"
       />
       <Input
+        name="webLink"
         type="text"
         onChange={(e) => updateField(e, "webLink")}
-        value={user.link}
+        value={user.webLink}
         placeholder="Enter link"
       />
 

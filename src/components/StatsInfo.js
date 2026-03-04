@@ -40,13 +40,19 @@ const StatsInfo = ({ user, setUser, originalUser, setEditProfileVisible }) => {
       },
     };
 
-    try {
-      await updateDoc(doc(db, "users", user.uid), updates);
-   
-    } catch (error) {
-      console.error(error);
+    setUser((prev) => ({ ...prev, ...updates }));
+
+
+    if (JSON.stringify(updates.stats) !== JSON.stringify(originalUser.stats)) {
+      try {
+        await updateDoc(doc(db, "users", user.uid), updates);
+        console.log("updated!")
+
+      } catch (error) {
+        console.error(error);
+      }
     }
-  };
+  }
 
   return (
     <div className="edit-profile-section">
@@ -72,7 +78,7 @@ const StatsInfo = ({ user, setUser, originalUser, setEditProfileVisible }) => {
         type="single"
       />
       <Dropdown
-        label={originalUser.stats.location.map((loc) => (
+        label={selectedCities.map((loc) => (
           <p key={loc}>{loc}</p>
         ))}
         data={cities}
@@ -80,7 +86,7 @@ const StatsInfo = ({ user, setUser, originalUser, setEditProfileVisible }) => {
         type="multi"
       />
 
-      <Button text="Save" filled_color onClick={handleUpdateUser} />
+      <Button text="Save" filled_color onClick={() => handleUpdateUser()} />
     </div>
   );
 };

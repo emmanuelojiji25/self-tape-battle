@@ -26,14 +26,15 @@ const BankInfo = ({ user, setUser, originalUser, setEditProfileVisible }) => {
     }
 
     if (user.sortCode != originalUser.sortCode) {
-      updates.sortCode = user.accountNumber.trim();
+      updates.sortCode = user.sortCode.trim();
     }
 
-    if (updates.length === 0) {
+    if (JSON.stringify(user) === JSON.stringify(originalUser)) {
       console.log("no changes");
     } else {
       try {
         await updateDoc(docRef, updates);
+        console.log("user updated!");
       } catch (error) {
         console.log(error);
       }
