@@ -7,14 +7,16 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebaseConfig";
+import { db, storage } from "../firebaseConfig";
 import Button from "./Button";
 import Input from "./Input";
 import "./PersonalInfo.scss";
-import { ref } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { AuthContext } from "../contexts/AuthContext";
 
+import imageCompression from "browser-image-compression";
 
 
 const PersonalInfo = ({
@@ -28,7 +30,8 @@ const PersonalInfo = ({
 
   const nav = useNavigate();
 
-
+  const { loggedInUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const updateField = (e, field) => {
     setUser({
@@ -41,7 +44,7 @@ const PersonalInfo = ({
   const handleUpdateUser = async () => {
     if (!originalUser) return; // early return if originalUser not loaded
 
-      const updates = {};
+    const updates = {};
 
     const username = user.username?.trim().toLowerCase() || "";
     const bio = user.bio?.trim() || "";
@@ -56,12 +59,13 @@ const PersonalInfo = ({
       updates.username = username;
     if (bio && bio != originalUser.bio) updates.bio = bio;
     if (link && link != originalUser.webLink) updates.webLink = formattedLink;
-
+    storage
 
     if (updates != originalUser) {
       try {
         const docRef = doc(db, "users", user.uid);
         await updateDoc(docRef, updates);
+        await updateHeadshot();
         console.log("User updated!");
         nav(`/profile/${user.username}`);
 
@@ -71,6 +75,7 @@ const PersonalInfo = ({
     }
   };
 
+
   // Edit headshot
 
   const inputRef = useRef(null);
@@ -79,11 +84,28 @@ const PersonalInfo = ({
   const [previewFile, setPreviewfile] = useState();
 
   const updateHeadshot = async () => {
-    const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
 
-    if (previewFile) {
-      await uploadBytes(storageRef, file).then(() => {
-        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
+    if (!file) return;
+
+    const extension = file.type.split("/")[1];
+    const storageRef = ref(storage, `headshots/${loggedInUser.uid}.${extension}`);
+
+    setLoading(true);
+    try {
+
+      const compressionOptions = {
+        maxSizeMB: 1.5,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+        fileType: "image/webp"
+      };
+
+      const compressedImage = await imageCompression(file, compressionOptions);
+
+      await uploadBytes(storageRef, compressedImage, {
+        contentType: file.type,
+      }).then(() => {
+        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}.${extension}`)).then(
           async (url) => {
             const docRef = doc(db, "users", loggedInUser.uid);
             await updateDoc(docRef, {
@@ -93,8 +115,11 @@ const PersonalInfo = ({
           }
         );
       });
+    } catch (error) {
+      console.log(error);
     }
-  };
+    setLoading(false);
+  }
 
   useEffect(() => {
     console.log(isUsernameAvailable);
