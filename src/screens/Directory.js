@@ -16,8 +16,6 @@ import NavBar from "../components/NavBar";
 import { db } from "../firebaseConfig";
 import "./Directory.scss";
 
-const PAGE_SIZE = 20;
-
 const Directory = () => {
   const [actors, setActors] = useState([]);
   const [casting, setCasting] = useState([]);
@@ -48,7 +46,6 @@ const Directory = () => {
           ? [where("location", "in", selectedCities)]
           : []),
         orderBy("uid"),
-        limit(PAGE_SIZE)
       );
 
       const snapshot = await getDocs(q);
@@ -79,7 +76,7 @@ const Directory = () => {
 
   return (
     <div className="Directory screen-width">
-      <h1>Residents</h1>
+      <h2>Residents</h2>
 
       <span
         className={`tab ${view === "actors" && "active"}`}
@@ -108,22 +105,22 @@ const Directory = () => {
           </h4>
 
           {filtersVisible && (
-            <>
+            <div className="filters-container">
               <Dropdown
                 label="Gender"
                 data={cities}
                 setData={setCities}
-               
+
               />
               <Dropdown
                 label="Location"
                 data={cities}
                 setData={setCities}
-               
+
               />
               <Input type="text" placeholder="Min age" />
               <Input type="text" placeholder="Max age" />
-            </>
+            </div>
           )}
 
           <div className="actors-grid">

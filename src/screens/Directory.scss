@@ -10,17 +10,27 @@
   padding-bottom: calc(82px + 50px);
 }
 
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+
+}
+
 .tab {
   margin-right: 10px;
   display: inline-block;
   margin-bottom: 25px;
 }
 
-.actors-grid{
+.actors-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  margin-top: 20px;
+
 }
 
-.actor-card-headshot{
+.actor-card-headshot {
   background-color: grey;
 }
