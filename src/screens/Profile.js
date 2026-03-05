@@ -28,6 +28,7 @@ import BackButton from "../components/BackButton";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import ff from "../media/ff.svg";
 import MessageModal from "../components/MessageModal";
+import imageCompression from "browser-image-compression";
 
 const Profile = () => {
   const params = useParams();
@@ -247,64 +248,61 @@ const Profile = () => {
 
   const handleUpdateUser = async () => {
     const updates = {};
-    try {
-      const docRef = doc(db, "users", userId);
 
-      if (username.trim().toLowerCase() !== originalUser.username) {
-        updates.username = username.trim().toLowerCase();
-      }
+    const docRef = doc(db, "users", userId);
 
-      if (bio.trim() !== originalUser.bio) {
-        updates.bio = bio.trim();
-      }
-
-      if (link.trim() !== originalUser.link) {
-        updates.webLink =
-          link.includes("https://") || link.includes("http://")
-            ? link.trim()
-            : `https://${link}`;
-      }
-
-      if (publicProfile !== originalUser.PublicProfile) {
-        updates.settings = { publicProfile: publicProfile };
-      }
-
-      if (contactEmail != originalUser.contactEmail) {
-        updates.contactEmail = contactEmail.trim();
-      }
-
-      if (contactNumber != originalUser.contactNumber) {
-        updates.contactNumber = contactNumber.trim();
-      }
-
-      if (accountName != originalUser.accountName) {
-        updates.accountName = accountName.trim();
-      }
-
-      if (accountNumber != originalUser.accountNumber) {
-        updates.accountNumber = accountNumber.trim();
-      }
-
-      if (sortCode != originalUser.sortCode) {
-        updates.sortCode = accountNumber.trim();
-      }
-
-      if (updates.length === 0) {
-        console.log("no changes");
-      } else {
-        try {
-          await updateDoc(docRef, updates);
-          await updateHeadshot();
-          window.location.reload();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
-      console.log("complete!");
-    } catch (error) {
-      console.log(error);
+    if (username.trim().toLowerCase() !== originalUser.username) {
+      updates.username = username.trim().toLowerCase();
     }
+
+    if (bio.trim() !== originalUser.bio) {
+      updates.bio = bio.trim();
+    }
+
+    if (link.trim() !== originalUser.link) {
+      updates.webLink =
+        link.includes("https://") || link.includes("http://")
+          ? link.trim()
+          : `https://${link}`;
+    }
+
+    if (publicProfile != originalUser.publicProfile) {
+      updates.settings = { publicProfile: publicProfile };
+    }
+
+    if (contactEmail != originalUser.contactEmail) {
+      updates.contactEmail = contactEmail.trim();
+    }
+
+    if (contactNumber != originalUser.contactNumber) {
+      updates.contactNumber = contactNumber.trim();
+    }
+
+    if (accountName != originalUser.accountName) {
+      updates.accountName = accountName.trim();
+    }
+
+    if (accountNumber != originalUser.accountNumber) {
+      updates.accountNumber = accountNumber.trim();
+    }
+
+    if (sortCode != originalUser.sortCode) {
+      updates.sortCode = sortCode.trim();
+    }
+
+    if (Object.keys(updates).length === 0 && file.length === 0) {
+      console.log("no changes");
+    } else {
+      try {
+        await updateDoc(docRef, updates);
+        await updateHeadshot();
+        //window.location.reload();
+        console.log("complete!");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
   };
 
   useEffect(() => {
@@ -327,15 +325,32 @@ const Profile = () => {
 
   const inputRef = useRef(null);
 
-  const [file, setFile] = useState([]);
+  const [file, setFile] = useState(null);
   const [previewFile, setPreviewfile] = useState();
 
   const updateHeadshot = async () => {
-    const storageRef = ref(storage, `headshots/${loggedInUser.uid}`);
 
-    if (previewFile) {
-      await uploadBytes(storageRef, file).then(() => {
-        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}`)).then(
+    if (!file || file.length === 0) return;
+
+    const extension = file.type.split("/")[1];
+    const storageRef = ref(storage, `headshots/${loggedInUser.uid}.${extension}`);
+
+    setLoading(true);
+    try {
+
+      const compressionOptions = {
+        maxSizeMB: 1.5,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+        fileType: "image/webp"
+      };
+
+      const compressedImage = await imageCompression(file, compressionOptions);
+
+      await uploadBytes(storageRef, compressedImage, {
+        contentType: file.type,
+      }).then(() => {
+        getDownloadURL(ref(storage, `headshots/${loggedInUser.uid}.${extension}`)).then(
           async (url) => {
             const docRef = doc(db, "users", loggedInUser.uid);
             await updateDoc(docRef, {
@@ -345,8 +360,11 @@ const Profile = () => {
           }
         );
       });
+    } catch (error) {
+      console.log(error);
     }
-  };
+    setLoading(false);
+  }
 
   return (
     <div className="Profile screen-width">
@@ -515,9 +533,8 @@ const Profile = () => {
                         <div
                           className="headshot"
                           style={{
-                            backgroundImage: `url(${
-                              previewFile ? previewFile : headshot
-                            })`,
+                            backgroundImage: `url(${previewFile ? previewFile : headshot
+                              })`,
                           }}
                         ></div>
 
