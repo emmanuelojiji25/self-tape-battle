@@ -272,7 +272,10 @@ const EntryCard = ({
       {voteListVisible && (
         <div className="vote-list-modal">
           <div className="vote-list-content">
-            <h3>{firstName}'s Votes ({votes.length})</h3>
+            <div className="vote-list-header">
+              <h3>{firstName}'s Votes ({votes.length})</h3>
+              <Button onClick={() => setVoteListVisible(false)} filled_color text="Close" />
+            </div>
             {votes.length > 0 ? (
               votes.map((vote, index) => (
                 <ActorCard key={index} uid={vote.uid} size="40" />
@@ -280,7 +283,7 @@ const EntryCard = ({
             ) : (
               <p>No votes yet.</p>
             )}
-            <Button onClick={() => setVoteListVisible(false)} filled_color text="Close"/>
+
           </div>
         </div>
       )}
