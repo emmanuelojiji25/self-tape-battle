@@ -169,6 +169,7 @@ const EntryCard = ({
         });
 
         const entryDoc = doc(db, "battles", battleId, "entries", uid);
+
         await updateDoc(entryDoc, {
           voteCount: increment(1),
         });
