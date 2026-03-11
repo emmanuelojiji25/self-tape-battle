@@ -186,7 +186,7 @@ const Battle = () => {
         onSnapshot(entryRef, (snapshot) => {
           setUserEntry(snapshot.data());
         });
-      } catch (error) {}
+      } catch (error) { }
     }
   };
 
@@ -223,7 +223,7 @@ const Battle = () => {
         `battles/${battleId}/${loggedInUser.uid}`
       );
 
-      await uploadBytes(storageRef, file, {
+      await uploadBytesResumable(storageRef, file, {
         contentType: file.type,
       });
 
