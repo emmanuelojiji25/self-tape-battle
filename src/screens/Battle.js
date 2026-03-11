@@ -391,7 +391,7 @@ const Battle = () => {
                 <Button
                   onClick={() => handleUploadBattle()}
                   text="Post"
-                  filled
+                  filled_color
                 />
                 <Button onClick={() => setFile(null)} text="Cancel" outline />
               </div>
