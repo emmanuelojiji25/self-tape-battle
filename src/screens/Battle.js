@@ -35,7 +35,7 @@ import Skeleton from "../components/Skeleton";
 import chest from "../media/chest.svg";
 import BackButton from "../components/BackButton";
 import { Coin } from "../components/Icon";
-w
+
 import HowToPlay from "../components/HowToPlay";
 
 const Battle = () => {
