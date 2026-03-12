@@ -8,7 +8,7 @@ const ShareModal = ({ battleId, uid, username, setShareModalVisible }) => {
 
   const [isCopied, setIsCopied] = useState(false);
 
-  const shareLink = `localhost:3000/arena/${battleId}/${username}`;
+  const shareLink = `app.selftapebattle.com/arena/${battleId}/${username}`;
 
   useEffect(() => {
     if (!battleId || !uid) return;
