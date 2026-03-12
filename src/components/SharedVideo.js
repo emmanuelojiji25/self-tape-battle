@@ -1,8 +1,10 @@
 import {
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   where,
 } from "firebase/firestore";
@@ -21,9 +23,12 @@ const SharedVideo = () => {
   const [entry, setEntry] = useState("");
 
   const [battleName, setBattleName] = useState("");
+  const [battleStatus, setBattleStatus] = useState("")
   const [prize, setPrize] = useState("");
 
   const [loading, setLoading] = useState(true);
+
+  const [userVotes, setUserVotes] = useState(0)
 
   const { loggedInUser } = useContext(AuthContext);
 
@@ -50,6 +55,8 @@ const SharedVideo = () => {
       const battleRef = doc(db, "battles", battleId);
       const battleSnapshot = await getDoc(battleRef);
 
+      setBattleStatus(battleSnapshot.data().status)
+
       setBattleName(battleSnapshot.data().title);
       setPrize(battleSnapshot.data().prize.value);
 
@@ -58,6 +65,24 @@ const SharedVideo = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (!loggedInUser?.uid) return;
+
+    const votesRef = collectionGroup(db, "votes");
+
+    const votesQuery = query(
+      votesRef,
+      where("uid", "==", loggedInUser.uid),
+      where("battleId", "==", battleId)
+    );
+
+    const unsub = onSnapshot(votesQuery, (snapshot) => {
+      setUserVotes(snapshot.docs.length);
+    });
+
+    return () => unsub();
+  }, [loggedInUser, battleId]);
 
   useEffect(() => {
     getVideo();
@@ -93,6 +118,9 @@ const SharedVideo = () => {
               battleId={battleId}
               userData={user}
               poster={user.headshot}
+              voteButtonVisible={true}
+              userVotes={userVotes}
+              battleStatus={battleStatus}
             />
           )}
         </>
