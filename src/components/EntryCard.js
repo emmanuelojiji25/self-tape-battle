@@ -23,6 +23,8 @@ import ShareModal from "./ShareModal";
 import DeleteModal from "./DeleteModal";
 import ReportModal from "./ReportModal";
 import Feedback from "./Feedback";
+import ActorCard from "./ActorCard";
+import Button from "./Button";
 
 const EntryCard = ({
   userData,
@@ -64,6 +66,8 @@ const EntryCard = ({
 
   const [amountOfFeedback, setAmountOfFeedback] = useState(0);
 
+  const [voteListVisible, setVoteListVisible] = useState(false);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -95,10 +99,15 @@ const EntryCard = ({
           uid,
           "votes"
         );
-        const snapshot = await getDocs(votesCollection);
+
+        const data = []
 
         onSnapshot(votesCollection, (snapshot) => {
-          setVotes(snapshot.size);
+          snapshot.docs.forEach((doc) => {
+
+            data.push(doc.data());
+            setVotes(data)
+          });
         });
 
         // Check if user has voted for entry
@@ -160,6 +169,7 @@ const EntryCard = ({
         });
 
         const entryDoc = doc(db, "battles", battleId, "entries", uid);
+
         await updateDoc(entryDoc, {
           voteCount: increment(1),
         });
@@ -260,6 +270,25 @@ const EntryCard = ({
 
       {isExploding && <ConfettiExplosion />}
 
+      {voteListVisible && (
+        <div className="vote-list-modal">
+          <div className="vote-list-content">
+            <div className="vote-list-header">
+              <h3>{firstName}'s Votes ({votes.length})</h3>
+              <Button onClick={() => setVoteListVisible(false)} filled_color text="Close" />
+            </div>
+            {votes.length > 0 ? (
+              votes.map((vote, index) => (
+                <ActorCard key={index} uid={vote.uid} size="40" />
+              ))
+            ) : (
+              <p>No votes yet.</p>
+            )}
+
+          </div>
+        </div>
+      )}
+
       {feedbackVisible && (
         <Feedback
           close={() => setFeedbackVisible(false)}
@@ -295,11 +324,11 @@ const EntryCard = ({
               )}
             {((loggedInUser && uid === loggedInUser.uid) ||
               battleStatus === "closed") && (
-              <span className="votes">
-                {votes > 0 ? votes : "No"} Vote
-                {votes > 1 && "s"}
-              </span>
-            )}
+                <span className="votes" onClick={() => setVoteListVisible(true)}>
+                  {votes.length > 0 ? votes.length : "No"} Vote
+                  {votes.length > 1 && "s"}
+                </span>
+              )}
           </div>
 
           {loggedInUser?.uid && (

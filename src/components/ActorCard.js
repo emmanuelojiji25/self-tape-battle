@@ -8,7 +8,7 @@ import { deleteDoc, doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { memo, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
-const ActorCard = memo(({ uid }) => {
+const ActorCard = memo(({ uid, buttonVisible, size }) => {
   const { loggedInUser, authRole } = useContext(AuthContext);
 
   const [userIsBookmarked, setUserIsBookmarked] = useState(false);
@@ -16,6 +16,10 @@ const ActorCard = memo(({ uid }) => {
   const [username, setUsername] = useState("");
   const [headshot, setHeadshot] = useState("");
   const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const docRef = doc(db, "users", loggedInUser.uid, "bookmarks", uid);
@@ -40,9 +44,15 @@ const ActorCard = memo(({ uid }) => {
     try {
       const docSnapshot = await getDoc(docRef);
       const data = docSnapshot.data();
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
       setName(`${data.firstName} ${data.lastName}`);
       setHeadshot(data.headshot);
       setUsername(data.username);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.log(error);
     }
@@ -75,27 +85,31 @@ const ActorCard = memo(({ uid }) => {
 
   return (
     <div className="ActorCard">
-      {authRole === "professional" && (
-        <img
-          src={userIsBookmarked ? star_filled : star}
-          className="star"
-          alt="bookmark"
-          onClick={() => handleBookmarkActor()}
-        />
-      )}
-      <div
-        className="actor-card-headshot"
-        style={{ backgroundImage: `url(${headshot})` }}
-      />
-      <div>
-        <Link to={`/profile/${username}`} className="actor-card-name">
-          {name}
-        </Link>
-        <Link to={`/profile/${username}`}>
-          <Button filled_color text="View Profile" />
-        </Link>
-      </div>
+      {loading ? <div className="loading" style={{ height: `${size}px` }} /> : (
+        <>
+          {authRole === "professional" && (
+            <img
+              src={userIsBookmarked ? star_filled : star}
+              className="star"
+              alt="bookmark"
+              onClick={() => handleBookmarkActor()}
+            />
+          )}
+          <div
+            className="actor-card-headshot"
+            style={{ backgroundImage: `url(${headshot})`, width: `${size}px`, height: `${size}px` }}
+          />
+          <div>
+            <Link to={`/profile/${username}`} className="actor-card-name">
+              {name ? name : "Deleted User"}
+            </Link>
+            <Link to={`/profile/${username}`}>
+              {buttonVisible && <Button filled_color text="View Profile" />}
+            </Link>
+          </div>
+        </>)}
     </div>
+
   );
 });
 
