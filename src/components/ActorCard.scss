@@ -3,12 +3,19 @@
   margin-bottom: 30px;
   align-items: center;
   gap: 10px;
+  
+
+  .loading{
+    background: #1e2434;
+    border-radius: 10px;
+    width: 100%;
+  }
+
 
 }
 
 .actor-card-headshot {
   width: 100px;
-  height: 100px;
   background-size: cover;
   background-position: center;
   border-radius: 15px;
@@ -24,5 +31,4 @@
 .actor-card-name {
   color: white;
   display: block;
-  margin-bottom: 10px;
 }

@@ -114,7 +114,7 @@ const Directory = () => {
       {view === "actors" && (
         <div className="actors">
           {actors.map((actor) => (
-            <ActorCard key={actor.uid} uid={actor.uid} />
+            <ActorCard key={actor.uid} uid={actor.uid} size="80" />
           ))}
           {hasMoreActors && (
             <Button

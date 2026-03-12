@@ -280,6 +280,11 @@ const Dashboard = () => {
           totalCoinsEarned: increment(prizeObject.value),
         });
 
+        await updateDoc(battleRef, {
+          winner: winnerUid,
+          status: "closed",
+        });
+
         // Award coin to all voters of winning entry
         const votesRef = collection(
           db,
@@ -297,7 +302,7 @@ const Dashboard = () => {
           publicKey: "vDAbvtQ-t4ao0CqWi",
         });
 
-        const voteDocs = votesSnapshot.docs.map((doc) => doc.data());
+
 
         for (const voter of uids) {
 
@@ -324,10 +329,6 @@ const Dashboard = () => {
         }
       }
 
-      await updateDoc(battleRef, {
-        winner: winnerUid,
-        status: "closed",
-      });
 
 
     } catch (error) {
