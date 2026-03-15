@@ -477,7 +477,7 @@ const Profile = () => {
               {role === "actor" && (
                 <div className="stat-card-container">
                   <div className="stat-card">
-                    <h2 className="number">{battlesEntered}</h2>
+                    <h2 className="number">{battles.length}</h2>
                     <p className="label">Battles Entered</p>
                   </div>
                   <div className="stat-card">
