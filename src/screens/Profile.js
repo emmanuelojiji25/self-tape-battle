@@ -27,6 +27,7 @@ import Loader from "../components/Loader";
 import BackButton from "../components/BackButton";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import ff from "../media/ff.svg";
+import verified from "../media/verified.svg";
 import MessageModal from "../components/MessageModal";
 import imageCompression from "browser-image-compression";
 
@@ -399,6 +400,13 @@ const Profile = () => {
                     {badges.includes("founding_fighter") && (
                       <img
                         src={ff}
+                        className="badge"
+                        onClick={() => setShowMessageModal(true)}
+                      />
+                    )}
+                    {badges.includes("verified") && (
+                      <img
+                        src={verified}
                         className="badge"
                         onClick={() => setShowMessageModal(true)}
                       />

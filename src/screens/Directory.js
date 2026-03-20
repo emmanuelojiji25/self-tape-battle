@@ -9,7 +9,6 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import ActorCard from "../components/ActorCard";
-import Button from "../components/Button";
 import NavBar from "../components/NavBar";
 import { db } from "../firebaseConfig";
 import "./Directory.scss";
@@ -29,7 +28,7 @@ const Directory = () => {
 
   const [view, setView] = useState("actors");
 
-  const getUsers = async (role, setter, lastDoc, setLast, setHasMore) => {
+  const getUsers = async (role, state, setState, lastDoc, setLast, setHasMore) => {
     if (loading) return;
     setLoading(true);
 
@@ -44,48 +43,82 @@ const Directory = () => {
         limit(PAGE_SIZE)
       );
 
-      if (lastDoc) q = query(q, startAfter(lastDoc));
+      if (lastDoc) {
+        q = query(q, startAfter(lastDoc));
+      }
 
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map((doc) => doc.data());
 
-      if (data.length < PAGE_SIZE) setHasMore(false);
+      // check if more data exists
+      if (data.length < PAGE_SIZE) {
+        setHasMore(false);
+      }
 
       if (data.length > 0) {
-        setter((prev) => [...prev, ...data]);
+        setState((prev) => {
+          const newData = data.filter(
+            (item) => !prev.some((p) => p.uid === item.uid)
+          );
+          return [...prev, ...newData];
+        });
+
         setLast(snapshot.docs[snapshot.docs.length - 1]);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     setLoading(false);
   };
 
+  // initial + tab switch fetch
   useEffect(() => {
-    getUsers("actor", setActors, null, setActorsLastDoc, setHasMoreActors);
-    getUsers(
-      "professional",
-      setCasting,
-      null,
-      setCastingLastDoc,
-      setHasMoreCasting
-    );
-  }, []);
+    if (view === "actors") {
+      setActors([]);
+      setActorsLastDoc(null);
+      setHasMoreActors(true);
+
+      getUsers(
+        "actor",
+        actors,
+        setActors,
+        null,
+        setActorsLastDoc,
+        setHasMoreActors
+      );
+    } else {
+      setCasting([]);
+      setCastingLastDoc(null);
+      setHasMoreCasting(true);
+
+      getUsers(
+        "professional",
+        casting,
+        setCasting,
+        null,
+        setCastingLastDoc,
+        setHasMoreCasting
+      );
+    }
+  }, [view]);
 
   const loadMore = () => {
     if (view === "actors" && hasMoreActors) {
       getUsers(
         "actor",
+        actors,
         setActors,
         actorsLastDoc,
         setActorsLastDoc,
         setHasMoreActors
       );
     }
+
     if (view === "casting" && hasMoreCasting) {
       getUsers(
         "professional",
+        casting,
         setCasting,
         castingLastDoc,
         setCastingLastDoc,
@@ -99,16 +132,17 @@ const Directory = () => {
       <h1>Residents</h1>
 
       <span
-        className={`tab ${view === "actors" && "active"}`}
+        className={`tab ${view === "actors" ? "active" : ""}`}
         onClick={() => setView("actors")}
       >
         Actors
       </span>
+
       <span
-        className={`tab ${view === "casting" && "active"}`}
+        className={`tab ${view === "casting" ? "active" : ""}`}
         onClick={() => setView("casting")}
       >
-        Casting & Agents
+        Professionals
       </span>
 
       {view === "actors" && (
@@ -116,31 +150,29 @@ const Directory = () => {
           {actors.map((actor) => (
             <ActorCard key={actor.uid} uid={actor.uid} size="80" />
           ))}
+
           {hasMoreActors && (
-            <Button
-              filled_color
-              onClick={loadMore}
-              disabled={loading}
-              text="Load More"
-            >
+            <button onClick={loadMore} disabled={loading}>
               {loading ? "Loading..." : "Load More"}
-            </Button>
+            </button>
           )}
         </div>
       )}
 
       {view === "casting" && (
         <div className="actors">
-          {casting.length === 0 && (
+          {casting.length === 0 && !loading && (
             <p>You'll see some familiar faces here, check back soon!</p>
           )}
+
           {casting.map((c) => (
             <ActorCard key={c.uid} uid={c.uid} />
           ))}
+
           {hasMoreCasting && (
-            <Button filled_color onClick={loadMore} disabled={loading}>
+            <button onClick={loadMore} disabled={loading}>
               {loading ? "Loading..." : "Load More"}
-            </Button>
+            </button>
           )}
         </div>
       )}
