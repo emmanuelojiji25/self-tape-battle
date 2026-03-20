@@ -408,7 +408,7 @@ const Profile = () => {
                       <img
                         src={verified}
                         className="badge"
-                        onClick={() => setShowMessageModal(true)}
+                        //onClick={() => setShowMessageModal(true)}
                       />
                     )}
                   </div>
