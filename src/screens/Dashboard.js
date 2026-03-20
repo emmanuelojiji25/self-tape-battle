@@ -310,7 +310,7 @@ const Dashboard = () => {
 
           await updateDoc(voterRef, {
             coins: increment(1),
-            totalCoinsEarned: increment(1),
+            totalCoinsEarned: increment(5),
           });
 
           const voterSnapshot = await getDoc(voterRef);

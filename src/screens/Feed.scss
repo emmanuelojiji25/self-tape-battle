@@ -53,3 +53,19 @@
   background: rgba(0,0,0,0.5);
   z-index: 2; //below header now 
 } */
+
+.updates{
+  background: orange;
+  width: 100%;
+  border-radius: 20px;
+  padding: 20px;
+
+  h2{
+    color: rgb(58, 38, 0);
+    margin-bottom: 20px;
+  }
+
+  p{
+    margin-bottom: 20px;
+  }
+}
