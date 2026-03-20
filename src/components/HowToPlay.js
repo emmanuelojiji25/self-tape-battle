@@ -1,6 +1,11 @@
 import "./HowToPlay.scss";
 
 const HowToPlay = () => {
+
+  const maxVotes = 5;
+
+  const amountOfExistingEntries = 10;
+
   return (
     <div className="HowToPlay screen-width">
       <h2>How to play</h2>
@@ -17,8 +22,8 @@ const HowToPlay = () => {
       <section>
         <h3>2. Vote to Enter (If Required)</h3>
         <p>
-          You have 5 votes for each battle. Use them wisely! When submitting
-          your entry - if a battle has more than 5 existing entries, you must
+          You have {maxVotes} votes for each battle. Use them wisely! When submitting
+          your entry - if a battle has more than {amountOfExistingEntries} existing entries, you must
           vote on one performance before you can submit yours. This ensures fair
           play and keeps the community engaged. Remember: once you vote for an
           actor, that vote is final and you can't unvote.
