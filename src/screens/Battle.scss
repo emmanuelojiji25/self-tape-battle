@@ -15,7 +15,32 @@
     color: white;
     margin-bottom: 10px;
   }
-  
+
+  .writtenBy {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .headshot {
+      width: 25px;
+      height: 25px;
+      border-radius: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .link {
+      color: aqua;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+    }
+  }
+
 }
 
 .battle-header-left {
@@ -34,7 +59,7 @@
   margin-top: 50px;
   display: flex;
   flex-direction: column;
-gap: 50px;
+  gap: 50px;
 
 }
 
@@ -122,7 +147,7 @@ gap: 50px;
   }
 }
 
-.winner-pending{
+.winner-pending {
   color: rgb(235, 200, 0);
 }
 

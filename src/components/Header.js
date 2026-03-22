@@ -9,7 +9,7 @@ import Wallet from "./Wallet";
 import Story from "./Story";
 import scroll from "../media/scroll.png";
 import SideMenu from "./SideMenu";
-import {Coin, Chest} from "./Icon";
+import { Coin, Chest } from "./Icon";
 
 const Header = () => {
   const { loggedInUser, authRole, firstName, username, headshot, coins } =
@@ -88,7 +88,7 @@ const Header = () => {
         </div>
 
         <div className="header-right">
-          {!isStoryComplete && (
+          {(!isStoryComplete && authRole === "actor") && (
             <div className="scroll" onClick={() => setStoryVisible(true)}>
               <img src={scroll} className="scroll" />
             </div>
@@ -98,7 +98,7 @@ const Header = () => {
               className="coins-container"
               onClick={() => setWalletVisible(true)}
             >
-              <Coin width="30"/>
+              <Coin width="30" />
               {coins}
             </div>
           )}

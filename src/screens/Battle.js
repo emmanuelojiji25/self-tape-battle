@@ -74,6 +74,8 @@ const Battle = () => {
 
   const [loggedInUserDoc, setLoggedInUserDoc] = useState({});
 
+  const [writtenByUser, setWrittenByUser] = useState(null)
+
   useEffect(() => {
     getUser();
     getBattle();
@@ -113,6 +115,16 @@ const Battle = () => {
         setGenre(data.genre);
         setVoters(data.voters);
       }
+
+      // Get writtenBy 
+
+      if (data.writtenBy) {
+        const writtenByRef = doc(db, "users", data.writtenBy)
+        const writtenBySnapshot = await getDoc(writtenByRef)
+        setWrittenByUser(writtenBySnapshot.data())
+      }
+
+      // Get entries
 
       let entries = [];
 
@@ -308,7 +320,16 @@ const Battle = () => {
           {loading ? (
             <Skeleton height={35} />
           ) : (
-            <h3 className="battle-title">{title}</h3>
+            <>
+              <h3 className="battle-title">{title}</h3>
+              {writtenByUser && <div className="writtenBy">
+                <p>Written by</p>
+                <Link to={`/profile/${writtenByUser.username}`} className="link">
+                  <div className="headshot" style={{ backgroundImage: `url('${writtenByUser.headshot}')` }}></div>
+                  <h4>{writtenByUser.firstName}{" "}{writtenByUser.lastName}</h4></Link>
+              </div>}
+            </>
+
           )}
           {loading ? (
             <Skeleton height={100} />
