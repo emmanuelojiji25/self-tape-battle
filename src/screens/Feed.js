@@ -94,7 +94,7 @@ const Feed = ({ user }) => {
   const handleReadUpdate = async () => {
     try {
       const updatesCollection = doc(db, "updates", "new-vote-mechanism")
-      await setDoc(updatesCollection, {
+      await updateDoc(updatesCollection, {
         readBy: arrayUnion(loggedInUser.uid)
       })
     } catch (error) {
