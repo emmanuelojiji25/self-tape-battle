@@ -60,7 +60,7 @@ const HowToPlay = () => {
         <br />
         <p>
           <strong>Smart Voting Bonus:</strong> If you vote for an actor and they
-          win the battle, you earn double coins!
+          win the battle, you earn 5 extra coins!
         </p>
         <p>
           <br />
