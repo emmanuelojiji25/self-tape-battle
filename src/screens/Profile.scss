@@ -23,8 +23,9 @@
     text-overflow: ellipsis;
   }
 
-  h1 {
+  .name {
     font-size: 20px;
+    text-transform: capitalize;
   }
 
   .username {

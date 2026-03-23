@@ -396,7 +396,7 @@ const Profile = () => {
                 </div>
                 <div className="profile-info">
                   <div className="name-badge-container">
-                    <h1>{name}</h1>{" "}
+                    <h1 className="name">{name}</h1>{" "}
                     {badges.includes("founding_fighter") && (
                       <img
                         src={ff}
