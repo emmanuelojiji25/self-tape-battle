@@ -151,7 +151,7 @@ const Battle = () => {
 
       onSnapshot(votesRef, async () => {
         const votesQuerySnapshot = await getDocs(votesQuery);
-        // setUserVotes(votesQuerySnapshot.docs.length);
+        setUserVotes(votesQuerySnapshot.docs.length);
       });
 
       setTimeout(() => {
@@ -372,17 +372,8 @@ const Battle = () => {
             loading === false &&
             battleStatus === "open" && (
               <Button
-                onClick={() => {
-                  if (userVotes === 0 && entries.length > 10) {
-                    console.log("You must vote first!");
-                    setErrorMessage(
-                      "You must watch & vote for at least 1 entry before you can join this battle. You can still vote for other entries in this battle."
-                    );
-                    return;
-                  } else {
-                    inputRef.current.click();
-                  }
-                }}
+                onClick={() => { inputRef.current.click(); }
+                }
                 text="Upload Tape"
                 className="upload-tape"
                 filled_color
@@ -399,7 +390,7 @@ const Battle = () => {
             outline
           />
           <p className="user-votes">
-            Votes Remaining: <strong>{5 - userVotes}</strong>
+            Votes Remaining: {userVotes && <strong>{5 - userVotes}</strong>}
           </p>
         </div>
       )}
