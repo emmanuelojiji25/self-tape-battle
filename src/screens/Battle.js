@@ -12,14 +12,11 @@ import {
   setDoc,
   updateDoc,
   where,
-  writeBatch,
 } from "firebase/firestore";
 import {
   getDownloadURL,
   ref,
-  uploadBytes,
   uploadBytesResumable,
-  uploadString,
 } from "firebase/storage";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -35,49 +32,41 @@ import Skeleton from "../components/Skeleton";
 import chest from "../media/chest.svg";
 import BackButton from "../components/BackButton";
 import { Coin } from "../components/Icon";
-
 import HowToPlay from "../components/HowToPlay";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
-  const [period, setPeriod] = useState("")
+  const [period, setPeriod] = useState("");
   const [entries, setEntries] = useState([]);
   const [deadline, setDeadline] = useState("");
   const [prize, setPrize] = useState("");
   const [genre, setGenre] = useState("");
   const [voters, setVoters] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [winner, setWinner] = useState("");
-
   const { loggedInUser } = useContext(AuthContext);
-
   const { battleId } = useParams();
-
   const [battleStatus, setBattleStatus] = useState("");
-
   const [battleAttachment, setBattleAttachment] = useState("");
-
   const [userHasVoted, setUserHasVoted] = useState(null);
-
   const [errorMessage, setErrorMessage] = useState("");
-
   const [showMessageModal, setShowMessageModal] = useState(false);
-
   const [userEntry, setUserEntry] = useState(null);
-
   const [howToPlayVisible, setHowToPlayVisible] = useState(false);
-
   const [usersCache, setUsersCache] = useState({});
-
   const [userVotes, setUserVotes] = useState(0);
-
   const [loggedInUserDoc, setLoggedInUserDoc] = useState({});
+  const [writtenByUser, setWrittenByUser] = useState(null);
 
-  const [writtenByUser, setWrittenByUser] = useState(null)
-
-
+  // ✅ Fisher–Yates shuffle
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
 
   useEffect(() => {
     getUser();
@@ -102,9 +91,7 @@ const Battle = () => {
       const entriesRef = collection(db, "battles", battleId, "entries");
 
       const q = query(entriesRef, orderBy("date", "asc"));
-
       const entriesDocs = await getDocs(q);
-
       const battleSnapshot = await getDoc(docRef);
 
       const data = battleSnapshot.data();
@@ -117,30 +104,28 @@ const Battle = () => {
         setPrize(data.prize.value);
         setGenre(data.genre);
         setVoters(data.voters);
-        setPeriod(data.period)
+        setPeriod(data.period);
       }
-
-      // Get writtenBy 
 
       if (data.writtenBy) {
-        const writtenByRef = doc(db, "users", data.writtenBy)
-        const writtenBySnapshot = await getDoc(writtenByRef)
-        setWrittenByUser(writtenBySnapshot.data())
+        const writtenByRef = doc(db, "users", data.writtenBy);
+        const writtenBySnapshot = await getDoc(writtenByRef);
+        setWrittenByUser(writtenBySnapshot.data());
       }
 
-      // Get entries
-
       let entries = [];
-
       entriesDocs.forEach((doc) => {
         entries.push(doc.data());
       });
 
       const filtered = entries.filter((e) => e.uid !== loggedInUser.uid);
-      setEntries(filtered);
-      await fetchUsersForEntries(filtered);
 
-      // Vote limit query
+      // ✅ Shuffle entries
+      const shuffled = shuffleArray(filtered);
+
+      setEntries(shuffled);
+      await fetchUsersForEntries(shuffled);
+
       const votesRef = collectionGroup(db, "votes");
 
       const votesQuery = query(
@@ -166,8 +151,6 @@ const Battle = () => {
     if (entriesData.length === 0) return;
 
     const uniqueUids = [...new Set(entriesData.map((e) => e.uid))];
-
-    // Only fetch users we don't have cached yet
     const uncachedUids = uniqueUids.filter((uid) => !usersCache[uid]);
 
     if (uncachedUids.length === 0) return;
@@ -177,8 +160,6 @@ const Battle = () => {
     );
 
     const userDocs = await Promise.all(userPromises);
-
-    // Create an object keyed by uid
     const newCache = { ...usersCache };
 
     userDocs.forEach((userDoc, index) => {
@@ -211,9 +192,7 @@ const Battle = () => {
   const getWinner = async () => {
     try {
       const battleRef = doc(db, "battles", battleId);
-
       const snapshot = await getDoc(battleRef);
-
       const winner = snapshot.data().winner;
 
       const userRef = doc(db, "users", winner);
@@ -227,7 +206,6 @@ const Battle = () => {
 
   const inputRef = useRef(null);
   const [file, setFile] = useState(null);
-
   const [uploadStatus, setUploadStatus] = useState("");
 
   const handleUploadBattle = async () => {
@@ -308,17 +286,18 @@ const Battle = () => {
           icon={<Coin width="100" />}
         />
       )}
+
       {howToPlayVisible && (
-        <>
-          <div className="battle-how-to-play-container">
-            <BackButton onClick={() => setHowToPlayVisible(false)} />
-            <HowToPlay />
-          </div>
-        </>
+        <div className="battle-how-to-play-container">
+          <BackButton onClick={() => setHowToPlayVisible(false)} />
+          <HowToPlay />
+        </div>
       )}
+
       <Link to="/" className="back">
         <BackButton />
       </Link>
+
       <div className="battle-header">
         <div className="battle-header-left">
           {loading ? (
@@ -326,16 +305,33 @@ const Battle = () => {
           ) : (
             <>
               <h3 className="battle-title">{title}</h3>
-              <h4 className="period">{period === "entry" ? 'Entry' : 'Voting'} Period</h4>
-              {writtenByUser && <div className="writtenBy">
-                <p>Written by</p>
-                <Link to={`/profile/${writtenByUser.username}`} className="link">
-                  <div className="headshot" style={{ backgroundImage: `url('${writtenByUser.headshot}')` }}></div>
-                  <h4>{writtenByUser.firstName}{" "}{writtenByUser.lastName}</h4></Link>
-              </div>}
-            </>
+              <h4 className="period">
+                {period === "entry" ? "Entry" : "Voting"} Period
+              </h4>
 
+              {writtenByUser && (
+                <div className="writtenBy">
+                  <p>Written by</p>
+                  <Link
+                    to={`/profile/${writtenByUser.username}`}
+                    className="link"
+                  >
+                    <div
+                      className="headshot"
+                      style={{
+                        backgroundImage: `url('${writtenByUser.headshot}')`,
+                      }}
+                    ></div>
+                    <h4>
+                      {writtenByUser.firstName}{" "}
+                      {writtenByUser.lastName}
+                    </h4>
+                  </Link>
+                </div>
+              )}
+            </>
           )}
+
           {loading ? (
             <Skeleton height={100} />
           ) : (
@@ -348,12 +344,14 @@ const Battle = () => {
                 )}
                 {prize}
               </span>
+
               <span className="info-pill">
-                <i class="fa-solid fa-masks-theater"></i>
+                <i className="fa-solid fa-masks-theater"></i>
                 {genre}
               </span>
+
               <span className="info-pill">
-                <i class="fa-solid fa-calendar"></i>
+                <i className="fa-solid fa-calendar"></i>
                 {deadline}
               </span>
             </div>
@@ -367,33 +365,33 @@ const Battle = () => {
 
       {battleStatus === "open" && (
         <div className="button-container">
-          {!userEntry &&
-            !file &&
-            loading === false &&
-            battleStatus === "open" && (
-              <Button
-                onClick={() => { inputRef.current.click(); }
-                }
-                text="Upload Tape"
-                className="upload-tape"
-                filled_color
-              />
-            )}
+          {!userEntry && !file && !loading && (
+            <Button
+              onClick={() => inputRef.current.click()}
+              text="Upload Tape"
+              className="upload-tape"
+              filled_color
+            />
+          )}
 
-          <a href={`${battleAttachment}`} download target="_blank">
+          <a href={battleAttachment} download target="_blank">
             <Button text="Download Monologue" outline />
           </a>
+
           <Button
             text="How to play"
-            icon={<i class="fa-solid fa-circle-info"></i>}
+            icon={<i className="fa-solid fa-circle-info"></i>}
             onClick={() => setHowToPlayVisible(true)}
             outline
           />
+
           <p className="user-votes">
-            Votes Remaining: {userVotes && <strong>{5 - userVotes}</strong>}
+            Votes Remaining:{" "}
+            {userVotes && <strong>{5 - userVotes}</strong>}
           </p>
         </div>
       )}
+
       {file && (
         <div className="file-container">
           {uploadStatus === "uploading" && (
@@ -401,31 +399,34 @@ const Battle = () => {
               Uploading..larger videos may take a bit longer..
             </span>
           )}
+
           {uploadStatus === "" && (
             <>
               <p className="file-name">{file.name}</p>
               <div className="button-container">
                 <Button
-                  onClick={() => handleUploadBattle()}
+                  onClick={handleUploadBattle}
                   text="Post"
                   filled_color
                 />
-                <Button onClick={() => setFile(null)} text="Cancel" outline />
+                <Button
+                  onClick={() => setFile(null)}
+                  text="Cancel"
+                  outline
+                />
               </div>
             </>
           )}
         </div>
       )}
+
       <input
         type="file"
         ref={inputRef}
         style={{ display: "none" }}
-        onChange={(e) => {
-          const file = e.target.files;
-          setFile(file[0]);
-        }}
+        onChange={(e) => setFile(e.target.files[0])}
         accept=".mov, .mp4"
-      ></input>
+      />
 
       {winner && battleStatus === "closed" && (
         <div className="winner">
@@ -446,10 +447,10 @@ const Battle = () => {
             url={userEntry.url}
             uid={userEntry.uid}
             battleId={battleId}
-            voteButtonVisible={userEntry.uid != loggedInUser.uid}
+            voteButtonVisible={userEntry.uid !== loggedInUser.uid}
             battleStatus={battleStatus}
             isPillVisible={true}
-            userData={loggedInUserDoc} // Changed from userDocs to usersCache
+            userData={loggedInUserDoc}
             userVotes={userVotes}
             menu
             feedbackOn={userEntry.feedbackOn}
@@ -458,24 +459,22 @@ const Battle = () => {
           />
         )}
 
-        {entries.map((entry) => {
-          return (
-            <EntryCard
-              key={entry?.uid} // Add key!
-              url={entry?.url}
-              uid={entry?.uid}
-              battleId={battleId}
-              voteButtonVisible={entry?.uid != loggedInUser.uid}
-              battleStatus={battleStatus}
-              userData={usersCache[entry.uid]} // Changed from userDocs to usersCache
-              userVotes={userVotes}
-              poster={usersCache[entry.uid]?.headshot}
-              feedbackOn={entry.feedbackOn}
-              title={title}
-              period={period}
-            />
-          );
-        })}
+        {entries.map((entry) => (
+          <EntryCard
+            key={entry.uid}
+            url={entry.url}
+            uid={entry.uid}
+            battleId={battleId}
+            voteButtonVisible={entry.uid !== loggedInUser.uid}
+            battleStatus={battleStatus}
+            userData={usersCache[entry.uid]}
+            userVotes={userVotes}
+            poster={usersCache[entry.uid]?.headshot}
+            feedbackOn={entry.feedbackOn}
+            title={title}
+            period={period}
+          />
+        ))}
       </div>
     </div>
   );
