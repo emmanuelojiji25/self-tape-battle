@@ -40,6 +40,7 @@ import HowToPlay from "../components/HowToPlay";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
+  const [period, setPeriod] = useState("")
   const [entries, setEntries] = useState([]);
   const [deadline, setDeadline] = useState("");
   const [prize, setPrize] = useState("");
@@ -75,6 +76,8 @@ const Battle = () => {
   const [loggedInUserDoc, setLoggedInUserDoc] = useState({});
 
   const [writtenByUser, setWrittenByUser] = useState(null)
+
+
 
   useEffect(() => {
     getUser();
@@ -114,6 +117,7 @@ const Battle = () => {
         setPrize(data.prize.value);
         setGenre(data.genre);
         setVoters(data.voters);
+        setPeriod(data.period)
       }
 
       // Get writtenBy 
@@ -147,7 +151,7 @@ const Battle = () => {
 
       onSnapshot(votesRef, async () => {
         const votesQuerySnapshot = await getDocs(votesQuery);
-        setUserVotes(votesQuerySnapshot.docs.length);
+        // setUserVotes(votesQuerySnapshot.docs.length);
       });
 
       setTimeout(() => {
@@ -322,6 +326,7 @@ const Battle = () => {
           ) : (
             <>
               <h3 className="battle-title">{title}</h3>
+              <h4 className="period">{period === "entry" ? 'Entry' : 'Voting'} Period</h4>
               {writtenByUser && <div className="writtenBy">
                 <p>Written by</p>
                 <Link to={`/profile/${writtenByUser.username}`} className="link">
@@ -458,6 +463,7 @@ const Battle = () => {
             menu
             feedbackOn={userEntry.feedbackOn}
             title={title}
+            period={period}
           />
         )}
 
@@ -475,6 +481,7 @@ const Battle = () => {
               poster={usersCache[entry.uid]?.headshot}
               feedbackOn={entry.feedbackOn}
               title={title}
+              period={period}
             />
           );
         })}

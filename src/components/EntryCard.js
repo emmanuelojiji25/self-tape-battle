@@ -40,6 +40,7 @@ const EntryCard = ({
   poster,
   page,
   feedbackOn,
+  period
 }) => {
   const { loggedInUser } = useContext(AuthContext);
 
@@ -314,7 +315,7 @@ const EntryCard = ({
             {loggedInUser &&
               voteButtonVisible &&
               battleStatus === "open" &&
-              userVotes < 5 && (
+              userVotes < 5 && period != "entry" && (
                 <span
                   onClick={() => handleVote()}
                   className={`vote-button ${userhasVoted ? "voted" : ""}`}
