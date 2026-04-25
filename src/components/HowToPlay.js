@@ -18,16 +18,18 @@ const HowToPlay = () => {
           showcase your talent.
         </p>
 
-        <li>
-          Entry period: Sunday - Thursday
-        </li>
-        <li>
-          Voting period: Friday - Sunday
-        </li>
+        <ul>
+          <li>
+            Entry period: Sunday - Thursday
+          </li>
+          <li>
+            Voting period: Friday - Sunday
+          </li>
 
-        <li>
-          Sunday evening: Winners announced + New battle commences
-        </li>
+          <li>
+            Sunday evening: Winners announced + New battle commences
+          </li>
+        </ul>
       </section>
 
       <section>

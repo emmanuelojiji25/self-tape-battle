@@ -72,28 +72,22 @@ const Feed = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    const getReadByUsers = async () => {
-      try {
-        const updateRef = doc(db, "updates", "new-vote-mechanism");
+    if (!loggedInUser?.uid) return;
 
-        onSnapshot(updateRef, (snapshot) => {
-          setReadByUser(snapshot.data().readBy?.includes(loggedInUser.uid))
-        })
+    const updateRef = doc(db, "updates", "new-voting-schedule");
 
-      } catch (error) {
-        console.log(error)
-      }
+    const unsubscribe = onSnapshot(updateRef, (snapshot) => {
+      const data = snapshot.data();
+      setReadByUser(data?.readBy?.includes(loggedInUser.uid) ?? false);
+    });
 
-    }
-
-    getReadByUsers();
-
-  })
+    return () => unsubscribe();
+  }, [loggedInUser]);
 
 
   const handleReadUpdate = async () => {
     try {
-      const updatesCollection = doc(db, "updates", "new-vote-mechanism")
+      const updatesCollection = doc(db, "updates", "new-voting-schedule")
       await updateDoc(updatesCollection, {
         readBy: arrayUnion(loggedInUser.uid)
       })
@@ -113,11 +107,21 @@ const Feed = ({ user }) => {
           {!readByUser && <div className="updates">
             <h2>Here's what's new..</h2>
 
-            <h4>Vote-to-enter update</h4>
-            <p>The mandatory vote-to-enter if there are more than 5 entries, is now changed to 10. This is to allow a wider selection to vote for.  </p>
+            <h4>New voting schedule</h4>
+            <p>By popular demand and based on your feedback, we're introducing an Entry Period and Voting period to make the battle process fairer for all actors</p>
 
-            <h4>5 coins for winning entry vote</h4>
-            <p>Instead of 1 extra coin, you now get 5 coins for voting for the winning entry!</p>
+            <li>
+              Entry period: Sunday - Thursday
+            </li>
+            <li>
+              Voting period: Friday - Sunday
+            </li>
+
+            <li>
+              Sunday evening: Winners announced + New battle commences
+            </li>
+
+
 
 
             <Button filled_color text="Got it!" onClick={() => handleReadUpdate()} />
