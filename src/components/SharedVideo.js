@@ -25,6 +25,7 @@ const SharedVideo = () => {
   const [battleName, setBattleName] = useState("");
   const [battleStatus, setBattleStatus] = useState("")
   const [prize, setPrize] = useState("");
+  const [period, setPeriod] = useState("")
 
   const [loading, setLoading] = useState(true);
 
@@ -59,6 +60,7 @@ const SharedVideo = () => {
 
       setBattleName(battleSnapshot.data().title);
       setPrize(battleSnapshot.data().prize.value);
+      setPeriod(battleSnapshot.data().period)
 
       setLoading(false);
     } catch (error) {
@@ -121,6 +123,7 @@ const SharedVideo = () => {
               voteButtonVisible={true}
               userVotes={userVotes}
               battleStatus={battleStatus}
+              period={period}
             />
           )}
         </>

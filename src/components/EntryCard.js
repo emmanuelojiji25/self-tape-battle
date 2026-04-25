@@ -312,10 +312,10 @@ const EntryCard = ({
 
         <div className="entry-card-header-right">
           <div className="user-actions">
-            {loggedInUser &&
+            {(loggedInUser &&
               voteButtonVisible &&
               battleStatus === "open" &&
-              userVotes < 5 && period != "entry" && (
+              userVotes < 5 && period != "entry") && (
                 <span
                   onClick={() => handleVote()}
                   className={`vote-button ${userhasVoted ? "voted" : ""}`}
