@@ -40,7 +40,9 @@ const Battle = () => {
   const [entries, setEntries] = useState([]);
   const [deadline, setDeadline] = useState("");
   const [prize, setPrize] = useState("");
+  const [prizeObject, setPrizeObject] = useState({});
   const [genre, setGenre] = useState("");
+  const [type, setType] = useState("")
   const [voters, setVoters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [winner, setWinner] = useState("");
@@ -57,6 +59,7 @@ const Battle = () => {
   const [userVotes, setUserVotes] = useState(0);
   const [loggedInUserDoc, setLoggedInUserDoc] = useState({});
   const [writtenByUser, setWrittenByUser] = useState(null);
+  const [prizeInfoVisible, setPrizeInfoVisible] = useState(false)
 
   // ✅ Fisher–Yates shuffle
   const shuffleArray = (array) => {
@@ -99,9 +102,11 @@ const Battle = () => {
       if (data) {
         setTitle(data.title);
         setBattleStatus(data.status);
+        setType(data.type)
         setBattleAttachment(data.file);
         setDeadline(data.deadline);
         setPrize(data.prize.value);
+        setPrizeObject(data.prize)
         setGenre(data.genre);
         setVoters(data.voters);
         setPeriod(data.period);
@@ -294,6 +299,17 @@ const Battle = () => {
         </div>
       )}
 
+      {prizeInfoVisible && (
+        <div className="battle-how-to-play-container prize-info-container">
+          <BackButton onClick={() => setPrizeInfoVisible(false)} />
+          <h2>{prizeObject.value}</h2>
+          <p>{prizeObject?.link}</p>
+          <div className="prize-info-video-container">
+            <video controls src="https://firebasestorage.googleapis.com/v0/b/self-tape-battle.appspot.com/o/random%2Fselftape%20ad.MP4?alt=media&token=294952ff-7822-49b8-9ce4-73093e3b2d83"></video>
+          </div>
+        </div>
+      )}
+
       <Link to="/" className="back">
         <BackButton />
       </Link>
@@ -305,9 +321,14 @@ const Battle = () => {
           ) : (
             <>
               <h3 className="battle-title">{title}</h3>
-              <h4 className="period">
-                {period === "entry" ? "Entry" : "Voting"} Period
-              </h4>
+              <div className="pill-container">
+                {battleStatus === "open" && <h4 className="period">
+                  {period === "entry" ? "Entry" : "Voting"} Period
+                </h4>}
+                {type === "sponsored" && <h4 className="sponsored">
+                  Sponsored
+                </h4>}
+              </div>
 
               {writtenByUser && (
                 <div className="writtenBy">
@@ -343,6 +364,7 @@ const Battle = () => {
                   <Coin width="30" />
                 )}
                 {prize}
+                {prizeObject.infoVisible && <i className="fa-solid fa-circle-info" onClick={() => setPrizeInfoVisible(true)}></i>}
               </span>
 
               <span className="info-pill">
