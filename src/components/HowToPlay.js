@@ -17,21 +17,23 @@ const HowToPlay = () => {
           available battles, select the one that excites you, and get ready to
           showcase your talent.
         </p>
+
+        <ul>
+          <li>
+            Entry period: Sunday - Thursday
+          </li>
+          <li>
+            Voting period: Friday - Sunday
+          </li>
+
+          <li>
+            Sunday evening: Winners announced + New battle commences
+          </li>
+        </ul>
       </section>
 
       <section>
-        <h3>2. Vote to Enter (If Required)</h3>
-        <p>
-          You have {maxVotes} votes for each battle. Use them wisely! When submitting
-          your entry - if a battle has more than {amountOfExistingEntries} existing entries, you must
-          vote on one performance before you can submit yours. This ensures fair
-          play and keeps the community engaged. Remember: once you vote for an
-          actor, that vote is final and you can't unvote.
-        </p>
-      </section>
-
-      <section>
-        <h3>3. Record Your Self-Tape</h3>
+        <h3>2. Record Your Self-Tape</h3>
         <p>
           Film your monologue in your own time, on your own setup. The quicker
           you submit, the more chance you have of getting votes.
@@ -39,7 +41,7 @@ const HowToPlay = () => {
       </section>
 
       <section>
-        <h3>4. Track Your Progress</h3>
+        <h3>3. Track Your Progress</h3>
         <p>
           Vote counts for all entries remain hidden until the battle ends,
           ensuring voting decisions remain purely based on talent and not
@@ -49,7 +51,7 @@ const HowToPlay = () => {
       </section>
 
       <section>
-        <h3>5. Earn Coins</h3>
+        <h3>4. Earn Coins</h3>
         <p>You earn coins for:</p>
         <p>
           • Entering battles
@@ -70,7 +72,7 @@ const HowToPlay = () => {
       </section>
 
       <section>
-        <h3>6. Win the Battle</h3>
+        <h3>5. Win the Battle</h3>
         <p>
           At the end of each battle, the entry with the highest number of votes
           wins the battle prize. In the event of a tie, the winner is determined
@@ -79,7 +81,7 @@ const HowToPlay = () => {
       </section>
 
       <section>
-        <h3>7. Build Your Portfolio</h3>
+        <h3>6. Build Your Portfolio</h3>
         <p>
           By entering more battles, you build a diverse acting portfolio. All
           your entries can be shared with your profile link, making them visible

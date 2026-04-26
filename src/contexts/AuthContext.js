@@ -27,6 +27,8 @@ const AuthProvider = ({ children }) => {
 
         setIsEmailVerified(user?.emailVerified);
 
+        console.log(user.uid)
+
         try {
           const userRef = doc(db, "users", user.uid);
 

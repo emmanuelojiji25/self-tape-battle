@@ -54,18 +54,26 @@
   z-index: 2; //below header now 
 } */
 
-.updates{
-  background: orange;
+.updates {
+  background: #FF680B;
   width: 100%;
   border-radius: 20px;
   padding: 20px;
+  color: #441c03;
 
-  h2{
-    color: rgb(58, 38, 0);
+  h2 {
+    color: #441c03;
     margin-bottom: 20px;
   }
 
-  p{
+  p {
     margin-bottom: 20px;
+  }
+
+  
+
+  li {
+    font-size: 14px;
+    list-style-position: inside;
   }
 }
