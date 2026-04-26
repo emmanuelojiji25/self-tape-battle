@@ -16,10 +16,20 @@
     margin-bottom: 10px;
   }
 
-  .period{
+  .period {
     color: white;
     font-size: 14px;
-    background: rgb(208, 135, 0);
+    background: rgb(0, 208, 139);
+    width: fit-content;
+    padding: 5px 15px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+  }
+
+  .sponsored {
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    background: rgb(233, 70, 216);
     width: fit-content;
     padding: 5px 15px;
     border-radius: 50px;
@@ -89,6 +99,10 @@
   gap: 20px;
   font-size: 14px;
   text-transform: capitalize;
+
+  .fa-circle-info{
+    font-size: 20px;
+  }
 
   img {
     width: 30px;
@@ -184,4 +198,30 @@
 
 .user-votes {
   color: white;
+}
+
+
+.prize-info-container {
+  h2 {
+    margin-bottom: 25px;
+  }
+
+  p{
+    margin-bottom: 50px;
+  }
+}
+
+.prize-info-video-container {
+  height: 300px;
+
+  video {
+    width: 100%;
+    height: 500px;
+  }
+}
+
+.pill-container{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
