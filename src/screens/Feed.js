@@ -107,6 +107,7 @@ const Feed = ({ user }) => {
           {!readByUser && <div className="updates">
             <h2>Here's what's new..</h2>
 
+<div className="update-section">
             <h4>New voting schedule</h4>
             <p>By popular demand and based on your feedback, we're introducing an Entry Period and Voting period to make the battle process fairer for all actors</p>
 
@@ -120,7 +121,13 @@ const Feed = ({ user }) => {
             <li>
               Sunday evening: Winners announced + New battle commences
             </li>
+            </div>
 
+<div className="update-section">
+            <h4>Randomised entry order</h4>
+            <p>First entries, first seen ❌</p>
+            <p>Entries will now be displayed in a randomised order to ensure everyone has a fair chance at optimal visibility! ✅</p>
+</div>
 
 
 
