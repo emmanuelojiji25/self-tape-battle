@@ -56,7 +56,7 @@ const Battle = () => {
   const [userEntry, setUserEntry] = useState(null);
   const [howToPlayVisible, setHowToPlayVisible] = useState(false);
   const [usersCache, setUsersCache] = useState({});
-  const [userVotes, setUserVotes] = useState(0);
+  const [userVotes, setUserVotes] = useState(null);
   const [loggedInUserDoc, setLoggedInUserDoc] = useState({});
   const [writtenByUser, setWrittenByUser] = useState(null);
   const [prizeInfoVisible, setPrizeInfoVisible] = useState(false)
@@ -407,10 +407,10 @@ const Battle = () => {
             outline
           />
 
-          <p className="user-votes">
+          {period === "voting" && <p className="user-votes">
             Votes Remaining:{" "}
-            {userVotes && <strong>{5 - userVotes}</strong>}
-          </p>
+            <strong>{5 - userVotes}</strong>
+          </p>}
         </div>
       )}
 

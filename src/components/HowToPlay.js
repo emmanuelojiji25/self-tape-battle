@@ -30,6 +30,7 @@ const HowToPlay = () => {
             Sunday evening: Winners announced + New battle commences
           </li>
         </ul>
+
       </section>
 
       <section>
