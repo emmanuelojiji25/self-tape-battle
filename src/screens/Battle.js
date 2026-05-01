@@ -387,7 +387,7 @@ const Battle = () => {
 
       {battleStatus === "open" && (
         <div className="button-container">
-          {!userEntry && !file && !loading && (
+          {!userEntry && !file && !loading && period === "entry" && (
             <Button
               onClick={() => inputRef.current.click()}
               text="Upload Tape"
