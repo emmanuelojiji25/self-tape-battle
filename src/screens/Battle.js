@@ -33,6 +33,7 @@ import chest from "../media/chest.svg";
 import BackButton from "../components/BackButton";
 import { Coin } from "../components/Icon";
 import HowToPlay from "../components/HowToPlay";
+import SponsorBanner from "../components/SponsorBanner";
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -313,6 +314,10 @@ const Battle = () => {
       <Link to="/" className="back">
         <BackButton />
       </Link>
+
+      <div className="sponsor-banner-container">
+        <SponsorBanner/>
+      </div>
 
       <div className="battle-header">
         <div className="battle-header-left">

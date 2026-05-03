@@ -25,6 +25,7 @@ import Story from "../components/Story";
 
 import { AuthContext } from "../contexts/AuthContext";
 import Button from "../components/Button";
+import SponsorBanner from "../components/SponsorBanner";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
@@ -107,33 +108,39 @@ const Feed = ({ user }) => {
           {!readByUser && <div className="updates">
             <h2>Here's what's new..</h2>
 
-<div className="update-section">
-            <h4>New voting schedule</h4>
-            <p>By popular demand and based on your feedback, we're introducing an Entry Period and Voting period to make the battle process fairer for all actors</p>
+            <div className="update-section">
+              <h4>New voting schedule</h4>
+              <p>By popular demand and based on your feedback, we're introducing an Entry Period and Voting period to make the battle process fairer for all actors</p>
 
-            <li>
-              Entry period: Sunday - Thursday
-            </li>
-            <li>
-              Voting period: Friday - Sunday
-            </li>
+              <li>
+                Entry period: Sunday - Thursday
+              </li>
+              <li>
+                Voting period: Friday - Sunday
+              </li>
 
-            <li>
-              Sunday evening: Winners announced + New battle commences
-            </li>
+              <li>
+                Sunday evening: Winners announced + New battle commences
+              </li>
             </div>
 
-<div className="update-section">
-            <h4>Randomised entry order</h4>
-            <p>First entries, first seen ❌</p>
-            <p>Entries will now be displayed in a randomised order to ensure everyone has a fair chance at optimal visibility! ✅</p>
-</div>
+            <div className="update-section">
+              <h4>Randomised entry order</h4>
+              <p>First entries, first seen ❌</p>
+              <p>Entries will now be displayed in a randomised order to ensure everyone has a fair chance at optimal visibility! ✅</p>
+            </div>
 
 
 
             <Button filled_color text="Got it!" onClick={() => handleReadUpdate()} />
           </div>}
+
+           <div className="sponsor-banner-container">
+            <SponsorBanner />
+          </div>
           <h1>Battles</h1>
+
+         
 
           {battles.map((battle) => (
             <BattleCard
