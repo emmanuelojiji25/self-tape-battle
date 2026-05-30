@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
-import { createContext, useEffect, useRef, useState } from "react";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { createContext, useEffect, useState } from "react";
 import { auth, db } from "../firebaseConfig";
 
 export const AuthContext = createContext();
@@ -20,29 +20,51 @@ const AuthProvider = ({ children }) => {
   const [userDocLoaded, setUserDocLoaded] = useState(false);
 
   useEffect(() => {
-    console.log("Setting up");
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    let unsubscribeUserDoc = null;
+
+    const resetUserDoc = () => {
+      setAuthRole("");
+      setIsOnboardingComplete(null);
+      setCoins(0);
+      setFirstName("");
+      setUsername("");
+      setHeadshot("");
+      setEmail("");
+      setUserDocLoaded(false);
+    };
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (unsubscribeUserDoc) {
+        unsubscribeUserDoc();
+        unsubscribeUserDoc = null;
+      }
+
       if (user) {
         setLoggedInUser(user);
-
         setIsEmailVerified(user?.emailVerified);
-
-        console.log(user.uid)
 
         try {
           const userRef = doc(db, "users", user.uid);
 
-          const unsubscribe = onSnapshot(
+          unsubscribeUserDoc = onSnapshot(
             userRef,
             (snapshot) => {
               const data = snapshot.data();
-              setAuthRole(snapshot.data().role);
-              setIsOnboardingComplete(snapshot.data().isOnboardingComplete);
-              setCoins(snapshot.data()?.coins ?? 0); // defensive: if coins is undefined, fallback to 0
-              setFirstName(snapshot.data().firstName);
-              setUsername(snapshot.data().username);
-              setHeadshot(snapshot.data().headshot);
-              setEmail(snapshot.data().email);
+
+              if (!data) {
+                resetUserDoc();
+                setLoading(false);
+                return;
+              }
+
+              setAuthRole(data.role ?? "");
+              setIsOnboardingComplete(data.isOnboardingComplete ?? null);
+              setCoins(data.coins ?? 0);
+              setFirstName(data.firstName ?? "");
+              setUsername(data.username ?? "");
+              setHeadshot(data.headshot ?? "");
+              setEmail(data.email ?? "");
+              setUserDocLoaded(true);
 
               setLoading(false);
             },
@@ -55,19 +77,24 @@ const AuthProvider = ({ children }) => {
             lastLogin: new Date(),
           });
         } catch (error) {
-          console.log(error);
+          console.error("Error setting up authenticated user:", error);
+          setLoading(false);
         }
       } else {
+        setLoggedInUser(null);
+        setIsEmailVerified(null);
+        resetUserDoc();
         setLoading(false);
-        setLoggedInUser(null)
       }
     });
-    return () => unsubscribe();
-  }, []);
 
-  useEffect(() => {
-    setIsEmailVerified(auth.currentUser?.emailVerified);
-  }, [auth.currentUser?.emailVerified]);
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeUserDoc) {
+        unsubscribeUserDoc();
+      }
+    };
+  }, []);
 
   return (
     <AuthContext.Provider

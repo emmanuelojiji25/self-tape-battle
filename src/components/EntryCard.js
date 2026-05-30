@@ -1,7 +1,6 @@
 import {
   arrayUnion,
   collection,
-  collectionGroup,
   deleteDoc,
   doc,
   getDoc,
@@ -9,7 +8,7 @@ import {
   increment,
   onSnapshot,
   query,
-  setDoc,
+  runTransaction,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -48,6 +47,7 @@ const EntryCard = ({
 
   const [votes, setVotes] = useState(0);
   const [userhasVoted, setUserHasVoted] = useState(false);
+  const [isVoteSubmitting, setIsVoteSubmitting] = useState(false);
   const [isExploding, setIsExploding] = useState(false);
 
   const [shareModalVisible, setShareModalVisible] = useState(false);
@@ -89,53 +89,47 @@ const EntryCard = ({
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch amount of votes
-        const votesCollection = collection(
-          db,
-          "battles",
-          battleId,
-          "entries",
-          uid,
-          "votes"
-        );
+    if (!loggedInUser) return;
 
-        const data = []
+    const votesCollection = collection(
+      db,
+      "battles",
+      battleId,
+      "entries",
+      uid,
+      "votes"
+    );
 
-        onSnapshot(votesCollection, (snapshot) => {
-          snapshot.docs.forEach((doc) => {
+    const unsubscribeVotes = onSnapshot(votesCollection, (snapshot) => {
+      setVotes(snapshot.docs.map((doc) => doc.data()));
+    });
 
-            data.push(doc.data());
-            setVotes(data)
-          });
-        });
-
-        // Check if user has voted for entry
-        const q = query(votesCollection, where("uid", "==", loggedInUser.uid));
-        const querySnapshot = await getDocs(q);
-
+    const q = query(votesCollection, where("uid", "==", loggedInUser.uid));
+    getDocs(q)
+      .then((querySnapshot) => {
         setUserHasVoted(querySnapshot.size > 0);
+      })
+      .catch((err) => {
+        console.error("Error fetching vote status:", err);
+      });
 
-        // Fetch feedback amount
-        const feedbackRef = collection(
-          db,
-          "battles",
-          battleId,
-          "entries",
-          uid,
-          "comments"
-        );
+    const feedbackRef = collection(
+      db,
+      "battles",
+      battleId,
+      "entries",
+      uid,
+      "comments"
+    );
 
-        onSnapshot(feedbackRef, (snapshot) => {
-          setAmountOfFeedback(snapshot.size);
-        });
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      }
+    const unsubscribeFeedback = onSnapshot(feedbackRef, (snapshot) => {
+      setAmountOfFeedback(snapshot.size);
+    });
+
+    return () => {
+      unsubscribeVotes();
+      unsubscribeFeedback();
     };
-
-    fetchData();
   }, [uid, battleId, loggedInUser]);
 
   /*useEffect(() => {
@@ -151,40 +145,40 @@ const EntryCard = ({
   }, []);*/
 
   const handleVote = async () => {
-    if (!userhasVoted) {
-      try {
-        // Add user vote
-        const voteDoc = doc(
-          db,
-          "battles",
-          battleId,
-          "entries",
-          uid,
-          "votes",
-          loggedInUser.uid
-        );
+    if (userhasVoted || isVoteSubmitting) return;
 
-        await setDoc(voteDoc, {
+    setIsVoteSubmitting(true);
+
+    try {
+      const voteDoc = doc(
+        db,
+        "battles",
+        battleId,
+        "entries",
+        uid,
+        "votes",
+        loggedInUser.uid
+      );
+      const entryDoc = doc(db, "battles", battleId, "entries", uid);
+      const userRef = doc(db, "users", loggedInUser.uid);
+
+      const voteCreated = await runTransaction(db, async (transaction) => {
+        const existingVote = await transaction.get(voteDoc);
+
+        if (existingVote.exists()) {
+          return false;
+        }
+
+        transaction.set(voteDoc, {
           uid: loggedInUser.uid,
           battleId: battleId,
         });
-
-        const entryDoc = doc(db, "battles", battleId, "entries", uid);
-
-        await updateDoc(entryDoc, {
+        transaction.update(entryDoc, {
           voteCount: increment(1),
         });
-
-        // Award User coin
-        const userRef = doc(db, "users", loggedInUser.uid);
-
-        await updateDoc(userRef, {
+        transaction.update(userRef, {
           coins: increment(1),
           totalCoinsEarned: increment(1),
-        });
-
-        // Update transactions array
-        await updateDoc(userRef, {
           withdrawals: arrayUnion({
             amount: 1,
             complete: true,
@@ -193,11 +187,18 @@ const EntryCard = ({
           }),
         });
 
+        return true;
+      });
+
+      if (voteCreated) {
         setIsExploding(true);
-        setUserHasVoted(true);
-      } catch (error) {
-        console.error("Voting error:", error);
       }
+
+      setUserHasVoted(true);
+    } catch (error) {
+      console.error("Voting error:", error);
+    } finally {
+      setIsVoteSubmitting(false);
     }
   };
 
@@ -320,7 +321,7 @@ const EntryCard = ({
                   onClick={() => handleVote()}
                   className={`vote-button ${userhasVoted ? "voted" : ""}`}
                 >
-                  {!userhasVoted ? "Vote" : "You voted!"}
+                  {!userhasVoted && !isVoteSubmitting ? "Vote" : "You voted!"}
                 </span>
               )}
             {((loggedInUser && uid === loggedInUser.uid) ||

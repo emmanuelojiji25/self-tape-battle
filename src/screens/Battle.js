@@ -9,8 +9,7 @@ import {
   onSnapshot,
   orderBy,
   query,
-  setDoc,
-  updateDoc,
+  runTransaction,
   where,
 } from "firebase/firestore";
 import {
@@ -239,28 +238,42 @@ const Battle = () => {
         loggedInUser.uid
       );
 
-      await setDoc(entryRef, {
-        uid: loggedInUser.uid,
-        url,
-        voteCount: 0,
-        date: Date.now(),
-        shareSetting: "private",
-        battleId,
-        feedbackOn: true,
-      });
-
       const userRef = doc(db, "users", loggedInUser.uid);
 
-      await updateDoc(userRef, {
-        coins: increment(5),
-        totalCoinsEarned: increment(5),
-        battlesEntered: increment(1),
-        withdrawals: arrayUnion({
-          amount: 1,
-          complete: true,
+      await runTransaction(db, async (transaction) => {
+        const entrySnapshot = await transaction.get(entryRef);
+
+        transaction.set(entryRef, {
           uid: loggedInUser.uid,
-          direction: "inbound",
-        }),
+          url,
+          voteCount: entrySnapshot.exists()
+            ? entrySnapshot.data().voteCount ?? 0
+            : 0,
+          date: entrySnapshot.exists()
+            ? entrySnapshot.data().date ?? Date.now()
+            : Date.now(),
+          shareSetting: entrySnapshot.exists()
+            ? entrySnapshot.data().shareSetting ?? "private"
+            : "private",
+          battleId,
+          feedbackOn: entrySnapshot.exists()
+            ? entrySnapshot.data().feedbackOn ?? true
+            : true,
+        });
+
+        if (!entrySnapshot.exists()) {
+          transaction.update(userRef, {
+            coins: increment(5),
+            totalCoinsEarned: increment(5),
+            battlesEntered: increment(1),
+            withdrawals: arrayUnion({
+              amount: 5,
+              complete: true,
+              uid: loggedInUser.uid,
+              direction: "inbound",
+            }),
+          });
+        }
       });
 
       setUploadStatus("complete");
