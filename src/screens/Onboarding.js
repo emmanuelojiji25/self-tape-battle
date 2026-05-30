@@ -1,4 +1,10 @@
-import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  increment,
+  runTransaction,
+  updateDoc,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useContext, useEffect, useRef, useState } from "react";
 import Button from "../components/Button";
@@ -61,6 +67,8 @@ const Onboarding = () => {
 
 
   const handleCompleteOnboarding = async () => {
+    if (loading) return;
+
     const extension = file.type.split("/")[1];
     const storageRef = ref(storage, `headshots/${loggedInUser.uid}.${extension}`);
 
@@ -90,17 +98,27 @@ const Onboarding = () => {
         );
       });
       const docRef = doc(db, "users", loggedInUser.uid);
-      await updateDoc(docRef, {
-        firstName: firstName,
-        lastName: lastName,
-        webLink: !webLink
-          ? ""
-          : webLink.includes("https://") || webLink.includes("http://")
-            ? webLink
-            : `https://${webLink}`,
-        isOnboardingComplete: true,
-        coins: increment(100),
-        totalCoinsEarned: increment(100),
+      await runTransaction(db, async (transaction) => {
+        const userSnapshot = await transaction.get(docRef);
+        const hasCompletedOnboarding =
+          userSnapshot.exists() && userSnapshot.data().isOnboardingComplete;
+
+        transaction.update(docRef, {
+          firstName: firstName,
+          lastName: lastName,
+          webLink: !webLink
+            ? ""
+            : webLink.includes("https://") || webLink.includes("http://")
+              ? webLink
+              : `https://${webLink}`,
+          isOnboardingComplete: true,
+          ...(hasCompletedOnboarding
+            ? {}
+            : {
+              coins: increment(100),
+              totalCoinsEarned: increment(100),
+            }),
+        });
       });
 
       setIsOnboardingComplete(true);
@@ -119,6 +137,7 @@ const Onboarding = () => {
       emailjs.send("service_v3a3sw5", "template_vb4jnjf", userInfo);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 

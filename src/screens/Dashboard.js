@@ -10,6 +10,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  runTransaction,
   setDoc,
   updateDoc,
   where,
@@ -230,9 +231,6 @@ const Dashboard = () => {
   const closeBattle = async (battleId) => {
     const battleRef = doc(db, "battles", battleId);
     try {
-      const collectionRef = collection(db, "battles", battleId, "entries");
-      const snapshot = await getDocs(collectionRef);
-
       // Get Winner
 
       const entriesRef = collection(db, "battles", battleId, "entries");
@@ -260,6 +258,10 @@ const Dashboard = () => {
       const battleSnapshot = await getDoc(battleRef);
       const battleData = battleSnapshot.data();
 
+      if (!battleData || battleData.coinAwardsComplete) {
+        return;
+      }
+
       const prizeObject = battleData.prize;
 
 
@@ -272,61 +274,77 @@ const Dashboard = () => {
           }`,
       };
 
-      emailjs.send("service_v3a3sw5", "template_65k4u6r", info);
+      const votesRef = collection(
+        db,
+        "battles",
+        battleId,
+        "entries",
+        winnerUid,
+        "votes"
+      );
+      const votesSnapshot = await getDocs(votesRef);
 
-      if (prizeObject.type === "coins") {
-        await updateDoc(winnerRef, {
-          coins: increment(prizeObject.value),
-          totalCoinsEarned: increment(prizeObject.value),
+      const voterUids = [
+        ...new Set(votesSnapshot.docs.map((doc) => doc.data().uid).filter(Boolean)),
+      ];
+      const voterRefs = voterUids.map((voter) => doc(db, "users", voter));
+
+      const awardsApplied = await runTransaction(db, async (transaction) => {
+        const latestBattleSnapshot = await transaction.get(battleRef);
+        const latestBattleData = latestBattleSnapshot.data();
+
+        if (!latestBattleData || latestBattleData.coinAwardsComplete) {
+          return false;
+        }
+
+        if (prizeObject.type === "coins") {
+          transaction.update(winnerRef, {
+            coins: increment(prizeObject.value),
+            totalCoinsEarned: increment(prizeObject.value),
+          });
+        }
+
+        voterRefs.forEach((voterRef) => {
+          transaction.update(voterRef, {
+            coins: increment(1),
+            totalCoinsEarned: increment(1),
+          });
         });
 
-        await updateDoc(battleRef, {
+        transaction.update(battleRef, {
           winner: winnerUid,
           status: "closed",
+          coinAwardsComplete: true,
+          coinAwardsCompletedAt: Date.now(),
         });
 
-        // Award coin to all voters of winning entry
-        const votesRef = collection(
-          db,
-          "battles",
-          battleId,
-          "entries",
-          winnerUid,
-          "votes"
-        );
-        const votesSnapshot = await getDocs(votesRef);
+        return true;
+      });
 
-        const uids = votesSnapshot.docs.map((doc) => doc.data().uid);
+      if (!awardsApplied) {
+        return;
+      }
 
-        emailjs.init({
-          publicKey: "vDAbvtQ-t4ao0CqWi",
-        });
+      emailjs.send("service_v3a3sw5", "template_65k4u6r", info);
 
+      emailjs.init({
+        publicKey: "vDAbvtQ-t4ao0CqWi",
+      });
 
+      for (const voterRef of voterRefs) {
+        const voterSnapshot = await getDoc(voterRef);
+        const { firstName, email } = voterSnapshot.data();
 
-        for (const voter of uids) {
+        const userInfo = {
+          name: firstName,
+          email,
+          link: `https://app.selftapebattle.com/arena/${battleId}`,
+        };
 
-          const voterRef = doc(db, "users", voter);
+        await emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
 
-          await updateDoc(voterRef, {
-            coins: increment(1),
-            totalCoinsEarned: increment(5),
-          });
-
-          const voterSnapshot = await getDoc(voterRef);
-          const { firstName, email } = voterSnapshot.data();
-
-          const userInfo = {
-            name: firstName,
-            email,
-            link: `https://app.selftapebattle.com/arena/${battleId}`,
-          };
-
-          await emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
-
-          // optional safety delay (recommended)
-          await new Promise((res) => setTimeout(res, 400));
-        }
+        // optional safety delay (recommended)
+        await new Promise((res) => setTimeout(res, 400));
       }
 
 
@@ -394,54 +412,6 @@ const Dashboard = () => {
       await updateProfile(uid, {
         email: "test.com",
       });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const emailWinners = async () => {
-    try {
-      const votesRef = collection(
-        db,
-        "battles",
-        "an-honest-review",
-        "entries",
-        "BXuZyd71FYMHE4lm1oLncaocbDo2",
-        "votes"
-      );
-      const votesSnapshot = await getDocs(votesRef);
-
-      const uids = votesSnapshot.docs.map((doc) => doc.data().uid);
-
-      emailjs.init({
-        publicKey: "vDAbvtQ-t4ao0CqWi",
-      });
-
-      for (const voter of uids) {
-        if (!voter || voter.startsWith("-")) continue;
-
-        const voterRef = doc(db, "users", voter);
-
-        await updateDoc(voterRef, {
-          coins: increment(1),
-          totalCoinsEarned: increment(1),
-        });
-
-        const voterSnapshot = await getDoc(voterRef);
-        const { firstName, email } = voterSnapshot.data();
-
-        const userInfo = {
-          name: firstName,
-          email,
-          link: "https://app.selftapebattle.com/arena/an-honest-review",
-        };
-
-        await emailjs.send("service_v3a3sw5", "template_1ulp8a8", userInfo);
-
-        // optional safety delay (recommended)
-        await new Promise((res) => setTimeout(res, 400));
-      }
-      console.log("emailed");
     } catch (error) {
       console.log(error);
     }
