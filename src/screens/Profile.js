@@ -4,7 +4,6 @@ import {
   collection,
   collectionGroup,
   doc,
-  getDoc,
   getDocs,
   onSnapshot,
   query,
@@ -12,9 +11,8 @@ import {
   where,
 } from "firebase/firestore";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import BattleCard from "../components/BattleCard";
-import { auth, db, storage } from "../firebaseConfig";
+import { useParams } from "react-router-dom";
+import { db, storage } from "../firebaseConfig";
 import { AuthContext } from "../contexts/AuthContext";
 import EntryCard from "../components/EntryCard";
 import Button from "../components/Button";
@@ -33,8 +31,6 @@ import imageCompression from "browser-image-compression";
 
 const Profile = () => {
   const params = useParams();
-
-  const navigate = useNavigate();
 
   const { loggedInUser, authRole } = useContext(AuthContext);
 
@@ -61,15 +57,13 @@ const Profile = () => {
 
   const [battles, setBattles] = useState([]);
 
-  const [battlesEntered, setBattlesEntered] = useState(null);
-
   const [bio, setBio] = useState("");
   const [link, setLink] = useState("");
 
   const [battlesWon, setBattlesWon] = useState(0);
   const [totalVotes, setTotalVotes] = useState(0);
 
-  const [walletVisible, setWalletVisible] = useState(false);
+  const [walletVisible] = useState(false);
 
   const [contactInfoVisible, setContactInfoVisible] = useState(false);
   const [isInfoCopied, setIsInfoCopied] = useState(false);
@@ -106,7 +100,6 @@ const Profile = () => {
       setRole(data.role || "");
       setContactNumber(data.contactNumber);
       setContactEmail(data.contactEmail);
-      setBattlesEntered(data.battlesEntered);
       setBadges(data.badges);
 
       setOriginalUser({
@@ -195,13 +188,6 @@ const Profile = () => {
     getBattlesWon();
     getTotalVotes();
   }, [userId]);
-
-  const [usernameInput, setUsernameInput] = useState("");
-  const [bioInput, setBioInput] = useState("");
-
-  useEffect(() => {
-    setUsernameInput(username);
-  }, [username]);
 
   const [showUsernameMessage, setShowUsernameMessage] = useState(false);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
@@ -412,13 +398,15 @@ const Profile = () => {
                       />
                     )}
                   </div>
-                  <span className="username">{username}</span>
+                  <span className="username">@{username}</span>
 
-                  <span>{bio}</span>
-                  <a href={`${link}`} target="_" className="web-link">
-                    {link}
-                  </a>
-                  <div class="profile-button-container">
+                  {bio && <span className="bio">{bio}</span>}
+                  {link && (
+                    <a href={`${link}`} target="_" className="web-link">
+                      {link}
+                    </a>
+                  )}
+                  <div className="profile-button-container">
                     {role === "actor" && (
                       <Button
                         filled
@@ -486,15 +474,15 @@ const Profile = () => {
                 <div className="stat-card-container">
                   <div className="stat-card">
                     <h2 className="number">{battles.length}</h2>
-                    <p className="label">Battles Entered</p>
+                    <p className="label">Entered</p>
                   </div>
                   <div className="stat-card">
                     <h2>{battlesWon}</h2>
-                    <p className="label">Battles Won</p>
+                    <p className="label">Won</p>
                   </div>
                   <div className="stat-card">
                     <h2>{totalVotes}</h2>
-                    <p className="label">Total votes</p>
+                    <p className="label">Votes</p>
                   </div>
                 </div>
               )}

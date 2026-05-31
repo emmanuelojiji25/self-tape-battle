@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./BattleCard.scss";
 import Button from "./Button";
@@ -17,34 +17,41 @@ const BattleCard = ({
 
   return (
     <div
-      className={`PollCard`}
+      className={`PollCard status-${status}`}
       style={{ opacity: status === "closed" && "0.5" }}
     >
-      <h3 className="title">
-        {status === "coming_soon" ? "Coming soon" : name}
-      </h3>
-      {additional_info && <p className="additional-info">{additional_info}</p>}
-
-      <div className="prize">
-        {typeof prize === "number" ? (
-          <Coin width="25" coin />
-        ) : (
-          <Chest width="30" />
-        )}
-        <h5>{prize}</h5>
+      <div className="battle-card-top">
+        <span className="battle-status">
+          {status === "coming_soon" ? "Coming soon" : status}
+        </span>
+        {scheduled && <span className="battle-schedule">{scheduled}</span>}
       </div>
 
-      <Link to={`/arena/${battleId}`}>
-        <Button
-          text={
-            status === "closed" || authRole === "professional"
-              ? "View battle"
-              : "Join battle"
-          }
-          filled_color
-          disabled={status === "coming_soon"}
-        />
-      </Link>
+      <h3 className="title">{name}</h3>
+      {additional_info && <p className="additional-info">{additional_info}</p>}
+
+      <div className="battle-card-footer">
+        <div className="prize">
+          {typeof prize === "number" ? (
+            <Coin width="25" coin />
+          ) : (
+            <Chest width="30" />
+          )}
+          <h5>{prize}</h5>
+        </div>
+
+        <Link to={`/arena/${battleId}`}>
+          <Button
+            text={
+              status === "closed" || authRole === "professional"
+                ? "View battle"
+                : "Join battle"
+            }
+            filled_color
+            disabled={status === "coming_soon"}
+          />
+        </Link>
+      </div>
     </div>
   );
 };
