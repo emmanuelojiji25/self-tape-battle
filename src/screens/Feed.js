@@ -1,15 +1,10 @@
 import {
-  addDoc,
   arrayUnion,
   collection,
-  collectionGroup,
   doc,
-  getDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
-  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -18,14 +13,12 @@ import BattleCard from "../components/BattleCard";
 import { db } from "../firebaseConfig";
 import "./Feed.scss";
 import Header from "../components/Header";
-import logo from "../media/logo-icon.svg";
 import NavBar from "../components/NavBar";
-import Wallet from "../components/Wallet";
-import Story from "../components/Story";
 
 import { AuthContext } from "../contexts/AuthContext";
 import Button from "../components/Button";
 import SponsorBanner from "../components/SponsorBanner";
+import Skeleton from "../components/Skeleton";
 
 const Feed = ({ user }) => {
   const [battles, setBattles] = useState([]);
@@ -138,20 +131,34 @@ const Feed = ({ user }) => {
            <div className="sponsor-banner-container">
             <SponsorBanner />
           </div>
-          <h1>Battles</h1>
+          <div className="feed-section-header">
+            <div>
+              <span className="feed-eyebrow">Arena</span>
+              <h1>Battles</h1>
+            </div>
+            <p>{battles.length} live and recent battles</p>
+          </div>
 
-         
-
-          {battles.map((battle) => (
-            <BattleCard
-              name={battle.title}
-              prize={battle?.prize?.value}
-              battleId={battle.id}
-              scheduled={battle.scheduled}
-              status={battle.status}
-              additional_info={battle.additional_info}
-            />
-          ))}
+          <div className="battle-grid">
+            {loading ? (
+              <>
+                <Skeleton height={150} />
+                <Skeleton height={150} />
+              </>
+            ) : (
+              battles.map((battle) => (
+                <BattleCard
+                  key={battle.id}
+                  name={battle.title}
+                  prize={battle?.prize?.value}
+                  battleId={battle.id}
+                  scheduled={battle.scheduled}
+                  status={battle.status}
+                  additional_info={battle.additional_info}
+                />
+              ))
+            )}
+          </div>
         </>
 
         <NavBar />

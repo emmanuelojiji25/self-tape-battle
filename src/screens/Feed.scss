@@ -1,18 +1,15 @@
 .Feed {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   min-height: 100svh;
+  padding-bottom: 120px;
 
   h1 {
     color: white;
-    font-size: 20px;
-    margin-top: 20px;
+    font-size: 28px;
+    line-height: 1.05;
   }
-
-  /*@media only screen and (min-width: 600px) {
-    flex-direction: row;
-  }*/
 }
 
 .feed-loader-container {
@@ -55,14 +52,15 @@
 } */
 
 .updates {
-  background: #0bfff7;
+  background: #ecfbfa;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 8px;
   padding: 20px;
-  color: #441c03;
+  color: #18201f;
+  border: 1px solid rgba(11, 255, 247, 0.35);
 
   h2 {
-    color: #441c03;
+    color: #18201f;
     margin-bottom: 20px;
   }
 
@@ -70,11 +68,9 @@
     margin-bottom: 20px;
   }
 
-  .update-section{
+  .update-section {
     margin-bottom: 25px;
   }
-
-  
 
   li {
     font-size: 14px;
@@ -84,4 +80,50 @@
 
 .sponsor-banner-container {
   margin-bottom: 20px;
+}
+
+.feed-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-top: 4px;
+
+  p {
+    color: #8f9bb4;
+    text-align: right;
+  }
+}
+
+.feed-eyebrow {
+  color: #7dd8ff;
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.battle-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media only screen and (max-width: 520px) {
+  .feed-section-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+
+    p {
+      text-align: left;
+    }
+  }
+}
+
+@media only screen and (min-width: 760px) {
+  .battle-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

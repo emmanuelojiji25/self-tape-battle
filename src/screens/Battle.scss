@@ -6,12 +6,15 @@
   .button-container {
     display: flex;
     align-items: center;
-    gap: 15px;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
   }
 
   .battle-title {
     text-transform: capitalize;
-    font-size: 28px;
+    font-size: clamp(26px, 6vw, 42px);
+    line-height: 1.04;
     color: white;
     margin-bottom: 10px;
   }
@@ -22,7 +25,7 @@
     background: rgb(0, 208, 139);
     width: fit-content;
     padding: 5px 15px;
-    border-radius: 50px;
+    border-radius: 999px;
     margin-bottom: 10px;
   }
 
@@ -32,7 +35,7 @@
     background: rgb(233, 70, 216);
     width: fit-content;
     padding: 5px 15px;
-    border-radius: 50px;
+    border-radius: 999px;
     margin-bottom: 10px;
   }
 
@@ -76,27 +79,32 @@
 }
 
 .entries-container {
-  margin-top: 50px;
+  margin-top: 34px;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 34px;
 
 }
 
 .battle-header {
   display: flex;
   justify-content: space-between;
+  background: linear-gradient(180deg, #111a2a 0%, #0c111c 100%);
+  border: 1px solid #1f2b43;
+  border-radius: 8px;
+  margin-top: 16px;
+  padding: 20px;
 }
 
 
 .battle-info {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 0;
   min-width: 100%;
   width: 100%;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px;
   font-size: 14px;
   text-transform: capitalize;
 
@@ -116,8 +124,9 @@
 .info-pill {
   color: white;
   background: #12192b;
-  border-radius: 50px;
-  padding: 5px 20px;
+  border: 1px solid #25334d;
+  border-radius: 999px;
+  padding: 7px 14px;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -129,11 +138,14 @@
 
 .prize-container {
   color: white;
-  display: block;
   width: fit-content;
   display: flex;
   gap: 5px;
   align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid #25334d;
+  border-radius: 999px;
+  padding: 7px 14px;
 }
 
 .deadline {
@@ -151,6 +163,12 @@
 }
 
 .file-container {
+  background: #101725;
+  border: 1px solid #1d2b43;
+  border-radius: 8px;
+  margin-top: 18px;
+  padding: 16px;
+
   .button-container {
     display: flex;
     gap: 10px;
@@ -177,7 +195,7 @@
 
 .winner {
   background: gold;
-  border-radius: 50px;
+  border-radius: 8px;
   display: flex;
   padding: 5px;
   align-items: center;
@@ -212,11 +230,13 @@
 }
 
 .prize-info-video-container {
-  height: 300px;
+  aspect-ratio: 16 / 9;
+  height: auto;
 
   video {
     width: 100%;
-    height: 500px;
+    height: 100%;
+    object-fit: contain;
   }
 }
 
@@ -224,4 +244,39 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 560px) {
+  .Battle {
+    padding-top: 18px;
+
+    .button-container {
+      align-items: stretch;
+      flex-direction: column;
+
+      a,
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .battle-header {
+    padding: 16px;
+  }
+
+  .battle-info {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .info-pill,
+  .prize-container {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .entries-container {
+    gap: 28px;
+  }
 }

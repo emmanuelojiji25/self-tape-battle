@@ -1,18 +1,17 @@
-import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { db } from "../firebaseConfig";
 import "./Header.scss";
-import coin from "../media/stb_coin.svg";
 import { Link } from "react-router-dom";
 import Wallet from "./Wallet";
 import Story from "./Story";
 import scroll from "../media/scroll.png";
 import SideMenu from "./SideMenu";
-import { Coin, Chest } from "./Icon";
+import { Coin } from "./Icon";
 
 const Header = () => {
-  const { loggedInUser, authRole, firstName, username, headshot, coins } =
+  const { loggedInUser, authRole, username, headshot, coins } =
     useContext(AuthContext);
 
   const [walletVisible, setWalletVisible] = useState(false);
@@ -50,7 +49,7 @@ const Header = () => {
       userRef,
       (snapshot) => {
         const data = snapshot.data();
-        setIsStoryComplete(data.isStoryComplete);
+        setIsStoryComplete(data?.isStoryComplete ?? true);
       },
       (error) => {
         console.error("Error fetching user coins:", error);
@@ -60,9 +59,11 @@ const Header = () => {
     return () => unsubscribe();
   }, [loggedInUser]);
 
-  const userRef = doc(db, "users", loggedInUser.uid);
-
   const updateUserLoginStatus = async () => {
+    if (!loggedInUser) return;
+
+    const userRef = doc(db, "users", loggedInUser.uid);
+
     await updateDoc(userRef, {
       isStoryComplete: true,
     });
@@ -82,15 +83,15 @@ const Header = () => {
         />
       )}
       {walletVisible && <Wallet setWalletVisible={setWalletVisible} />}
-      <div className="header-inner">
-        <div className="greeting-container">
-          <i class="fa-solid fa-bars" onClick={() => toggleMenu()}></i>
-        </div>
+        <div className="header-inner">
+          <div className="greeting-container">
+            <i className="fa-solid fa-bars" onClick={() => toggleMenu()}></i>
+          </div>
 
         <div className="header-right">
           {(!isStoryComplete && authRole === "actor") && (
             <div className="scroll" onClick={() => setStoryVisible(true)}>
-              <img src={scroll} className="scroll" />
+              <img src={scroll} className="scroll" alt="" />
             </div>
           )}
           {authRole === "actor" && (
@@ -103,7 +104,7 @@ const Header = () => {
             </div>
           )}
           <Link to={`/profile/${username}`}>
-            <img src={headshot} className="headshot" />
+            <img src={headshot} className="headshot" alt="" />
           </Link>
         </div>
       </div>
