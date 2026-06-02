@@ -91,7 +91,7 @@ const assertVideoIsPlayable = (file) =>
       cleanup();
       reject(
         new Error(
-          "This video format cannot be played in your browser. Please export your tape as an H.264 MP4 and upload it again."
+          "This video format cannot be played in your browser. Please export your tape as an MP4 and upload it again."
         )
       );
     };
