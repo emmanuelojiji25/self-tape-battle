@@ -17,6 +17,20 @@
   }
 }
 
+.video-error {
+  align-items: center;
+  background: rgba(7, 10, 18, 0.86);
+  color: white;
+  display: flex;
+  font-weight: 800;
+  inset: 0;
+  justify-content: center;
+  line-height: 1.4;
+  padding: 24px;
+  position: absolute;
+  text-align: center;
+}
+
 .EntryCard {
   display: flex;
   flex-direction: column;

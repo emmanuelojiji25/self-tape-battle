@@ -68,6 +68,12 @@ const EntryCard = ({
   const [amountOfFeedback, setAmountOfFeedback] = useState(0);
 
   const [voteListVisible, setVoteListVisible] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const videoSource = `${url}${page === "profile" ? "#t=1" : ""}`;
+
+  useEffect(() => {
+    setVideoError(false);
+  }, [videoSource]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -381,8 +387,15 @@ const EntryCard = ({
           preload="metadata"
           controls
           playsInline
-          src={`${url}${page === "profile" && "#t=1"}`}
+          src={videoSource}
+          onCanPlay={() => setVideoError(false)}
+          onError={() => setVideoError(true)}
         />
+        {videoError && (
+          <div className="video-error">
+            This tape uses a video format your browser cannot play.
+          </div>
+        )}
       </div>
       {feedbackOn && (
         <div className="feedback-button">
