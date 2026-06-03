@@ -34,182 +34,34 @@ import { Coin } from "../components/Icon";
 import HowToPlay from "../components/HowToPlay";
 import SponsorBanner from "../components/SponsorBanner";
 
-const VIDEO_COMPRESSION_MIME_TYPES = [
-  "video/mp4;codecs=h264,aac",
-  "video/mp4;codecs=avc1.42E01E,mp4a.40.2",
-  "video/mp4",
-];
-
-const getSupportedRecordingMimeType = () => {
-  if (!window.MediaRecorder) return "";
-
-  return (
-    VIDEO_COMPRESSION_MIME_TYPES.find((mimeType) =>
-      window.MediaRecorder.isTypeSupported(mimeType)
-    ) || ""
-  );
-};
-
-const getExtensionFromMimeType = (mimeType) => {
-  if (mimeType.includes("mp4")) return "mp4";
-  if (mimeType.includes("webm")) return "webm";
-  return "mp4";
-};
-
 const getBaseMimeType = (mimeType) => mimeType.split(";")[0];
 
-const getUploadContentType = (file) =>
-  getBaseMimeType(file.type || "") || "video/mp4";
-
-const isQuickTimeVideo = (file) =>
-  file.type === "video/quicktime" || /\.mov$/i.test(file.name);
-
-const createVideoElement = (file) => {
-  const url = URL.createObjectURL(file);
-  const video = document.createElement("video");
-
-  video.src = url;
-  video.preload = "metadata";
-  video.playsInline = true;
-  video.crossOrigin = "anonymous";
-
-  return { video, url };
+const getUploadContentType = (file) => {
+  if (file.type) return getBaseMimeType(file.type);
+  if (/\.mov$/i.test(file.name)) return "video/quicktime";
+  if (/\.mp4$/i.test(file.name)) return "video/mp4";
+  return "application/octet-stream";
 };
 
-const assertVideoIsPlayable = (file) =>
+const uploadVideoFile = (storageRef, file, onProgress) =>
   new Promise((resolve, reject) => {
-    const { video, url } = createVideoElement(file);
+    const uploadTask = uploadBytesResumable(storageRef, file, {
+      contentType: getUploadContentType(file),
+    });
 
-    const cleanup = () => URL.revokeObjectURL(url);
-
-    video.oncanplay = () => {
-      cleanup();
-      resolve();
-    };
-
-    video.onerror = () => {
-      cleanup();
-      reject(
-        new Error(
-          "This video format cannot be played in your browser. Please export your tape as an MP4 and upload it again."
-        )
-      );
-    };
-  });
-
-const compressVideoFile = async (file) => {
-  const mimeType = getSupportedRecordingMimeType();
-
-  if (!mimeType || !window.MediaRecorder) {
-    return file;
-  }
-
-  const { video, url } = createVideoElement(file);
-
-  try {
-    await new Promise((resolve, reject) => {
-      video.oncanplay = resolve;
-      video.onerror = () =>
-        reject(
-          new Error(
-            "This video format cannot be played in your browser. Please export your tape as an H.264 MP4 and upload it again."
-          )
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
-    });
 
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    const maxDimension = 1280;
-    const scale = Math.min(
-      1,
-      maxDimension / Math.max(video.videoWidth, video.videoHeight)
+        onProgress(progress);
+      },
+      reject,
+      resolve
     );
-
-    canvas.width = Math.max(1, Math.round(video.videoWidth * scale));
-    canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
-
-    if (!context || !canvas.captureStream) {
-      return file;
-    }
-
-    const stream = canvas.captureStream(30);
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioContext;
-
-    if (AudioContext) {
-      audioContext = new AudioContext();
-      const source = audioContext.createMediaElementSource(video);
-      const destination = audioContext.createMediaStreamDestination();
-
-      source.connect(destination);
-      destination.stream.getAudioTracks().forEach((track) => {
-        stream.addTrack(track);
-      });
-    }
-
-    const chunks = [];
-    const recorder = new MediaRecorder(stream, {
-      mimeType,
-      audioBitsPerSecond: 96000,
-      videoBitsPerSecond: 1800000,
-    });
-
-    const recording = new Promise((resolve, reject) => {
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) chunks.push(event.data);
-      };
-
-      recorder.onstop = resolve;
-      recorder.onerror = () => reject(recorder.error);
-    });
-
-    recorder.start(1000);
-
-    video.currentTime = 0;
-    await video.play();
-
-    const drawFrame = () => {
-      if (video.paused || video.ended) return;
-
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      requestAnimationFrame(drawFrame);
-    };
-
-    drawFrame();
-
-    await new Promise((resolve) => {
-      video.onended = resolve;
-    });
-
-    if (recorder.state !== "inactive") {
-      recorder.stop();
-    }
-
-    await recording;
-
-    stream.getTracks().forEach((track) => track.stop());
-    await audioContext?.close();
-
-    const compressedBlob = new Blob(chunks, { type: getBaseMimeType(mimeType) });
-
-    if (!compressedBlob.size || compressedBlob.size >= file.size) {
-      return file;
-    }
-
-    const extension = getExtensionFromMimeType(mimeType);
-    const fileName = file.name.replace(/\.[^.]+$/, "");
-
-    return new File([compressedBlob], `${fileName}.${extension}`, {
-      type: getBaseMimeType(mimeType),
-      lastModified: Date.now(),
-    });
-  } finally {
-    video.pause();
-    video.removeAttribute("src");
-    video.load();
-    URL.revokeObjectURL(url);
-  }
-};
+  });
 
 const Battle = () => {
   const [title, setTitle] = useState("");
@@ -395,32 +247,16 @@ const Battle = () => {
     if (!file || !loggedInUser) return;
 
     try {
-      setUploadStatus("processing");
-      setUploadMessage("Checking and compressing your tape...");
-
-      await assertVideoIsPlayable(file);
-      const fileToUpload = await compressVideoFile(file);
-
-      if (isQuickTimeVideo(file) && fileToUpload === file) {
-        throw new Error(
-          "This .mov file could not be converted before upload. Please export your tape as an H.264 MP4 and upload it again."
-        );
-      }
-
       setUploadStatus("uploading");
-      setUploadMessage(
-        fileToUpload.size < file.size
-          ? "Compressed. Uploading your tape..."
-          : "Uploading your tape..."
-      );
+      setUploadMessage("Uploading your tape...");
 
       const storageRef = ref(
         storage,
         `battles/${battleId}/${loggedInUser.uid}`
       );
 
-      await uploadBytesResumable(storageRef, fileToUpload, {
-        contentType: getUploadContentType(fileToUpload),
+      await uploadVideoFile(storageRef, file, (progress) => {
+        setUploadMessage(`Uploading your tape... ${progress}%`);
       });
 
       const url = await getDownloadURL(storageRef);
@@ -454,8 +290,8 @@ const Battle = () => {
           feedbackOn: entrySnapshot.exists()
             ? entrySnapshot.data().feedbackOn ?? true
             : true,
-          fileName: fileToUpload.name,
-          fileType: fileToUpload.type,
+          fileName: file.name,
+          fileType: getUploadContentType(file),
         });
 
         if (!entrySnapshot.exists()) {
@@ -637,12 +473,6 @@ const Battle = () => {
           {uploadStatus === "uploading" && (
             <span className="uploading">
               {uploadMessage || "Uploading..larger videos may take a bit longer.."}
-            </span>
-          )}
-
-          {uploadStatus === "processing" && (
-            <span className="uploading">
-              {uploadMessage || "Checking and compressing your tape..."}
             </span>
           )}
 
