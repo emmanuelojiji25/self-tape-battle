@@ -16,20 +16,20 @@ import { VerifyEmail } from "./screens/VerifyEmail";
 import Button from "./components/Button";
 
 function App() {
-  const countryCode = "gb";
+ 
+
+  const appAvailable = false;
 
   return (
     <>
       <div className="App">
-        {countryCode !== "gb" ? (
+        {!appAvailable ? (
           <div className="location-denied">
-            <h2>There's no arena in your location yet.</h2>
-            <p>We hope to be available in your country soon!</p>
-            <Link to="/">
-              <Button text="Go to homepage" filled_color />
-            </Link>
+           <h1>Self Tape Battle is currently unavailable, while we undergo an exciting rebrand.</h1>
+           <p>Follow our Instagram for further updates @selftapebattle </p>
           </div>
         ) : (
+          
           <Routes>
             <Route
               path="/"
